@@ -63,3 +63,40 @@ a{color:var(--accent);text-decoration:none}a:hover{color:#e5c58e}
 @media(max-width:620px){.cover-options{grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}.cover-picker{padding:12px}.cover-options strong{font-size:.68rem}}
 
 .manuscript-field textarea{min-height:320px;line-height:1.8;font-family:Georgia,serif;font-size:1rem;resize:vertical}.manuscript-field small{display:block;color:var(--text2);font-size:.78rem;margin-top:8px;line-height:1.5}.required-tag{color:#d5b77f;font-size:.68rem;text-transform:uppercase;letter-spacing:.12em;margin-left:8px}
+
+
+/* Responsive Admin Hub: fluid form, readable controls and cover picker */
+html,body{width:100%;min-width:0;overflow-x:clip}
+.admin-wrap{width:min(100% - 32px,1000px);min-width:0}
+.admin-card{min-width:0}
+.admin-form,.admin-form label,.cover-picker{min-width:0}
+.admin-form input:not([type=checkbox]),.admin-form textarea,.admin-form select{max-width:100%;min-width:0;font-size:16px}
+.admin-form textarea{overflow-wrap:anywhere}
+.cover-options{grid-template-columns:repeat(auto-fit,minmax(105px,1fr))}
+.cover-options>label{min-width:0}
+.cover-art{width:100%}
+.admin-top>*{min-width:0}
+@media(max-width:700px){
+ .admin-wrap{width:calc(100% - 20px);margin:12px auto 28px}
+ .admin-card{padding:clamp(18px,5vw,28px)}
+ .admin-top{flex-wrap:wrap;gap:12px}
+ #dashboard .admin-top{flex-wrap:wrap;align-items:flex-start}
+ #dashboard .admin-top>div{min-width:0;flex:1 1 100%}
+ #dashboard .admin-top button{width:100%;min-height:44px}
+ .admin-card h1{font-size:clamp(2.2rem,10vw,3.2rem);overflow-wrap:anywhere}
+ .admin-form{gap:15px}
+ .admin-form label{font-size:.74rem}
+ .manuscript-field textarea{min-height:260px}
+ .cover-options{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+ .cover-art{max-height:220px}
+ .btn{width:100%;min-height:48px}
+}
+@media(min-width:701px) and (max-width:1024px){
+ .admin-wrap{width:min(92%,900px)}
+ .cover-options{grid-template-columns:repeat(5,minmax(0,1fr));gap:9px}
+}
+@media(min-width:1200px){
+ .admin-wrap{width:min(100% - 64px,1080px)}
+ .admin-card{padding:clamp(36px,4vw,64px)}
+}
+@media(prefers-reduced-motion:reduce){.card,.featured .cover{transition:none!important}}
