@@ -58,10 +58,36 @@ If the browser displays the Data API access message, check the Supabase project'
 - Theme choice, page bookmark and reading progress persist on the current device.
 - Responsive reading room with reduced-motion support.
 
+## Phase 5 — PDF editions and bookmarks
+
+- Book PDFs are served from the existing private `book-files` Storage bucket.
+- The public library requests short-lived signed URLs only for published book records, so private PDF objects remain protected by Storage RLS.
+- Book details provide separate **Download PDF** and **Print Book** actions. Print opens the original PDF in the browser's PDF viewer, where the visitor can use its print controls.
+- The reader keeps the animated ribbon bookmark and adds a one-tap jump back to the bookmarked page.
+- Reading progress and bookmarks remain local to the visitor's browser in this phase.
+
+## Phase 6 — Supabase administration
+
+- `admin.html` is a browser-only admin workroom using the pinned Supabase JavaScript SDK; no Node.js, package installation or terminal commands are required.
+- Admin sign-in uses existing Supabase Auth email/password accounts. There is no public sign-up form.
+- The dashboard creates, edits, publishes, unpublishes and deletes book records.
+- Cover images upload to the public `book-covers` bucket; PDF editions upload to the private `book-files` bucket.
+- Admin authorization checks the trusted `app_metadata.role = admin` claim, matching the existing database and Storage RLS policies. User-editable `user_metadata` is never used for permissions.
+- The existing `public.books` schema, Storage buckets and RLS policies are reused; no production schema reset or destructive migration is required.
+
+## Admin account setup
+
+1. In Supabase Dashboard → Authentication → Users, invite or create the administrator account. Do not add a public registration form.
+2. Open that user and set trusted **App Metadata** to include `{"role":"admin"}`. Do not set this in User Metadata.
+3. The administrator signs in at `/admin.html`. If the role was just changed, sign out and sign back in so the refreshed JWT contains the trusted claim.
+4. The public library only displays records with `is_published = true`. Drafts and unpublished PDFs are not exposed through the public book list or the private PDF bucket policy.
+
+## Storage model
+
+- `book-covers` — public image delivery; only authorised admins can upload, replace or delete objects.
+- `book-files` — private PDF storage; admins can manage files, while public visitors can obtain a signed download/reader URL only for a PDF path linked to a published book.
+- `vellora-books` — legacy bucket retained untouched; new admin uploads use the existing dedicated cover and PDF buckets.
+
 ## Current boundaries
 
-Reading progress and page bookmarks are local to the current browser/device. Cross-device sync requires authenticated accounts and a protected progress table, planned with the account/backend phase. Chapter navigation uses the PDF's embedded outline; PDFs without one still support page-by-page reading. The admin dashboard and upload workflows remain a later phase.
-
-## Next work
-
-The admin dashboard, authenticated admin workflows, PDF upload management, and immersive page-turn reader are later development work. They are not faked in this phase.
+Reading progress and page bookmarks remain local to the current browser/device. Reader accounts and cross-device progress sync are a separate future feature. Chapter navigation uses the PDF's embedded outline; PDFs without one still support page-by-page reading. The app remains plain HTML/CSS/JavaScript and uses browser-hosted CDN libraries only.
