@@ -104,3 +104,9 @@ footer .logo{font-size:.9rem}
 #pageFrame.turn-prev{transform:translateX(-24px) rotateY(7deg);box-shadow:0 14px 36px #0002}
 #pageRange{cursor:pointer}
 @media(max-width:650px){.reader-main{display:flex;flex-direction:column}.reader-side{display:flex;align-items:center;gap:8px;flex-wrap:wrap;padding:8px 10px;border-right:0;border-bottom:1px solid var(--border);overflow:visible}.reader-side label{font-size:.7rem;margin:0}.reader-side select{width:auto;max-width:44%;font-size:.72rem;padding:6px}.reader-side label.bookmark-label{margin:0}#readerProgress{flex:1 1 100%;max-width:none;margin:2px 0;padding:7px 10px}.reader-top{padding:10px 12px}.reader-top strong{max-width:42vw;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}#bookmarkPage{min-width:90px;padding:7px 9px}.page-stage{flex:1;min-height:0}.page-frame{height:100%;min-height:0}}
+
+/* Phase 4 — reader settings and private reading-data controls */
+.settings-subhead{font:600 1.35rem var(--display);padding:20px 12px 8px;color:var(--text)}
+.setting-row{display:flex;align-items:center;justify-content:space-between;gap:14px;width:100%;padding:13px 12px;border:1px solid var(--border);border-radius:6px;margin:7px 0;text-align:left;background:var(--bg);font-family:var(--ui)}
+.setting-row span{display:grid;gap:3px}.setting-row b{font-size:.88rem;font-weight:500;color:var(--text)}.setting-row small{font-size:.72rem;color:var(--text2);line-height:1.45}.setting-row strong{font-size:.72rem;color:var(--accent);text-transform:uppercase;letter-spacing:.08em;white-space:nowrap}
+.setting-row[aria-pressed=true]{border-color:var(--accent);background:color-mix(in srgb,var(--accent) 10%,var(--surface))}
