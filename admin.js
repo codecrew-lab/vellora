@@ -3,20 +3,20 @@
 const API="https://egyrlxgpgkflcejtgvvc.supabase.co/functions/v1/vellora-admin-", $=s=>document.querySelector(s), SESSION_KEY="vellora.admin.session.v1";
 let sessionToken="";
 function makeBookPdf(title,author,genre,coverStyle,manuscript){
-const {jsPDF}=window.jspdf||{};if(!jsPDF)throw new Error("The PDF typesetting library could not load. Refresh the page and try again.");
-const doc=new jsPDF({unit:"mm",format:"a4",compress:true}),w=210,h=297,colors={nocturne:[39,31,26],botanical:[35,56,43],gilded:[91,65,40],midnight:[24,31,49],terracotta:[139,76,58]},c=colors[coverStyle]||colors.nocturne;
-doc.setProperties({title,author,subject:genre+" · VELLORA Library",creator:"VELLORA Editions"});
-doc.setFillColor(...c);doc.rect(0,0,w,h,"F");doc.setDrawColor(211,180,126);doc.setLineWidth(.45);doc.rect(11,11,w-22,h-22);doc.setLineWidth(.18);doc.rect(14,14,w-28,h-28);
-doc.setTextColor(226,204,163);doc.setFont("times","bold");doc.setFontSize(10);doc.text("V E L L O R A   E D I T I O N S",w/2,52,{align:"center"});
-doc.setTextColor(248,239,220);doc.setFontSize(Math.min(32,Math.max(19,350/doc.getTextWidth(title)*doc.getFontSize())));doc.text(doc.splitTextToSize(title,150),w/2,135,{align:"center"});
-doc.setTextColor(226,204,163);doc.setFont("times","italic");doc.setFontSize(15);doc.text("by "+author,w/2,155,{align:"center"});
-doc.setDrawColor(211,180,126);doc.line(75,170,135,170);doc.setFont("times","bold");doc.setFontSize(10);doc.text(String(genre).toUpperCase(),w/2,247,{align:"center"});doc.setFont("times","normal");doc.setFontSize(8);doc.text("A DIGITAL EDITION",w/2,257,{align:"center"});
-let page=1,y=25;const left=23,right=23,bottom=22,bodyWidth=w-left-right;
-function footer(){doc.setDrawColor(190,166,128);doc.setLineWidth(.2);doc.line(left,h-15,w-right,h-15);doc.setFont("times","italic");doc.setFontSize(8);doc.setTextColor(115,98,76);doc.text(title,left,h-9);doc.text(String(page),w-right,h-9,{align:"right"});}
-function nextPage(){footer();doc.addPage();page++;y=25;doc.setFont("times","italic");doc.setFontSize(8);doc.setTextColor(130,111,84);doc.text(title,left,15);y=27;}
-const blocks=manuscript.replace(/\r/g,"").split(/\n\s*\n/);
-for(const raw of blocks){const block=raw.trim();if(!block)continue;const chapter=block.startsWith("# "),section=block.startsWith("## "),content=block.replace(/^#{1,2}\s*/,"");const size=chapter?19:section?14:11.5,style=chapter||section?"bold":"normal",lineH=chapter?9:section?7:6.1;doc.setFont("times",style);doc.setFontSize(size);const lines=doc.splitTextToSize(content,bodyWidth);const needed=lines.length*lineH+(chapter?15:section?11:8);if(y+needed>h-bottom)nextPage();if(chapter){y+=8;doc.setDrawColor(190,156,103);doc.line(left,y-4,w-right,y-4)}doc.setTextColor(48,41,34);doc.text(lines,left,y);y+=lines.length*lineH+(chapter?14:section?10:8);}
-footer();return doc.output("blob");
+const colors={nocturne:[39,31,26],botanical:[35,56,43],gilded:[91,65,40],midnight:[24,31,49],terracotta:[139,76,58]},bg=colors[coverStyle]||colors.nocturne;
+const clean=s=>String(s).normalize("NFKD").replace(/[\u0300-\u036f]/g,"").replace(/[^\x20-\x7E]/g,"?").replaceAll("—","-").replaceAll("’","'");
+const esc=s=>clean(s).replaceAll("\\","\\\\").replaceAll("(","\\(").replaceAll(")","\\)");
+const wrap=(s,n)=>{let out=[],line="";for(const w of clean(s).split(" ")){let t=line?line+" "+w:w;if(t.length>n&&line){out.push(line);line=w}else line=t}if(line)out.push(line);return out};
+let pages=[],cover="q\n"+bg.map(v=>(v/255).toFixed(3)).join(" ")+" rg\n0 0 595 842 re f\n0.82 0.69 0.48 RG 1 w 32 32 531 778 re S 42 42 511 758 re S\nBT /F2 13 Tf 0.82 0.69 0.48 rg 1 0 0 1 190 700 Tm (V E L L O R A   E D I T I O N S) Tj ET\n";
+let lines=wrap(title,28),yy=480;cover+="BT /F2 28 Tf 0.96 0.92 0.84 rg\n";lines.forEach((v,i)=>cover+="1 0 0 1 "+(297-v.length*7.5)+" "+(yy-i*38)+" Tm ("+esc(v)+") Tj\n");cover+="ET\nBT /F3 17 Tf 0.82 0.69 0.48 rg 1 0 0 1 220 340 Tm ("+esc("by "+author)+") Tj ET\nBT /F2 10 Tf 0.96 0.92 0.84 rg 1 0 0 1 240 115 Tm ("+esc(genre.toUpperCase())+") Tj ET\nQ";pages.push(cover);
+let body="",y=785,n=2;
+const footer=(s,num)=>s+"\n0.65 0.55 0.42 RG 0.5 w 65 42 m 530 42 l S\nBT /F3 9 Tf 0.35 0.30 0.25 rg 1 0 0 1 65 26 Tm ("+esc(title.slice(0,60))+") Tj ET\nBT /F1 9 Tf 0.35 0.30 0.25 rg 1 0 0 1 520 26 Tm ("+num+") Tj ET";
+const next=()=>{pages.push(footer(body,n++));body="BT /F3 9 Tf 0.48 0.41 0.31 rg 1 0 0 1 65 810 Tm ("+esc(title.slice(0,65))+") Tj ET\n";y=785};
+for(const raw of String(manuscript).replaceAll("\r","").split("\n\n")){let b=raw.trim();if(!b)continue;let ch=b.startsWith("# "),sec=b.startsWith("## "),txt=b.replace(/^#{1,2}\s*/,""),sz=ch?18:sec?14:11,lh=ch?26:sec?20:16,ls=wrap(txt,ch?48:sec?65:88),gap=ch?16:sec?12:8;if(y-ls.length*lh-gap<65)next();if(ch){y-=10;body+="0.65 0.52 0.34 RG 0.7 w 65 "+y+" m 530 "+y+" l S\n"}body+="BT "+(ch||sec?"/F2":"/F1")+" "+sz+" Tf 0.18 0.16 0.14 rg\n";for(const line of ls){body+="1 0 0 1 65 "+y+" Tm ("+esc(line)+") Tj\n";y-=lh}body+="ET\n";y-=gap}
+pages.push(footer(body,n));
+let o=[];o[1]="<< /Type /Catalog /Pages 2 0 R >>";o[3]="<< /Type /Font /Subtype /Type1 /BaseFont /Times-Roman >>";o[4]="<< /Type /Font /Subtype /Type1 /BaseFont /Times-Bold >>";o[5]="<< /Type /Font /Subtype /Type1 /BaseFont /Times-Italic >>";let kids=[];
+pages.forEach((s,i)=>{let p=6+i*2,q=p+1;kids.push(p+" 0 R");o[p]="<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R /F2 4 0 R /F3 5 0 R >> >> /Contents "+q+" 0 R >>";o[q]="<< /Length "+s.length+" >>\nstream\n"+s+"\nendstream"});
+o[2]="<< /Type /Pages /Kids ["+kids.join(" ")+"] /Count "+pages.length+" >>";let out="%PDF-1.4\n",off=[0];for(let i=1;i<o.length;i++){off[i]=out.length;out+=i+" 0 obj\n"+o[i]+"\nendobj\n"}let x=out.length;out+="xref\n0 "+o.length+"\n0000000000 65535 f \n";for(let i=1;i<o.length;i++)out+=String(off[i]).padStart(10,"0")+" 00000 n \n";out+="trailer\n<< /Size "+o.length+" /Root 1 0 R /Info << /Title ("+esc(title)+") /Author ("+esc(author)+") /Creator (VELLORA Editions) >> >>\nstartxref\n"+x+"\n%%EOF";return new Blob([out],{type:"application/pdf"});
 }
 function status(el,msg,kind){el.textContent=msg;el.className="admin-status"+(kind?" "+kind:"")}
 function lock(){sessionToken="";localStorage.removeItem(SESSION_KEY);$("#loginPanel").classList.remove("admin-hidden");$("#dashboard").classList.add("admin-hidden");$("#loginForm").reset()}
