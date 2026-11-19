@@ -93,14 +93,14 @@
         <p>— ERNEST HEMINGWAY</p>
       </section>
 
-      <footer class="site-footer"><a class="footer-wordmark" href="#home">VELLORA</a><span>A beautiful world where stories come to life.</span><span>© 2026 VELLORA</span></footer>
+      <footer class="site-footer"><a class="footer-wordmark" href="#home">VELLORA</a><span>A beautiful world where stories come to life.</span><a class="admin-entry" href="./admin.html">ADMIN ACCESS ↗</a><span>© 2026 VELLORA</span></footer>
     </main>
   </div>
 
   <dialog class="book-dialog" id="bookDialog">
     <button class="dialog-close" id="dialogClose" aria-label="Close book details">×</button>
     <div class="dialog-cover" id="dialogCover"></div>
-    <div class="dialog-content"><p class="eyebrow" id="dialogGenre">THE VELLORA COLLECTION</p><h2 id="dialogTitle">A story</h2><p class="dialog-author" id="dialogAuthor"></p><p class="dialog-description" id="dialogDescription"></p><div class="dialog-actions"><a class="primary-action" id="downloadBook" href="#" target="_blank" rel="noopener">DOWNLOAD BOOK ↗</a><button class="save-action" id="readBook">OPEN READER ↗</button><button class="save-action" id="saveBook">♡ SAVE STORY</button></div></div>
+    <div class="dialog-content"><p class="eyebrow" id="dialogGenre">THE VELLORA COLLECTION</p><h2 id="dialogTitle">A story</h2><p class="dialog-author" id="dialogAuthor"></p><p class="dialog-description" id="dialogDescription"></p><div class="dialog-actions"><a class="primary-action" id="downloadBook" href="#" target="_blank" rel="noopener">DOWNLOAD PDF ↗</a><a class="save-action" id="printBook" href="#" target="_blank" rel="noopener">PRINT BOOK ↗</a><button class="save-action" id="readBook">OPEN READER ↗</button><button class="save-action" id="saveBook">♡ SAVE STORY</button></div></div>
   </dialog>
 
 
@@ -137,6 +137,7 @@
         <div class="reader-controls">
           <button class="reader-page-button" id="readerPrevious" disabled>← <span>PREVIOUS</span></button>
           <span class="reader-page-count" id="readerPageCount">1 / —</span>
+          <button class="reader-page-button" id="readerGoBookmark" disabled>NO BOOKMARK</button>
           <button class="reader-page-button" id="readerNext" disabled><span>NEXT</span> →</button>
         </div>
         <p class="reader-hint">SWIPE OR USE THE ARROWS TO TURN THE PAGE</p>
