@@ -5,7 +5,8 @@
   const SUPABASE_URL = "https://egyrlxgpgkflcejtgvvc.supabase.co";
   const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_AyNnLpE63guwq4SLMQR31g_-id54atp";
   const BOOKS_TABLE = "books";
-  const STORAGE_BUCKET = "vellora-books";
+  const STORAGE_BUCKET = "book-files";
+  const signedPdfUrls = Object.create(null);
 
   const $ = (selector, root = document) => root.querySelector(selector);
   const $$ = (selector, root = document) => [...root.querySelectorAll(selector)];
@@ -66,7 +67,21 @@
     return book.cover_url || storageUrl(book.cover_path) || "";
   }
   function pdfFor(book) {
-    return storageUrl(book.pdf_path);
+    return book && book.id ? (signedPdfUrls[book.id] || "") : "";
+  }
+  async function signPdfPath(path) {
+    if (!path) return "";
+    const encodedPath = String(path).split("/").map(encodeURIComponent).join("/");
+    const response = await fetch(SUPABASE_URL + "/storage/v1/object/sign/" + STORAGE_BUCKET + "/" + encodedPath, {
+      method: "POST",
+      headers: { apikey: SUPABASE_PUBLISHABLE_KEY, Authorization: "Bearer " + SUPABASE_PUBLISHABLE_KEY, "Content-Type": "application/json" },
+      body: JSON.stringify({ expiresIn: 3600 })
+    });
+    if (!response.ok) throw new Error("Could not prepare the private PDF link.");
+    const result = await response.json();
+    const signed = result.signedURL || result.signedUrl || "";
+    if (!signed) throw new Error("Supabase did not return a signed PDF link.");
+    return /^https?:\/\//i.test(signed) ? signed : SUPABASE_URL + "/storage/v1" + (signed.startsWith("/") ? signed : "/" + signed);
   }
   function escapeHtml(value = "") {
     return String(value).replace(/[&<>"']/g, char => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[char]));
@@ -92,6 +107,11 @@
       }
       const books = await response.json();
       state.books = Array.isArray(books) ? books : [];
+      await Promise.all(state.books.map(async book => {
+        if (!book.pdf_path) return;
+        try { signedPdfUrls[book.id] = await signPdfPath(book.pdf_path); }
+        catch (error) { console.warn("PDF link unavailable for", book.title, error); }
+      }));
       renderGenres();
       renderBooks();
       renderFeatured();
@@ -193,6 +213,13 @@
     $("#dialogCover").innerHTML = cover ? '<img src="' + escapeHtml(cover) + '" alt="Cover of ' + escapeHtml(book.title) + '" style="width:100%;height:100%;object-fit:cover">' : '<div class="book-cover-fallback tone-' + toneFor(book) + '"><strong>' + escapeHtml(book.title) + '</strong><small>' + escapeHtml(book.author || "VELLORA") + '</small></div>';
     const download = pdfFor(book);
     $("#downloadBook").href = download || "#";
+    $("#downloadBook").download = (book.slug || "vellora-book") + ".pdf";
+    $("#printBook").href = download || "#";
+    $("#printBook").style.opacity = download ? "1" : ".45";
+    $("#printBook").setAttribute("aria-disabled", String(!download));
+    $("#printBook").onclick = event => {
+      if (!download) { event.preventDefault(); notify("The printable edition is not available yet."); }
+    };
     $("#downloadBook").style.opacity = download ? "1" : ".45";
     $("#downloadBook").setAttribute("aria-disabled", String(!download));
     $("#downloadBook").onclick = event => { if (!download) { event.preventDefault(); notify("The downloadable edition is not available yet."); } };
@@ -294,6 +321,8 @@
     $("#readerNext").disabled = readerState.page >= total;
     const savedPage = bookmarkMap()[readerState.book.id];
     const marked = savedPage === readerState.page;
+    $("#readerGoBookmark").disabled = !savedPage;
+    $("#readerGoBookmark").textContent = savedPage ? "BOOKMARK · PAGE " + savedPage : "NO BOOKMARK";
     $("#readerBookmark").classList.toggle("is-bookmarked", marked);
     $("#readerBookmark").setAttribute("aria-pressed", String(marked));
     $("#readerBookmark").setAttribute("aria-label", marked ? "Remove bookmark from this page" : "Bookmark this page");
@@ -449,6 +478,11 @@
   $("#readerClose").addEventListener("click", closeReader);
   $("#readerPrevious").addEventListener("click", () => turnPage(-1));
   $("#readerNext").addEventListener("click", () => turnPage(1));
+  $("#readerGoBookmark").addEventListener("click", () => {
+    if (!readerState.book || !readerState.pdf) return;
+    const savedPage = bookmarkMap()[readerState.book.id];
+    if (savedPage) renderReaderPage(savedPage, savedPage > readerState.page ? 1 : -1);
+  });
   $("#readerBookmark").addEventListener("click", () => {
     if (!readerState.book || !readerState.pdf) return;
     const map = bookmarkMap();

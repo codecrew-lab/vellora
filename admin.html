@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#e9dfca">
+  <meta name="robots" content="noindex,nofollow">
+  <title>VELLORA — Administration</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./admin.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.119.1"></script>
+  <script defer src="./admin.js"></script>
+</head>
+<body>
+  <main class="admin-shell">
+    <header class="admin-topbar">
+      <a class="admin-wordmark" href="./index.html">VELLORA<span>®</span></a>
+      <span class="admin-edition">PRIVATE ADMINISTRATION</span>
+      <button class="quiet-button" id="signOut" hidden>Sign out ↗</button>
+    </header>
+    <section class="login-panel" id="loginPanel">
+      <p class="eyebrow">THE VELLORA WORKROOM</p>
+      <h1>Welcome <em>back.</em></h1>
+      <p class="intro-copy">Sign in with an authorised VELLORA administrator account to manage the collection.</p>
+      <form id="loginForm">
+        <label for="adminEmail">EMAIL ADDRESS</label>
+        <input id="adminEmail" type="email" autocomplete="username" required>
+        <label for="adminPassword">PASSWORD</label>
+        <input id="adminPassword" type="password" autocomplete="current-password" required>
+        <button class="primary-button" id="loginButton" type="submit">ENTER THE WORKROOM ↗</button>
+      </form>
+      <p class="form-message" id="loginMessage" role="status" aria-live="polite"></p>
+      <a class="back-link" href="./index.html">← RETURN TO THE LIBRARY</a>
+    </section>
+    <section class="dashboard" id="dashboard" hidden>
+      <div class="dashboard-heading">
+        <div><p class="eyebrow">THE VELLORA WORKROOM</p><h1>Collection <em>management.</em></h1><p class="intro-copy" id="adminIdentity"></p></div>
+        <button class="primary-button compact" id="newBook">＋ ADD A BOOK</button>
+      </div>
+      <div class="dashboard-stats">
+        <article><span>ALL BOOKS</span><strong id="totalBooks">0</strong></article>
+        <article><span>PUBLISHED</span><strong id="publishedBooks">0</strong></article>
+        <article><span>DRAFTS</span><strong id="draftBooks">0</strong></article>
+      </div>
+      <section class="editor-panel" id="editorPanel" hidden>
+        <div class="panel-heading"><div><p class="eyebrow">BOOK DETAILS</p><h2 id="editorTitle">Add a story</h2></div><button class="quiet-button" id="cancelEdit" type="button">CLOSE ×</button></div>
+        <form id="bookForm">
+          <div class="form-grid">
+            <div class="field"><label for="bookTitle">TITLE *</label><input id="bookTitle" required maxlength="180"></div>
+            <div class="field"><label for="bookAuthor">AUTHOR *</label><input id="bookAuthor" required maxlength="140"></div>
+            <div class="field"><label for="bookGenre">GENRE *</label><input id="bookGenre" required maxlength="80" placeholder="e.g. Fantasy"></div>
+            <div class="field"><label for="bookSlug">SLUG *</label><input id="bookSlug" required maxlength="180"></div>
+            <div class="field"><label for="bookLanguage">LANGUAGE</label><input id="bookLanguage" value="English" maxlength="60"></div>
+            <div class="field"><label for="bookReadingTime">READING TIME (MINUTES)</label><input id="bookReadingTime" type="number" min="1" step="1" placeholder="Optional"></div>
+            <div class="field full"><label for="bookDescription">DESCRIPTION</label><textarea id="bookDescription" rows="4" maxlength="5000"></textarea></div>
+            <div class="field"><label for="coverFile">COVER IMAGE (JPG, PNG, WEBP · MAX 5 MB)</label><input id="coverFile" type="file" accept="image/jpeg,image/png,image/webp"></div>
+            <div class="field"><label for="pdfFile">BOOK PDF (MAX 50 MB)</label><input id="pdfFile" type="file" accept="application/pdf"></div>
+          </div>
+          <div class="check-row">
+            <label><input id="bookFeatured" type="checkbox"> Featured story</label>
+            <label><input id="bookRecommended" type="checkbox"> Recommended</label>
+            <label><input id="bookPublished" type="checkbox"> Publish to library</label>
+          </div>
+          <p class="form-message" id="editorMessage" role="status" aria-live="polite"></p>
+          <div class="form-actions"><button class="primary-button" id="saveBook" type="submit">SAVE BOOK ↗</button><button class="quiet-button" id="cancelEditBottom" type="button">CANCEL</button></div>
+        </form>
+      </section>
+      <section class="books-panel">
+        <div class="panel-heading"><div><p class="eyebrow">YOUR COLLECTION</p><h2>Books on the shelves</h2></div><button class="quiet-button" id="refreshBooks" type="button">REFRESH ↻</button></div>
+        <div class="book-list" id="bookList"><p class="muted-copy">Loading your collection…</p></div>
+      </section>
+      <p class="dashboard-footnote">Only published books are visible in the public library. Changes are protected by Supabase authentication and Row Level Security.</p>
+    </section>
+  </main>
+  <div class="admin-toast" id="adminToast" role="status" aria-live="polite"></div>
+</body>
+</html>
