@@ -1,231 +1,180 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>vellora - A beautiful world where stories come to life</title>
-    <!-- Google Fonts for Typography -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700;900&family=Cinzel:wght@500;700;900&family=Dancing+Script:wght@600&family=Fira+Code&family=Inter:wght@400;600&family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="./web/styles.css">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#ede3d0">
+  <meta name="description" content="VELLORA — A beautiful world where stories come to life. Discover and read stories in an immersive digital library.">
+  <title>VELLORA — A beautiful world where stories come to life</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./web/styles.css">
 </head>
 <body class="theme-enhanced-manuscript">
+  <div class="ambient-grain" aria-hidden="true"></div>
 
-    <!-- 1. BORDERLESS MANUSCRIPT LANDING SLIDE OVERLAY -->
-    <div id="landingDoor" class="landing-door-overlay">
-        <!-- Ambient Particles -->
-        <div class="particles-bg"></div>
-
-        <!-- Left Door Panel (No Borders) -->
-        <div class="door-panel door-left"></div>
-
-        <!-- Right Door Panel (No Borders) -->
-        <div class="door-panel door-right"></div>
-
-        <!-- Center Content -->
-        <div class="door-content">
-            <div class="brand-emblem-box">
-                <span class="brand-emblem-icon">📖</span>
-            </div>
-            <h1 class="brand-title">vellora</h1>
-            <p class="brand-tagline">A beautiful world where stories come to life</p>
-            <button id="openWorldBtn" class="open-world-btn">
-                <span class="star-icon">✨</span> Open the World
-            </button>
-        </div>
+  <section id="landingDoor" class="landing-door" aria-label="Welcome to VELLORA">
+    <div class="door-atmosphere" aria-hidden="true">
+      <span class="light-orb orb-one"></span>
+      <span class="light-orb orb-two"></span>
+      <span class="dust dust-one"></span><span class="dust dust-two"></span>
+      <span class="dust dust-three"></span><span class="dust dust-four"></span>
+      <span class="dust dust-five"></span><span class="dust dust-six"></span>
     </div>
-
-    <!-- MAIN APP WRAPPER -->
-    <div id="appContainer" class="app-container hidden">
-
-        <!-- FLOATING HAMBURGER MENU -->
-        <div class="floating-menu-container">
-            <button id="hamburgerBtn" class="floating-fab" title="Navigation Menu">
-                <span id="hamburgerIcon">☰</span>
-            </button>
-            <div id="floatingDropdown" class="floating-dropdown hidden">
-                <div class="menu-brand">vellora</div>
-                <button class="menu-item active" data-screen="library">
-                    <span class="icon">📚</span> Library
-                </button>
-                <button class="menu-item" data-screen="recent">
-                    <span class="icon">🔖</span> Recent Books Read
-                </button>
-                <button class="menu-item" data-screen="settings">
-                    <span class="icon">⚙️</span> Settings
-                </button>
-            </div>
-        </div>
-
-        <!-- SCREEN 1: LIBRARY -->
-        <section id="screenLibrary" class="screen-section">
-            <header class="library-header">
-                <h2>vellora Library</h2>
-                <p>Explore timeless manuscripts and enchanted stories</p>
-            </header>
-
-            <!-- Category Filter Chips -->
-            <div id="categoryContainer" class="category-chips-row">
-                <!-- Injected via JS -->
-            </div>
-
-            <!-- Featured Book Banner -->
-            <div id="featuredBanner" class="featured-book-card">
-                <!-- Injected via JS -->
-            </div>
-
-            <!-- Collection Books Grid -->
-            <div class="section-title">Collection Books</div>
-            <div id="booksGrid" class="books-grid">
-                <!-- Injected via JS -->
-            </div>
-        </section>
-
-        <!-- SCREEN 2: BOOK READER -->
-        <section id="screenReader" class="screen-section hidden">
-            <div class="reader-top-bar">
-                <button id="readerBackBtn" class="icon-btn">← Back</button>
-                <div id="readerTitle" class="reader-book-title">Book Title</div>
-                <div class="reader-top-actions">
-                    <button id="readerBookmarkBtn" class="icon-btn" title="Toggle Ribbon Bookmark">🔖</button>
-                    <button id="readerSoundBtn" class="icon-btn" title="Toggle Sound">🔊</button>
-                    <button id="readerSettingsBtn" class="icon-btn" title="Typography & Theme">⚙️</button>
-                    <button id="readerPdfBtn" class="icon-btn" title="Download PDF with Watermark">📥 PDF</button>
-                </div>
-            </div>
-
-            <div class="reader-stage">
-                <!-- Real Book Page Viewport -->
-                <div class="book-spine-card">
-                    <div class="watermark-bg">vellora</div>
-
-                    <!-- Physical Satin Ribbon Bookmark -->
-                    <div id="physicalRibbon" class="physical-ribbon hidden">
-                        <div class="ribbon-stitching"></div>
-                    </div>
-
-                    <!-- Page Text Content -->
-                    <div id="pageTextContent" class="page-text-content">
-                        <!-- Injected via JS -->
-                    </div>
-
-                    <!-- Page Click Hotspots -->
-                    <div id="prevHotspot" class="page-hotspot left"></div>
-                    <div id="nextHotspot" class="page-hotspot right"></div>
-                </div>
-            </div>
-
-            <!-- Bottom Navigation Bar -->
-            <div class="reader-bottom-bar">
-                <div class="reader-nav-controls">
-                    <button id="prevPageBtn" class="nav-btn">‹ Previous</button>
-                    <span id="pageCounter" class="page-counter">Page 1 of 3</span>
-                    <button id="nextPageBtn" class="nav-btn">Next ›</button>
-                </div>
-                <input type="range" id="pageSlider" min="0" max="1" value="0" class="page-slider">
-            </div>
-        </section>
-
-        <!-- SCREEN 3: RECENT BOOKS READ -->
-        <section id="screenRecent" class="screen-section hidden">
-            <header class="library-header">
-                <h2>Recent Reads</h2>
-                <p>Pick up right where you left off</p>
-            </header>
-            <div id="recentList" class="recent-list">
-                <!-- Injected via JS -->
-            </div>
-        </section>
-
-        <!-- SCREEN 4: SETTINGS -->
-        <section id="screenSettings" class="screen-section hidden">
-            <header class="library-header">
-                <h2>vellora Settings</h2>
-                <p>Personalize your aesthetic reading environment</p>
-            </header>
-
-            <div class="settings-card">
-                <h3>Manuscript Themes</h3>
-                <div class="theme-options">
-                    <label class="radio-option">
-                        <input type="radio" name="themeRadio" value="enhanced-manuscript" checked>
-                        <div class="radio-label">
-                            <strong>Enhanced Manuscript</strong>
-                            <span>Aged manuscript paper with royal gold & burgundy accents</span>
-                        </div>
-                    </label>
-                    <label class="radio-option">
-                        <input type="radio" name="themeRadio" value="classic-vellum">
-                        <div class="radio-label">
-                            <strong>Classic Vellum</strong>
-                            <span>Warm parchment tone with sepia text</span>
-                        </div>
-                    </label>
-                    <label class="radio-option">
-                        <input type="radio" name="themeRadio" value="dark-heritage">
-                        <div class="radio-label">
-                            <strong>Dark Heritage</strong>
-                            <span>Deep charcoal backdrop with soft antique ivory text</span>
-                        </div>
-                    </label>
-                </div>
-            </div>
-
-            <div class="settings-card">
-                <h3>Typography & Fonts</h3>
-                <div class="font-options">
-                    <button class="font-chip active" data-font="serif">Serif</button>
-                    <button class="font-chip" data-font="sans">Sans-Serif</button>
-                    <button class="font-chip" data-font="mono">Monospace</button>
-                    <button class="font-chip" data-font="cursive">Manuscript Script</button>
-                </div>
-
-                <div class="font-size-control">
-                    <span>Text Size: <strong id="fontSizeVal">18px</strong></span>
-                    <div>
-                        <button id="decFontBtn" class="size-btn">-</button>
-                        <button id="incFontBtn" class="size-btn">+</button>
-                    </div>
-                </div>
-            </div>
-
-            <div class="settings-card">
-                <h3>Audio Effects</h3>
-                <label class="toggle-option">
-                    <span>Page Turn Sound Effect</span>
-                    <input type="checkbox" id="soundToggle" checked>
-                </label>
-            </div>
-        </section>
-
+    <div class="door-panel door-left" aria-hidden="true">
+      <div class="panel-imprint"></div>
     </div>
-
-    <!-- Quick Settings Modal for Reader -->
-    <div id="quickModal" class="modal-overlay hidden">
-        <div class="modal-card">
-            <div class="modal-header">
-                <h3>Reader Settings</h3>
-                <button id="closeModalBtn" class="close-btn">✕</button>
-            </div>
-
-            <h4>Theme</h4>
-            <div class="quick-theme-buttons">
-                <button class="theme-btn" data-theme="enhanced-manuscript">Manuscript</button>
-                <button class="theme-btn" data-theme="classic-vellum">Vellum</button>
-                <button class="theme-btn" data-theme="dark-heritage">Dark</button>
-            </div>
-
-            <h4>Font</h4>
-            <div class="quick-font-buttons">
-                <button class="font-btn" data-font="serif">Serif</button>
-                <button class="font-btn" data-font="sans">Sans</button>
-                <button class="font-btn" data-font="mono">Mono</button>
-                <button class="font-btn" data-font="cursive">Script</button>
-            </div>
-        </div>
+    <div class="door-panel door-right" aria-hidden="true">
+      <div class="panel-imprint"></div>
     </div>
+    <div class="door-content">
+      <div class="brand-mark" aria-hidden="true"><span>V</span></div>
+      <p class="eyebrow">THE ART OF GETTING LOST IN A STORY</p>
+      <h1 class="door-wordmark">VELLORA</h1>
+      <p class="door-tagline">A beautiful world where stories come to life.</p>
+      <button id="openWorldBtn" class="open-world-button" type="button">
+        <span>OPEN THE WORLD</span><span class="button-arrow" aria-hidden="true">↗</span>
+      </button>
+      <p class="door-footnote">A library beyond the ordinary</p>
+    </div>
+    <span class="door-edge-note" aria-hidden="true">EST. IN STORIES · VELLORA</span>
+  </section>
 
-    <script src="./web/app.js"></script>
+  <main id="appContainer" class="app-shell is-hidden">
+    <header class="topbar">
+      <button id="hamburgerBtn" class="menu-trigger" type="button" aria-label="Open navigation" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+      <a class="topbar-brand" href="#library" aria-label="VELLORA Library">VELLORA</a>
+      <button id="topSearchBtn" class="topbar-search" type="button" aria-label="Focus book search">
+        <span class="search-symbol" aria-hidden="true">⌕</span><span>Search the library</span><kbd>/</kbd>
+      </button>
+    </header>
+
+    <div id="menuBackdrop" class="menu-backdrop"></div>
+    <nav id="floatingMenu" class="floating-menu" aria-label="Main navigation" aria-hidden="true">
+      <div class="menu-heading">
+        <span class="menu-monogram">V</span>
+        <div><strong>VELLORA</strong><small>A world of stories</small></div>
+      </div>
+      <button class="menu-item is-active" data-screen="library" type="button"><span class="menu-icon">⌂</span>Library</button>
+      <button class="menu-item" data-screen="recent" type="button"><span class="menu-icon">◷</span>Recently Read</button>
+      <button class="menu-item" data-screen="settings" type="button"><span class="menu-icon">⚙</span>Settings</button>
+      <div class="menu-bottom-note">TURN A PAGE. ENTER A WORLD.</div>
+    </nav>
+
+    <section id="screenLibrary" class="screen screen-library" data-screen-panel="library">
+      <div class="library-intro page-width">
+        <p class="eyebrow">YOUR NEXT JOURNEY BEGINS HERE</p>
+        <h1>A world of stories<br><em>awaits.</em></h1>
+        <p class="intro-copy">Discover imaginative worlds, unforgettable characters, and stories worth staying up for.</p>
+        <div class="library-search">
+          <span class="search-symbol" aria-hidden="true">⌕</span>
+          <input id="bookSearch" type="search" placeholder="Search titles, genres, characters..." autocomplete="off" aria-label="Search stories">
+          <span class="search-hint">Explore</span>
+        </div>
+      </div>
+
+      <div class="page-width library-content">
+        <section class="featured-section" aria-labelledby="featuredHeading">
+          <div class="section-kicker"><span>01</span><span>THE LIBRARY'S SPOTLIGHT</span></div>
+          <div class="featured-empty">
+            <div class="featured-art" aria-hidden="true">
+              <div class="featured-book book-back"></div>
+              <div class="featured-book book-front"><span>V</span><i></i></div>
+              <div class="featured-glow"></div>
+            </div>
+            <div class="featured-copy">
+              <p class="eyebrow">A PLACE RESERVED FOR A GREAT STORY</p>
+              <h2 id="featuredHeading">The next favourite<br><em>is waiting to be written.</em></h2>
+              <p>Our featured story will appear here when it is published by the VELLORA library team.</p>
+              <span class="quiet-label"><span class="status-dot"></span> CURATED FOR CURIOUS MINDS</span>
+            </div>
+          </div>
+        </section>
+
+        <section class="collection-section" aria-labelledby="collectionHeading">
+          <div class="section-heading-row">
+            <div>
+              <div class="section-kicker"><span>02</span><span>FIND YOUR KIND OF STORY</span></div>
+              <h2 id="collectionHeading">Explore the collections</h2>
+            </div>
+            <span class="collection-count">THE VELLORA CATALOGUE</span>
+          </div>
+          <div id="categoryContainer" class="category-list" aria-label="Filter by genre">
+            <button class="category-chip is-selected" data-category="All Stories" type="button">All Stories</button>
+            <button class="category-chip" data-category="Adventure" type="button">Adventure</button>
+            <button class="category-chip" data-category="Mystery" type="button">Mystery</button>
+            <button class="category-chip" data-category="Fantasy" type="button">Fantasy</button>
+            <button class="category-chip" data-category="Fables" type="button">Fables</button>
+            <button class="category-chip" data-category="Drama" type="button">Drama</button>
+            <button class="category-chip" data-category="Romance" type="button">Romance</button>
+            <button class="category-chip" data-category="Historical" type="button">Historical</button>
+            <button class="category-chip" data-category="Science Fiction" type="button">Science Fiction</button>
+          </div>
+          <div id="booksGrid" class="books-grid">
+            <div class="empty-library">
+              <div class="empty-book-icon" aria-hidden="true"><span></span><span></span></div>
+              <p class="eyebrow">THE SHELVES ARE BEING PREPARED</p>
+              <h3>Every great library begins<br>with its first story.</h3>
+              <p>Books published by the VELLORA team will appear here. Come back soon to discover your next world.</p>
+            </div>
+          </div>
+        </section>
+
+        <section class="library-note">
+          <span class="note-ornament" aria-hidden="true">✳</span>
+          <p>“A story is a door. All you have to do is turn the page.”</p>
+          <span>THE VELLORA READING ROOM</span>
+        </section>
+      </div>
+    </section>
+
+    <section id="screenRecent" class="screen page-width secondary-screen is-hidden" data-screen-panel="recent">
+      <div class="section-kicker"><span>03</span><span>YOUR READING JOURNEY</span></div>
+      <p class="eyebrow">PICK UP WHERE YOU LEFT OFF</p>
+      <h1>Recently <em>read.</em></h1>
+      <div class="simple-empty-state">
+        <span class="empty-state-symbol">◷</span>
+        <h2>Your reading journey starts here.</h2>
+        <p>Stories you open will be gathered here, ready whenever you return.</p>
+        <button class="text-action" data-go-library type="button">Return to the library <span>→</span></button>
+      </div>
+    </section>
+
+    <section id="screenSettings" class="screen page-width secondary-screen is-hidden" data-screen-panel="settings">
+      <div class="section-kicker"><span>04</span><span>MAKE THIS WORLD YOURS</span></div>
+      <p class="eyebrow">A READING SPACE THAT FEELS LIKE HOME</p>
+      <h1>Your <em>preferences.</em></h1>
+      <div class="settings-intro">Choose the atmosphere you would like to read in. Your selection will be remembered on this device.</div>
+      <div class="theme-picker">
+        <button class="theme-choice is-current" data-theme-choice="enhanced-manuscript" type="button">
+          <span class="theme-swatch swatch-manuscript"></span>
+          <span><strong>Enhanced Manuscript</strong><small>Faded paper · Antique gold</small></span>
+          <span class="theme-check">✓</span>
+        </button>
+        <button class="theme-choice" data-theme-choice="classic-vellum" type="button">
+          <span class="theme-swatch swatch-vellum"></span>
+          <span><strong>Classic Vellum</strong><small>Warm ivory · Timeless simplicity</small></span>
+          <span class="theme-check">✓</span>
+        </button>
+        <button class="theme-choice" data-theme-choice="dark-heritage" type="button">
+          <span class="theme-swatch swatch-dark"></span>
+          <span><strong>Dark Heritage</strong><small>Deep espresso · Antique bronze</small></span>
+          <span class="theme-check">✓</span>
+        </button>
+      </div>
+    </section>
+
+    <footer class="site-footer page-width">
+      <a class="footer-brand" href="#library">VELLORA</a>
+      <p>A beautiful world where stories come to life.</p>
+      <div class="footer-links"><a href="#library" data-go-library>Library</a><a href="#about">Our philosophy</a><a href="#top" id="backToTop">Back to top ↑</a></div>
+      <small>© 2026 VELLORA. A world of stories.</small>
+    </footer>
+  </main>
+
+  <script src="./web/app.js" defer></script>
 </body>
 </html>
