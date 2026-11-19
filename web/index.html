@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>vellora - A beautiful world where stories come to life</title>
+    <!-- Google Fonts for Typography -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;900&family=Dancing+Script:wght@600&family=Fira+Code&family=Inter:wght@400;600&family=Merriweather:ital,wght@0,300;0,400;0,700;1,300&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body class="theme-enhanced-manuscript">
+
+    <!-- 1. LANDING DOOR SLIDE OVERLAY -->
+    <div id="landingDoor" class="landing-door-overlay">
+        <!-- Left Door Panel -->
+        <div class="door-panel door-left">
+            <div class="door-border-inner"></div>
+            <div class="door-corner top-right"></div>
+        </div>
+
+        <!-- Right Door Panel -->
+        <div class="door-panel door-right">
+            <div class="door-border-inner"></div>
+            <div class="door-corner top-left"></div>
+        </div>
+
+        <!-- Center Content -->
+        <div class="door-content">
+            <div class="brand-emblem">📖</div>
+            <h1 class="brand-title">vellora</h1>
+            <p class="brand-tagline">A beautiful world where stories come to life</p>
+            <button id="openWorldBtn" class="open-world-btn">
+                <span class="star-icon">✨</span> Open the World
+            </button>
+        </div>
+    </div>
+
+    <!-- MAIN APP WRAPPER -->
+    <div id="appContainer" class="app-container hidden">
+
+        <!-- FLOATING HAMBURGER MENU -->
+        <div class="floating-menu-container">
+            <button id="hamburgerBtn" class="floating-fab" title="Navigation Menu">
+                <span id="hamburgerIcon">☰</span>
+            </button>
+            <div id="floatingDropdown" class="floating-dropdown hidden">
+                <div class="menu-brand">vellora</div>
+                <button class="menu-item active" data-screen="library">
+                    <span class="icon">📚</span> Library
+                </button>
+                <button class="menu-item" data-screen="recent">
+                    <span class="icon">🔖</span> Recent Books Read
+                </button>
+                <button class="menu-item" data-screen="settings">
+                    <span class="icon">⚙️</span> Settings
+                </button>
+            </div>
+        </div>
+
+        <!-- SCREEN 1: LIBRARY -->
+        <section id="screenLibrary" class="screen-section">
+            <header class="library-header">
+                <h2>📚 vellora Library</h2>
+                <p>Explore timeless manuscripts and enchanted stories</p>
+            </header>
+
+            <!-- Category Filter Chips -->
+            <div id="categoryContainer" class="category-chips-row">
+                <!-- Injected via JS -->
+            </div>
+
+            <!-- Featured Book Banner -->
+            <div id="featuredBanner" class="featured-book-card">
+                <!-- Injected via JS -->
+            </div>
+
+            <!-- Collection Books Grid -->
+            <div class="section-title">Collection Books</div>
+            <div id="booksGrid" class="books-grid">
+                <!-- Injected via JS -->
+            </div>
+        </section>
+
+        <!-- SCREEN 2: BOOK READER -->
+        <section id="screenReader" class="screen-section hidden">
+            <div class="reader-top-bar">
+                <button id="readerBackBtn" class="icon-btn">← Back</button>
+                <div id="readerTitle" class="reader-book-title">Book Title</div>
+                <div class="reader-top-actions">
+                    <button id="readerBookmarkBtn" class="icon-btn" title="Toggle Ribbon Bookmark">🔖</button>
+                    <button id="readerSoundBtn" class="icon-btn" title="Toggle Sound">🔊</button>
+                    <button id="readerSettingsBtn" class="icon-btn" title="Typography & Theme">⚙️</button>
+                    <button id="readerPdfBtn" class="icon-btn" title="Download PDF with Watermark">📥 PDF</button>
+                </div>
+            </div>
+
+            <div class="reader-stage">
+                <!-- Real Book Page Viewport -->
+                <div class="book-spine-card">
+                    <div class="watermark-bg">vellora</div>
+
+                    <!-- Physical Satin Ribbon Bookmark -->
+                    <div id="physicalRibbon" class="physical-ribbon hidden">
+                        <div class="ribbon-stitching"></div>
+                    </div>
+
+                    <!-- Page Text Content -->
+                    <div id="pageTextContent" class="page-text-content">
+                        <!-- Injected via JS -->
+                    </div>
+
+                    <!-- Page Click Hotspots -->
+                    <div id="prevHotspot" class="page-hotspot left"></div>
+                    <div id="nextHotspot" class="page-hotspot right"></div>
+                </div>
+            </div>
+
+            <!-- Bottom Navigation Bar -->
+            <div class="reader-bottom-bar">
+                <div class="reader-nav-controls">
+                    <button id="prevPageBtn" class="nav-btn">‹ Previous</button>
+                    <span id="pageCounter" class="page-counter">Page 1 of 3</span>
+                    <button id="nextPageBtn" class="nav-btn">Next ›</button>
+                </div>
+                <input type="range" id="pageSlider" min="0" max="1" value="0" class="page-slider">
+            </div>
+        </section>
+
+        <!-- SCREEN 3: RECENT BOOKS READ -->
+        <section id="screenRecent" class="screen-section hidden">
+            <header class="library-header">
+                <h2>🔖 Recent Reads</h2>
+                <p>Pick up right where you left off</p>
+            </header>
+            <div id="recentList" class="recent-list">
+                <!-- Injected via JS -->
+            </div>
+        </section>
+
+        <!-- SCREEN 4: SETTINGS -->
+        <section id="screenSettings" class="screen-section hidden">
+            <header class="library-header">
+                <h2>⚙️ vellora Settings</h2>
+                <p>Personalize your aesthetic reading environment</p>
+            </header>
+
+            <div class="settings-card">
+                <h3>🎨 Themes</h3>
+                <div class="theme-options">
+                    <label class="radio-option">
+                        <input type="radio" name="themeRadio" value="enhanced-manuscript" checked>
+                        <div class="radio-label">
+                            <strong>Enhanced Manuscript</strong>
+                            <span>Aged manuscript paper with royal gold & burgundy accents</span>
+                        </div>
+                    </label>
+                    <label class="radio-option">
+                        <input type="radio" name="themeRadio" value="classic-vellum">
+                        <div class="radio-label">
+                            <strong>Classic Vellum</strong>
+                            <span>Warm parchment tone with sepia text</span>
+                        </div>
+                    </label>
+                    <label class="radio-option">
+                        <input type="radio" name="themeRadio" value="dark-heritage">
+                        <div class="radio-label">
+                            <strong>Dark Heritage</strong>
+                            <span>Deep charcoal backdrop with soft antique ivory text</span>
+                        </div>
+                    </label>
+                </div>
+            </div>
+
+            <div class="settings-card">
+                <h3>✒️ Typography & Fonts</h3>
+                <div class="font-options">
+                    <button class="font-chip active" data-font="serif">Serif</button>
+                    <button class="font-chip" data-font="sans">Sans-Serif</button>
+                    <button class="font-chip" data-font="mono">Monospace</button>
+                    <button class="font-chip" data-font="cursive">Manuscript Script</button>
+                </div>
+
+                <div class="font-size-control">
+                    <span>Text Size: <strong id="fontSizeVal">18px</strong></span>
+                    <div>
+                        <button id="decFontBtn" class="size-btn">-</button>
+                        <button id="incFontBtn" class="size-btn">+</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="settings-card">
+                <h3>🔊 Audio Effects</h3>
+                <label class="toggle-option">
+                    <span>Page Turn Sound Effect</span>
+                    <input type="checkbox" id="soundToggle" checked>
+                </label>
+            </div>
+        </section>
+
+    </div>
+
+    <!-- Quick Settings Modal for Reader -->
+    <div id="quickModal" class="modal-overlay hidden">
+        <div class="modal-card">
+            <div class="modal-header">
+                <h3>Reader Settings</h3>
+                <button id="closeModalBtn" class="close-btn">✕</button>
+            </div>
+
+            <h4>Theme</h4>
+            <div class="quick-theme-buttons">
+                <button class="theme-btn" data-theme="enhanced-manuscript">Manuscript</button>
+                <button class="theme-btn" data-theme="classic-vellum">Vellum</button>
+                <button class="theme-btn" data-theme="dark-heritage">Dark</button>
+            </div>
+
+            <h4>Font</h4>
+            <div class="quick-font-buttons">
+                <button class="font-btn" data-font="serif">Serif</button>
+                <button class="font-btn" data-font="sans">Sans</button>
+                <button class="font-btn" data-font="mono">Mono</button>
+                <button class="font-btn" data-font="cursive">Script</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
