@@ -1,24 +1,36 @@
 (function(){
 "use strict";
-const cfg=window.VELLORA_CONFIG||{},$=s=>document.querySelector(s),client=window.supabase&&cfg.url?window.supabase.createClient(cfg.url,cfg.publishableKey):null;
-let user=null;
+const API="https://egyrlxgpgkflcejtgvvc.supabase.co/functions/v1/vellora-admin";
+const $=s=>document.querySelector(s);
+const SESSION_KEY="vellora.admin.session.v1";
+let sessionToken="";
 function status(el,msg,kind){el.textContent=msg;el.className="admin-status"+(kind?" "+kind:"")}
-async function refresh(){if(!client){status($("#loginStatus"),"Supabase configuration is missing.","error");return}const {data:{user:u}}=await client.auth.getUser();user=u;if(user&&user.app_metadata&&user.app_metadata.role==="admin"){$("#loginPanel").classList.add("admin-hidden");$("#dashboard").classList.remove("admin-hidden")}else{$("#loginPanel").classList.remove("admin-hidden");$("#dashboard").classList.add("admin-hidden");if(user)status($("#loginStatus"),"This account is not an admin. Ask the project owner to set trusted App Metadata role to admin, then sign in again.","error")}}
-$("#loginForm").addEventListener("submit",async e=>{e.preventDefault();if(!client)return;const f=new FormData(e.currentTarget);status($("#loginStatus"),"Signing in…");const {error}=await client.auth.signInWithPassword({email:f.get("email"),password:f.get("password")});if(error){status($("#loginStatus"),error.message,"error");return}await refresh()});
-$("#signOut").addEventListener("click",async()=>{await client.auth.signOut();location.reload()});
+function lock(){sessionToken="";localStorage.removeItem(SESSION_KEY);$("#loginPanel").classList.remove("admin-hidden");$("#dashboard").classList.add("admin-hidden");$("#loginForm").reset()}
+function unlock(token){sessionToken=token;$("#loginPanel").classList.add("admin-hidden");$("#dashboard").classList.remove("admin-hidden");status($("#adminStatus"),"Admin hub unlocked on this device. Your session expires after 7 days.","success")}
+async function restoreSession(){try{const saved=JSON.parse(localStorage.getItem(SESSION_KEY)||"null");if(!saved||!saved.token||!saved.expiresAt||saved.expiresAt<=Date.now()){lock();return}await callApi("verify",{action:"verify"},saved.token);unlock(saved.token)}catch(_){lock()}}
+async function callApi(action,body,token){
+ const headers={};if(token)headers.Authorization="Bearer "+token;
+ const isForm=body instanceof FormData;if(!isForm)headers["Content-Type"]="application/json";
+ const response=await fetch(API,{method:"POST",headers,body:isForm?body:JSON.stringify(body)});
+ let data={};try{data=await response.json()}catch(_){}
+ if(!response.ok)throw new Error(data.error||"The request could not be completed.");
+ return data;
+}
+$("#loginForm").addEventListener("submit",async e=>{
+ e.preventDefault();const f=new FormData(e.currentTarget);status($("#loginStatus"),"Checking your access codes…");
+ try{const result=await callApi("login",{action:"login",loginCode:String(f.get("loginCode")||""),secretCode:String(f.get("secretCode")||"")});localStorage.setItem(SESSION_KEY,JSON.stringify({token:result.token,expiresAt:result.expiresAt}));unlock(result.token);e.currentTarget.reset()}
+ catch(err){status($("#loginStatus"),err.message,"error")}
+});
+$("#signOut").addEventListener("click",lock);
 $("#bookForm").addEventListener("submit",async e=>{
- e.preventDefault();if(!client||!user||user.app_metadata.role!=="admin"){status($("#adminStatus"),"Admin permission required.","error");return}
- const f=new FormData(e.currentTarget),title=String(f.get("title")).trim(),author=String(f.get("author")).trim(),genre=String(f.get("genre")).trim(),cover=f.get("cover"),pdf=f.get("pdf");
- if(!title||!author||!genre||!cover.size||!pdf.size){status($("#adminStatus"),"Complete all required fields and select both files.","error");return}
+ e.preventDefault();if(!sessionToken){lock();return}
+ const form=new FormData(e.currentTarget),cover=form.get("cover"),pdf=form.get("pdf");
+ if(!cover||!cover.size||!pdf||!pdf.size){status($("#adminStatus"),"Choose both a cover image and a PDF.","error");return}
  if(cover.size>5*1024*1024||pdf.size>80*1024*1024){status($("#adminStatus"),"Cover images must be under 5 MB and PDFs under 80 MB.","error");return}
  if(!["image/jpeg","image/png","image/webp"].includes(cover.type)||pdf.type!=="application/pdf"){status($("#adminStatus"),"Use a JPG, PNG or WebP cover and a PDF file.","error");return}
- status($("#adminStatus"),"Uploading cover and PDF…");
- const id=crypto.randomUUID(),base=id+"-"+title.toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,""),coverPath=base+"."+cover.name.split(".").pop().toLowerCase(),pdfPath=base+".pdf";
- const cu=await client.storage.from("book-covers").upload(coverPath,cover,{upsert:false,contentType:cover.type});if(cu.error){status($("#adminStatus"),"Cover upload failed: "+cu.error.message,"error");return}
- const pu=await client.storage.from("book-files").upload(pdfPath,pdf,{upsert:false,contentType:"application/pdf"});if(pu.error){status($("#adminStatus"),"PDF upload failed: "+pu.error.message+". The uploaded cover may need manual cleanup.","error");return}
- const {data:coverData}=client.storage.from("book-covers").getPublicUrl(coverPath),row={id,title,author,slug:base+"-"+id.slice(0,8),description:String(f.get("description")||""),genre,cover_url:coverData.publicUrl,pdf_path:pdfPath,language:String(f.get("language")||"English"),reading_time_minutes:f.get("reading_time_minutes")?Number(f.get("reading_time_minutes")):null,is_featured:f.get("is_featured")==="on",is_recommended:f.get("is_recommended")==="on",is_published:f.get("is_published")==="on",created_by:user.id};
- const {error}=await client.from("books").insert(row);if(error){status($("#adminStatus"),"Book record failed: "+error.message+". Uploaded files may need manual cleanup.","error");return}
- e.currentTarget.reset();status($("#adminStatus"),"Book added successfully. "+(row.is_published?"It is now visible in the public library.":"It is saved as unpublished."),"success")
+ status($("#adminStatus"),"Uploading book securely…");
+ try{form.set("action","add-book");await callApi("add-book",form,sessionToken);e.currentTarget.reset();status($("#adminStatus"),"Book added successfully. "+(form.get("is_published")==="on"?"It is now visible in the public library.":"It is saved as unpublished."),"success")}
+ catch(err){if(/session|access code|expired/i.test(err.message))lock();status($("#adminStatus"),err.message,"error")}
 });
-if(client){client.auth.onAuthStateChange(()=>refresh());refresh()}else status($("#loginStatus"),"Supabase client could not start. Check config.js and network access.","error");
+restoreSession();
 })();
