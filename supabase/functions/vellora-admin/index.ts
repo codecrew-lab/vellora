@@ -8,8 +8,10 @@ const equal = (a: string, b: string) => { let diff = a.length ^ b.length; const 
 const b64url = (bytes: Uint8Array) => btoa(String.fromCharCode(...bytes)).replace(/=/g,"").replace(/\+/g,"-").replace(/\//g,"_");
 const fromB64url = (s: string) => Uint8Array.from(atob(s.replace(/-/g,"+").replace(/_/g,"/")+"=".repeat((4-s.length%4)%4)),c=>c.charCodeAt(0));
 async function hmac(secret:string,data:string){const key=await crypto.subtle.importKey("raw",encoder.encode(secret),{name:"HMAC",hash:"SHA-256"},false,["sign"]);return new Uint8Array(await crypto.subtle.sign("HMAC",key,encoder.encode(data)));}
-async function issueToken(secret:string){const payload=b64url(encoder.encode(JSON.stringify({exp:Date.now()+30*60*1000,scope:"vellora-admin"})));return payload+"."+b64url(await hmac(secret,payload));}
-async function validToken(token:string,secret:string){try{const [payload,sig]=token.split(".");if(!payload||!sig)return false;const expected=await hmac(secret,payload);if(!equal(b64url(expected),sig))return false;const data=JSON.parse(new TextDecoder().decode(fromB64url(payload)));return data.scope==="vellora-admin"&&Number(data.exp)>Date.now();}catch{return false;}}
+const SESSION_MS=7*24*60*60*1000;
+const signingKey=(secret:string,serviceKey:string)=>secret+":"+serviceKey;
+async function issueToken(secret:string,serviceKey:string){const exp=Date.now()+SESSION_MS;const payload=b64url(encoder.encode(JSON.stringify({exp,scope:"vellora-admin"})));return {token:payload+"."+b64url(await hmac(signingKey(secret,serviceKey),payload)),expiresAt:exp};}
+async function validToken(token:string,secret:string,serviceKey:string){try{const [payload,sig]=token.split(".");if(!payload||!sig)return false;const expected=await hmac(signingKey(secret,serviceKey),payload);if(!equal(b64url(expected),sig))return false;const data=JSON.parse(new TextDecoder().decode(fromB64url(payload)));return data.scope==="vellora-admin"&&Number(data.exp)>Date.now();}catch{return false;}}
 async function sha(value:string){return b64url(new Uint8Array(await crypto.subtle.digest("SHA-256",encoder.encode(value))));}
 
 Deno.serve(async(req:Request)=>{
@@ -17,7 +19,7 @@ Deno.serve(async(req:Request)=>{
  if(req.method!=="POST")return json({error:"Method not allowed."},405);
  const url=Deno.env.get("SUPABASE_URL")!, serviceKey=Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
  const secret=Deno.env.get("VELLORA_ADMIN_SECRET_CODE");
- if(!secret||secret.length<16)return json({error:"Admin access is not configured yet. Ask the owner to add the Supabase function secret."},503);
+ if(!secret||!/^[A-Za-z0-9]{6}$/.test(secret))return json({error:"Admin access is not configured. Set VELLORA_ADMIN_SECRET_CODE to exactly six letters or digits in Supabase Function Secrets."},503);
  const db=createClient(url,serviceKey,{auth:{persistSession:false,autoRefreshToken:false}});
  const authHeader=req.headers.get("authorization")||"";
  const bearer=authHeader.startsWith("Bearer ")?authHeader.slice(7):"";
@@ -40,10 +42,10 @@ Deno.serve(async(req:Request)=>{
        return json({error:"The login code or secret access code is incorrect."},401);
      }
      await db.from("vellora_admin_login_attempts").delete().eq("ip_hash",ipHash);
-     return json({token:await issueToken(secret),expiresIn:1800});
+     const issued=await issueToken(secret,serviceKey);\n     return json({...issued,expiresIn:7*24*60*60});
    }
  }
- if(!await validToken(bearer,secret))return json({error:"Admin session is invalid or expired. Please unlock the Admin Hub again."},401);
+ if(action==="verify"){if(!await validToken(bearer,secret,serviceKey))return json({error:"Admin session is invalid or expired. Please unlock the Admin Hub again."},401);return json({ok:true});}\n if(!await validToken(bearer,secret,serviceKey))return json({error:"Admin session is invalid or expired. Please unlock the Admin Hub again."},401);
  if(!contentType.includes("multipart/form-data"))return json({error:"Invalid upload request."},400);
  let form:FormData;try{form=await req.formData()}catch{return json({error:"Could not read upload form."},400)}
  if(String(form.get("action")||"")!=="add-book")return json({error:"Unknown admin action."},400);
