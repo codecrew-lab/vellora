@@ -32,12 +32,25 @@
     toastTimer = setTimeout(() => toast.classList.remove("show"), 2600);
   }
 
+  let entranceStarted = false;
   function openLibrary() {
-    intro.classList.add("is-opening");
+    if (entranceStarted) return;
+    entranceStarted = true;
+    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const duration = reducedMotion ? 0 : 1450;
+
+    // Reveal the library underneath the manuscript, then release the cover.
     siteShell.removeAttribute("aria-hidden");
-    siteShell.classList.add("is-visible");
+    requestAnimationFrame(() => siteShell.classList.add("is-visible"));
+    intro.classList.add("is-opening");
     document.body.classList.remove("is-locked");
-    window.setTimeout(() => intro.classList.add("is-gone"), 1600);
+    const trigger = $("#openWorld");
+    if (trigger) trigger.disabled = true;
+    window.setTimeout(() => {
+      intro.classList.add("is-gone");
+      intro.setAttribute("aria-hidden", "true");
+      if (trigger) trigger.blur();
+    }, duration);
   }
 
   $("#openWorld").addEventListener("click", openLibrary);
