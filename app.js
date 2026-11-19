@@ -385,6 +385,12 @@
     readerState.pdf = null;
     readerState.page = 1;
     $("#readerBookTitle").textContent = book.title || "VELLORA STORY";
+    const chosenTheme = safeRead("vellora:theme", "manuscript");
+    $("#readerDialog").classList.remove("theme-manuscript", "theme-vellum", "theme-dark");
+    $("#readerDialog").classList.add("theme-" + chosenTheme);
+    $(".reader-theme-choice").forEach(button => button.classList.toggle("selected", button.dataset.readerTheme === chosenTheme));
+    const savedProgress = progressMap()[book.id];
+    $("#readBook").textContent = savedProgress && savedProgress.page > 1 ? "CONTINUE · PAGE " + savedProgress.page + " ↗" : "OPEN READER ↗";
     $("#readerLoading").hidden = false;
     $("#readerLoading").textContent = "Preparing your reading room…";
     $("#readerDialog").showModal();
@@ -484,7 +490,7 @@
     if (!$("#readerDialog").open) return;
     if (event.key === "ArrowRight" || event.key === " ") { event.preventDefault(); turnPage(1); }
     if (event.key === "ArrowLeft") { event.preventDefault(); turnPage(-1); }
-    if (event.key === "Escape") closeReader();
+    if (event.key === "Escape") { event.preventDefault(); closeReader(); }
   });
   window.addEventListener("resize", () => {
     if ($("#readerDialog").open && readerState.pdf && !readerState.rendering) renderReaderPage(readerState.page, 1);
