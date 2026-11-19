@@ -198,3 +198,15 @@ dialog{inset:0;margin:auto;max-height:min(90dvh,900px);overscroll-behavior:conta
  header.hero p{padding-right:56px}
  .featured .tag{top:0}
 }
+
+
+/* VELLORA cover typography systems — each built-in design has its own layout. */
+.cover{container-type:inline-size;isolation:isolate}
+.cover em{font-size:clamp(.52rem,6.2cqi,.95rem);line-height:1.15;max-width:88%;overflow-wrap:anywhere;z-index:2}
+.cover b{font-size:clamp(.72rem,11cqi,1.55rem);line-height:1.08;max-width:100%;max-height:48%;overflow:hidden;overflow-wrap:anywhere;word-break:normal;text-wrap:balance;z-index:2}
+.cover small{font-size:clamp(.45rem,4.7cqi,.72rem);line-height:1.2;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;z-index:2}
+.cover-nocturne{padding:9% 8%}.cover-nocturne em{text-align:left;align-self:flex-start;letter-spacing:.08em}.cover-nocturne b{text-align:left;align-self:stretch;padding:0 4%;font-size:clamp(.72rem,10.5cqi,1.5rem)}.cover-nocturne small{align-self:flex-end;letter-spacing:.12em}
+.cover-botanical{padding:11% 9%;justify-content:space-between}.cover-botanical em{text-align:center;align-self:center;font-style:italic;letter-spacing:.1em}.cover-botanical b{text-align:center;align-self:center;padding:0 3%;font-style:italic;font-size:clamp(.78rem,11.5cqi,1.6rem)}.cover-botanical small{align-self:center;letter-spacing:.14em}
+.cover-gilded{padding:12% 9%;justify-content:space-around}.cover-gilded em{text-align:center;align-self:center;letter-spacing:.2em;text-transform:uppercase}.cover-gilded b{text-align:center;align-self:center;padding:0 4%;letter-spacing:.035em;font-size:clamp(.7rem,10cqi,1.45rem)}.cover-gilded small{align-self:center;letter-spacing:.18em;text-transform:uppercase}
+.cover-midnight{padding:10% 9%;justify-content:space-between}.cover-midnight em{text-align:right;align-self:flex-end;letter-spacing:.16em;text-transform:uppercase}.cover-midnight b{text-align:center;align-self:stretch;padding:0 3%;font-size:clamp(.72rem,10.5cqi,1.5rem)}.cover-midnight small{align-self:center;letter-spacing:.2em}
+.cover-terracotta{padding:10% 9%;justify-content:space-between}.cover-terracotta em{text-align:left;align-self:flex-start;font-style:italic;letter-spacing:.06em}.cover-terracotta b{text-align:left;align-self:stretch;padding:0 2%;font-size:clamp(.78rem,11cqi,1.55rem)}.cover-terracotta small{align-self:flex-end;letter-spacing:.1em}
