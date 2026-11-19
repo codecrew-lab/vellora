@@ -185,3 +185,10 @@ dialog{inset:0;margin:auto;max-height:min(90dvh,900px);overscroll-behavior:conta
  html{scroll-behavior:auto}
  .cont{scroll-snap-type:none}
 }
+
+/* Audit fix: keep a real, measurable reader viewport on compact screens. */
+@media(max-width:650px){
+ .reader-main{min-height:0}
+ .page-stage{flex:1;min-height:0}
+ .page-frame{height:100%;min-height:0;max-height:100%;width:calc(100% - 64px)}
+}
