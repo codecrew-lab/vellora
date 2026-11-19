@@ -186,6 +186,13 @@ body.menu-open .menu-backdrop { opacity: 1; visibility: visible; }
 .footer-links a { color: var(--muted); font-size: 10px; }.footer-links a:hover { color: var(--accent-deep); }
 .site-footer small { color: var(--muted); font-size: 9px; }
 
+.about-section { padding-top: 45px; padding-bottom: 72px; }
+.about-layout { display: grid; grid-template-columns: .7fr 1.3fr; gap: 35px; padding: 38px 0 0; border-top: 1px solid var(--line); }
+.about-layout h2 { margin: 0 0 15px; font: 500 clamp(32px, 4.2vw, 48px)/.95 var(--serif); letter-spacing: -.04em; }
+.about-layout h2 em { color: var(--accent-deep); font-weight: 400; }
+.about-layout > div > p { max-width: 580px; margin: 0; color: var(--muted); font: 16px/1.8 var(--serif); }
+@media (max-width: 760px) { .about-layout { grid-template-columns: 1fr; gap: 8px; } }
+
 /* Signature themes */
 body.theme-classic-vellum {
   --paper: #faf7f2; --surface: #fffcf7; --surface-raised: #fffdf9;
