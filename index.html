@@ -121,6 +121,12 @@ dialog p{margin:8px 0 0;color:var(--text2);font-size:.95rem}
  #open{bottom:20%}
 }
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition-duration:.01ms!important}}
+
+/* VELLORA cross-device layout safeguards */
+html,body{width:100%;max-width:100%;min-width:0;overflow-x:hidden}*,*::before,*::after{box-sizing:border-box}img,svg,canvas,video{max-width:100%;height:auto}button,input,select,textarea{max-width:100%;min-width:0}.wrap{width:100%;min-width:0}.grid{grid-template-columns:repeat(3,minmax(0,1fr))}.card{min-width:0}.cont{max-width:100%;overscroll-behavior-x:contain}.cover{width:100%;min-width:0}#panel{max-width:calc(100vw - 24px);right:12px}#fab{right:12px}dialog{width:min(380px,calc(100vw - 24px));max-width:calc(100vw - 24px);max-height:calc(100dvh - 32px);overflow:auto}
+@media(max-width:1023px){.grid{grid-template-columns:repeat(2,minmax(0,1fr))}.wrap{padding-left:20px;padding-right:20px}}
+@media(max-width:639px){.wrap{padding-left:14px;padding-right:14px}.grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:24px 12px}.card h3{font-size:clamp(1rem,4.2vw,1.25rem);overflow-wrap:anywhere}.card p{font-size:.84rem}.cover{padding:clamp(10px,3vw,18px)}.cover b{font-size:clamp(.85rem,4vw,1.1rem)}.cover em{font-size:clamp(.72rem,3vw,.9rem)}.featured{min-width:0;max-width:100%;overflow:hidden}.cont{gap:12px}.cont .card{width:clamp(112px,36vw,150px)}#open{max-width:calc(100vw - 40px);white-space:nowrap}#fab{top:12px;right:12px;width:44px;height:44px}#panel{top:66px;right:12px;width:min(320px,calc(100vw - 24px))}}
+@media(min-width:1500px){.wrap{max-width:1320px}.grid{grid-template-columns:repeat(4,minmax(0,1fr))}}
 </style>
 <link rel="stylesheet" href="styles.css"><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.119.1/dist/umd/supabase.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script><script src="config.js"></script>
 </head>
