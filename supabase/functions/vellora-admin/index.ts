@@ -19,7 +19,7 @@ Deno.serve(async(req:Request)=>{
  if(req.method!=="POST")return json({error:"Method not allowed."},405);
  const url=Deno.env.get("SUPABASE_URL")!, serviceKey=Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
  const secret=Deno.env.get("VELLORA_ADMIN_SECRET_CODE");
- if(!secret||!/^[A-Za-z0-9]{6}$/.test(secret))return json({error:"Admin access is not configured. Set VELLORA_ADMIN_SECRET_CODE to exactly six letters or digits in Supabase Function Secrets."},503);
+ if(!secret||secret.length<8||secret.length>128||/\s/.test(secret))return json({error:"Admin access is not configured. Set VELLORA_ADMIN_SECRET_CODE to 8–128 characters with no spaces in Supabase Function Secrets."},503);
  const db=createClient(url,serviceKey,{auth:{persistSession:false,autoRefreshToken:false}});
  const authHeader=req.headers.get("authorization")||"";
  const bearer=authHeader.startsWith("Bearer ")?authHeader.slice(7):"";
