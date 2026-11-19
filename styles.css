@@ -58,3 +58,11 @@ footer .logo{font-size:.9rem}
 @media(max-width:639px){header.hero{padding:100px 0 36px}.featured{grid-template-columns:1fr}.featured .cover{max-width:210px}.featured>div:last-child{text-align:center}.featured .tag{left:24px}.grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:32px 16px}.card h3{font-size:1.12rem}.bar{margin-top:56px}.bar h2{font-size:2rem}#search{width:100%}#fab{top:14px;right:14px}.reader-top strong{font-size:1.12rem}.reader-back,.ribbon{padding:8px 9px;font-size:.65rem}.reader-bottom{gap:7px}.page-frame{height:calc(100vh - 164px)}}
 @media(min-width:1500px){.grid{gap:58px 42px}}
 @media(prefers-reduced-motion:reduce){.card,.featured .cover{transition:none}}
+
+/* VELLORA built-in cover rendering */
+.cover-nocturne{background:radial-gradient(circle at 70% 25%,#9c7952 0 2%,transparent 3%),linear-gradient(145deg,#3e3029,#171310)}
+.cover-botanical{background:radial-gradient(ellipse at 50% 40%,#9b9b70,transparent 48%),linear-gradient(145deg,#354638,#17271f)}
+.cover-gilded{background:repeating-linear-gradient(45deg,transparent 0 12px,rgba(220,187,120,.09) 13px 14px),linear-gradient(145deg,#987346,#39271c)}
+.cover-midnight{background:radial-gradient(circle at 70% 24%,#b69a75 0 1px,transparent 2px),linear-gradient(145deg,#242c43,#101521)}
+.cover-terracotta{background:radial-gradient(ellipse at 50% 35%,#d49b70,transparent 45%),linear-gradient(145deg,#a65f43,#542e27)}
+.cover small{position:relative;z-index:2;font:.58rem var(--ui);letter-spacing:.12em;opacity:.78}
