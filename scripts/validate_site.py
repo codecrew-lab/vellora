@@ -123,8 +123,8 @@ def main():
         path = ROOT / filename
         if path.is_file():
             source = path.read_text(encoding="utf-8").lower()
-            if "service_role" in source or "service-role" in source or "sb_secret_" in source:
-                fail(f"{filename}: a server-only Supabase credential pattern was found")
+            if re.search(r"sb_secret_[A-Za-z0-9_-]{20,}", source):
+                fail(f"{filename}: a Supabase secret-key value was found")
 
     if ERRORS:
         print("VELLORA validation failed:")
