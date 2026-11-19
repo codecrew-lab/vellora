@@ -8,17 +8,28 @@ const esc=v=>String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&
 const slug=v=>String(v||"book").toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"");
 function theme(t){if(!themes.some(x=>x[0]===t))t="manuscript";document.documentElement.dataset.theme=t;store.set("vellora.theme",t)}
 theme(store.get("vellora.theme","manuscript"));
-/* Manuscript opening: retain the exact split-cover slide-away transition. */
-const landing=document.querySelector("#landing");
-function showOpening(){
- if(!landing)return;
- landing.hidden=false;landing.classList.remove("opening");
- const dust=document.querySelector("#dust");
- if(dust){dust.innerHTML="";for(let i=0;i<26;i++){const p=document.createElement("i");p.style.cssText="left:"+(Math.random()*100)+"%;top:"+(50+Math.random()*50)+"%;animation-duration:"+(9+Math.random()*10)+"s;animation-delay:"+(-Math.random()*12)+"s";dust.appendChild(p)}}
+/* Original VELLORA manuscript opening — preserved from the supplied index.html. */
+const landing=$("#landing");
+function showLanding(){
+  landing.hidden=false;
+  landing.className="";
+  const dust=$("#dust");
+  dust.innerHTML="";
+  for(let i=0;i<26;i++){
+    const p=document.createElement("i");
+    p.style.cssText=`left:${Math.random()*100}%;top:${50+Math.random()*50}%;animation-duration:${9+Math.random()*10}s;animation-delay:${-Math.random()*12}s;transform:scale(${.6+Math.random()*1.4})`;
+    dust.appendChild(p);
+  }
+  $("#open").focus();
 }
-const openButton=document.querySelector("#open");
-if(openButton)openButton.addEventListener("click",()=>{landing.classList.add("opening");store.set("vellora.seen",1);setTimeout(()=>{landing.hidden=true},1800)});
-if(!store.get("vellora.seen",0))showOpening();
+$("#open").onclick=()=>{
+  landing.classList.add("opening");
+  store.set("vellora.seen",1);
+  setTimeout(()=>{landing.hidden=true},1800);
+};
+/* Always show the signature opening on a fresh page load, even if a
+   previous preview already set the old one-time seen flag. */
+showLanding();
 
 function cover(b){return b.cover_url?'<div class="cover has-image"><img class="cover-photo" src="'+esc(b.cover_url)+'" alt="" loading="lazy"><em>'+esc(b.genre||"Story")+'</em><b>'+esc(b.title)+'</b></div>':'<div class="cover" style="background:linear-gradient(160deg,#765d43,#30251d)"><em>'+esc(b.genre||"Story")+'</em><b>'+esc(b.title)+'</b></div>'}
 function card(b){return '<button class="card" data-id="'+esc(b.id)+'">'+cover(b)+'<h3>'+esc(b.title)+'</h3><p>'+esc(b.description||"")+'</p><div class="meta">'+esc(b.author||"VELLORA")+' · '+esc(b.genre||"")+'</div></button>'}
