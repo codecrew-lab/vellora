@@ -35,7 +35,7 @@ button{font:inherit;color:inherit;cursor:pointer;background:none;border:0}
 background:linear-gradient(180deg,#2D231C,#211A16);color:#E5D5BE}
 .door.l .door-in{left:0}.door.r .door-in{right:0}
 .door-in h1{font-family:var(--display);font-weight:600;font-size:clamp(3rem,11vw,8rem);letter-spacing:.22em;padding-left:.22em;line-height:1;color:#E5D5BE}
-.door-in p{font-family:var(--display);font-style:italic;font-size:clamp(1.05rem,2.4vw,1.6rem);color:#B6A28A;margin-top:1rem}
+.door-in p{width:min(680px,calc(100vw - 64px));max-width:100%;font-family:var(--display);font-style:italic;font-size:clamp(1rem,2.4vw,1.6rem);line-height:1.35;letter-spacing:0;color:#B6A28A;margin:1rem auto 0;padding:0 8px;text-align:center;text-wrap:balance;overflow-wrap:normal}
 .door-in::after{content:"";position:absolute;inset:18px;border:1px solid #514031;pointer-events:none}
 #open{position:absolute;z-index:5;left:50%;bottom:16%;transform:translateX(-50%);padding:.85rem 2.2rem;border:1px solid #B18A55;color:#E5D5BE;font-family:var(--ui);letter-spacing:.06em;background:rgba(33,26,22,.85);transition:background .3s,color .3s,opacity .5s}
 #open:hover{background:#B18A55;color:#211A16}
