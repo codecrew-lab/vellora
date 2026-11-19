@@ -66,3 +66,85 @@ footer .logo{font-size:.9rem}
 .cover-midnight{background:radial-gradient(circle at 70% 24%,#b69a75 0 1px,transparent 2px),linear-gradient(145deg,#242c43,#101521)}
 .cover-terracotta{background:radial-gradient(ellipse at 50% 35%,#d49b70,transparent 45%),linear-gradient(145deg,#a65f43,#542e27)}
 .cover small{position:relative;z-index:2;font:.58rem var(--ui);letter-spacing:.12em;opacity:.78}
+
+
+/* Responsive hardening: phones, tablets, laptops and wide desktops */
+html{width:100%;min-width:0;overflow-x:clip}
+body{width:100%;min-width:0;overflow-x:clip}
+.wrap{width:100%;min-width:0}
+main,.featured,.bar,.grid,.cont,.reader,.reader-main,.page-stage{min-width:0;max-width:100%}
+.grid{grid-template-columns:repeat(auto-fit,minmax(min(100%,210px),1fr))}
+.card{min-width:0;width:100%;max-width:100%;overflow-wrap:anywhere}
+.card .cover{width:100%;max-width:100%}
+.featured{grid-template-columns:minmax(0, min(30%,270px)) minmax(0,1fr)}
+.featured>*{min-width:0}
+.bar{display:flex;flex-wrap:wrap;gap:14px}
+#search{min-width:0;max-width:100%}
+#chips{max-width:100%;overflow-x:auto;overscroll-behavior-inline:contain}
+dialog{box-sizing:border-box;width:min(760px,calc(100% - 24px));max-width:calc(100% - 24px);max-height: min(90dvh,900px);overflow:auto}
+.dialog-copy,.dialog-actions{min-width:0}
+.reader{width:100%;height:100vh;height:100dvh;max-height:100dvh;overflow:hidden}
+.reader-top,.reader-bottom{flex:0 0 auto;min-width:0;flex-wrap:wrap}
+.reader-top strong{min-width:0;max-width:48vw;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.reader-main{flex:1 1 auto;min-height:0;min-width:0;grid-template-columns:minmax(0,190px) minmax(0,1fr);overflow:hidden}
+.page-stage{min-width:0;min-height:0;overflow:hidden}
+.page-frame{min-width:0;min-height:0;max-width:100%;max-height:100%;height:min(78dvh,980px);height:min(78vh,980px)}
+#pdfCanvas{width:auto;max-width:100%;height:auto;max-height:100%;object-fit:contain}
+.page-arrow{flex:0 0 auto}
+.reader-bottom input{min-width:50px}
+button,.btn,input,select{touch-action:manipulation}
+img,canvas,svg{max-width:100%}
+@media(max-width:800px){
+ .wrap{padding-inline:clamp(14px,3.5vw,26px)}
+ .featured{grid-template-columns:minmax(0,1fr);gap:22px}
+ .featured .cover{width:min(68%,230px);max-width:230px}
+ .featured>div:last-child{text-align:center}
+ .grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:clamp(18px,4vw,30px) clamp(12px,3vw,20px)}
+ .reader-main{grid-template-columns:minmax(0,1fr)}
+ .reader-side{display:none}
+ .page-stage{padding:clamp(5px,1.5vw,12px);gap:clamp(3px,1vw,8px)}
+ .page-frame{width:min(100%,calc(100vw - 76px));height:100%;max-height:100%;flex:1 1 auto}
+ .page-arrow{min-width:32px;padding:8px 7px;font-size:1.6rem}
+ .reader-top{gap:7px;padding:9px 10px}
+ .reader-top strong{font-size:1rem;max-width:38vw}
+ .reader-bottom{gap:8px;padding:8px 10px}
+}
+@media(max-width:480px){
+ .wrap{padding-inline:14px}
+ header.hero{padding-top:clamp(88px,17vh,112px)}
+ header.hero h1{font-size:clamp(2.45rem,11vw,3.3rem);overflow-wrap:anywhere}
+ .grid{gap:22px 12px}
+ .card h3{font-size:1.05rem;overflow-wrap:anywhere}
+ .card p{font-size:.84rem}
+ .bar{align-items:stretch}
+ .bar h2{width:100%}
+ #search{width:100%;flex:1 1 100%}
+ #fab{width:46px;height:46px;top:12px;right:12px}
+ #panel{max-width:calc(100vw - 24px)}
+ dialog[open]{grid-template-columns:minmax(0,1fr);gap:12px;padding:20px}
+ #dCover .cover{max-width:150px;margin:auto}
+ .dialog-actions{display:grid;grid-template-columns:1fr}
+ .dialog-actions .btn{width:100%}
+ .reader-top strong{max-width:34vw;font-size:.92rem}
+ .reader-back,.ribbon{padding:7px 8px;font-size:.62rem}
+ .page-stage{gap:2px}
+ .page-frame{width:calc(100vw - 66px)}
+ .page-arrow{min-width:27px;padding:6px 3px}
+ .reader-bottom{font-size:.7rem}
+ .reader-bottom button{font-size:.62rem;padding:7px 8px}
+}
+@media(min-width:801px) and (max-width:1100px){
+ .grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+ .reader-main{grid-template-columns:160px minmax(0,1fr)}
+}
+@media(min-width:1400px){
+ .wrap{max-width:1440px}
+ .grid{grid-template-columns:repeat(5,minmax(0,1fr))}
+}
+@media(orientation:landscape) and (max-height:560px){
+ .reader-top{min-height:44px;padding:5px 10px}
+ .reader-bottom{min-height:44px;padding:5px 10px}
+ .page-frame{height:calc(100dvh - 100px);max-height:calc(100dvh - 100px)}
+ .reader-side{padding:10px}
+}
+@supports(height:100dvh){.reader{height:100dvh}}
