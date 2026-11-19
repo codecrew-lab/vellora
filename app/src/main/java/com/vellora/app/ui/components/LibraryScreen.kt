@@ -47,6 +47,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.vellora.app.model.Book
@@ -472,3 +473,17 @@ private fun BookListItemCard(
         }
     }
 }
+
+@Preview(showBackground = true, showSystemUi = true)
+@Composable
+fun LibraryScreenPreview() {
+    LibraryScreen(
+        featuredBook = com.vellora.app.data.BookRepository.sampleBooks.first(),
+        books = com.vellora.app.data.BookRepository.sampleBooks,
+        selectedCategory = BookCategory.ALL,
+        onCategorySelected = {},
+        onBookSelected = {},
+        onDownloadPdf = {}
+    )
+}
+
