@@ -7,28 +7,27 @@
     <!-- Google Fonts for Typography -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;900&family=Dancing+Script:wght@600&family=Fira+Code&family=Inter:wght@400;600&family=Merriweather:ital,wght@0,300;0,400;0,700;1,300&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700;900&family=Cinzel:wght@500;700;900&family=Dancing+Script:wght@600&family=Fira+Code&family=Inter:wght@400;600&family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="./web/styles.css">
 </head>
 <body class="theme-enhanced-manuscript">
 
-    <!-- 1. LANDING DOOR SLIDE OVERLAY -->
+    <!-- 1. BORDERLESS MANUSCRIPT LANDING SLIDE OVERLAY -->
     <div id="landingDoor" class="landing-door-overlay">
-        <!-- Left Door Panel -->
-        <div class="door-panel door-left">
-            <div class="door-border-inner"></div>
-            <div class="door-corner top-right"></div>
-        </div>
+        <!-- Ambient Particles -->
+        <div class="particles-bg"></div>
 
-        <!-- Right Door Panel -->
-        <div class="door-panel door-right">
-            <div class="door-border-inner"></div>
-            <div class="door-corner top-left"></div>
-        </div>
+        <!-- Left Door Panel (No Borders) -->
+        <div class="door-panel door-left"></div>
+
+        <!-- Right Door Panel (No Borders) -->
+        <div class="door-panel door-right"></div>
 
         <!-- Center Content -->
         <div class="door-content">
-            <div class="brand-emblem">📖</div>
+            <div class="brand-emblem-box">
+                <span class="brand-emblem-icon">📖</span>
+            </div>
             <h1 class="brand-title">vellora</h1>
             <p class="brand-tagline">A beautiful world where stories come to life</p>
             <button id="openWorldBtn" class="open-world-btn">
@@ -62,7 +61,7 @@
         <!-- SCREEN 1: LIBRARY -->
         <section id="screenLibrary" class="screen-section">
             <header class="library-header">
-                <h2>📚 vellora Library</h2>
+                <h2>vellora Library</h2>
                 <p>Explore timeless manuscripts and enchanted stories</p>
             </header>
 
@@ -131,7 +130,7 @@
         <!-- SCREEN 3: RECENT BOOKS READ -->
         <section id="screenRecent" class="screen-section hidden">
             <header class="library-header">
-                <h2>🔖 Recent Reads</h2>
+                <h2>Recent Reads</h2>
                 <p>Pick up right where you left off</p>
             </header>
             <div id="recentList" class="recent-list">
@@ -142,12 +141,12 @@
         <!-- SCREEN 4: SETTINGS -->
         <section id="screenSettings" class="screen-section hidden">
             <header class="library-header">
-                <h2>⚙️ vellora Settings</h2>
+                <h2>vellora Settings</h2>
                 <p>Personalize your aesthetic reading environment</p>
             </header>
 
             <div class="settings-card">
-                <h3>🎨 Themes</h3>
+                <h3>Manuscript Themes</h3>
                 <div class="theme-options">
                     <label class="radio-option">
                         <input type="radio" name="themeRadio" value="enhanced-manuscript" checked>
@@ -174,7 +173,7 @@
             </div>
 
             <div class="settings-card">
-                <h3>✒️ Typography & Fonts</h3>
+                <h3>Typography & Fonts</h3>
                 <div class="font-options">
                     <button class="font-chip active" data-font="serif">Serif</button>
                     <button class="font-chip" data-font="sans">Sans-Serif</button>
@@ -192,7 +191,7 @@
             </div>
 
             <div class="settings-card">
-                <h3>🔊 Audio Effects</h3>
+                <h3>Audio Effects</h3>
                 <label class="toggle-option">
                     <span>Page Turn Sound Effect</span>
                     <input type="checkbox" id="soundToggle" checked>

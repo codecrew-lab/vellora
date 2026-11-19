@@ -1,63 +1,73 @@
 /* ==========================================================================
-   VELLORA STYLESHEET
+   VELLORA ULTRA-PREMIUM MANUSCRIPT DESIGN SYSTEM
    ========================================================================== */
 
+@import url('https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700;900&family=Cinzel:wght@500;700;900&family=Dancing+Script:wght@600&family=Fira+Code&family=Inter:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&display=swap');
+
 :root {
-    --bg-color: #FAF0E6;
-    --surface-color: #F2E3D0;
-    --surface-variant: #E8D4BB;
-    --text-primary: #2C1810;
-    --text-secondary: #5A3E2B;
+    --bg-color: #17120F;
+    --surface-color: #231B15;
+    --surface-variant: #2E231C;
+    --text-primary: #F3E9DD;
+    --text-secondary: #C4B29E;
     --accent-color: #8B0000;
-    --gold-accent: #D4AF37;
-    --border-color: #C8AD8D;
+    --accent-glow: #B22222;
+    --gold-primary: #D4AF37;
+    --gold-light: #F3E5AB;
+    --gold-dark: #AA820A;
+    --border-color: rgba(212, 175, 55, 0.25);
     --ribbon-color: #8B0000;
-    --watermark-color: rgba(139, 0, 0, 0.05);
-    --font-family: 'Merriweather', serif;
+    --watermark-color: rgba(212, 175, 55, 0.05);
+    --font-family: 'Playfair Display', serif;
+    --glass-bg: rgba(35, 27, 21, 0.85);
+    --shadow-luxury: 0 20px 50px rgba(0, 0, 0, 0.6), 0 0 30px rgba(212, 175, 55, 0.1);
 }
 
-/* 1. Theme Styles */
-body.theme-classic-vellum {
-    --bg-color: #F5E6D3;
-    --surface-color: #EEDCC8;
-    --surface-variant: #E5CEB5;
-    --text-primary: #3E2723;
-    --text-secondary: #6D4C41;
-    --accent-color: #8D6E63;
-    --gold-accent: #BCAAA4;
-    --border-color: #D7CCC8;
-    --ribbon-color: #B71C1C;
-    --watermark-color: rgba(62, 39, 35, 0.05);
-}
-
+/* 1. Theme Variables */
 body.theme-enhanced-manuscript {
-    --bg-color: #FAF0E6;
-    --surface-color: #F2E3D0;
-    --surface-variant: #E8D4BB;
-    --text-primary: #2C1810;
-    --text-secondary: #5A3E2B;
+    --bg-color: #181310;
+    --surface-color: #241C16;
+    --surface-variant: #30241C;
+    --text-primary: #F5EAE0;
+    --text-secondary: #C8B5A2;
     --accent-color: #8B0000;
-    --gold-accent: #D4AF37;
-    --border-color: #C8AD8D;
-    --ribbon-color: #7A1F1D;
-    --watermark-color: rgba(139, 0, 0, 0.05);
+    --gold-primary: #D4AF37;
+    --gold-light: #F4E8B6;
+    --border-color: rgba(212, 175, 55, 0.3);
+    --ribbon-color: #8B0000;
+    --watermark-color: rgba(212, 175, 55, 0.06);
+}
+
+body.theme-classic-vellum {
+    --bg-color: #F6ECD9;
+    --surface-color: #EFE2CB;
+    --surface-variant: #E4D3B8;
+    --text-primary: #322018;
+    --text-secondary: #5C4537;
+    --accent-color: #7A3B2E;
+    --gold-primary: #B8860B;
+    --gold-light: #DAA520;
+    --border-color: rgba(184, 134, 11, 0.3);
+    --ribbon-color: #A03B2A;
+    --watermark-color: rgba(50, 32, 24, 0.06);
 }
 
 body.theme-dark-heritage {
-    --bg-color: #12161A;
-    --surface-color: #1B2026;
-    --surface-variant: #242B33;
-    --text-primary: #E0D8C3;
-    --text-secondary: #AAA28D;
+    --bg-color: #0E1216;
+    --surface-color: #161D24;
+    --surface-variant: #1F2832;
+    --text-primary: #E6DFD3;
+    --text-secondary: #9EB0A5;
     --accent-color: #C5A059;
-    --gold-accent: #D4AF37;
-    --border-color: #2E3742;
-    --ribbon-color: #B23A22;
-    --watermark-color: rgba(224, 216, 195, 0.05);
+    --gold-primary: #D4AF37;
+    --gold-light: #F9E79F;
+    --border-color: rgba(197, 160, 89, 0.25);
+    --ribbon-color: #C0392B;
+    --watermark-color: rgba(230, 223, 211, 0.05);
 }
 
-/* Font Classes */
-body.font-serif { --font-family: 'Merriweather', serif; }
+/* Typography Classes */
+body.font-serif { --font-family: 'Playfair Display', serif; }
 body.font-sans { --font-family: 'Inter', sans-serif; }
 body.font-mono { --font-family: 'Fira Code', monospace; }
 body.font-cursive { --font-family: 'Dancing Script', cursive; }
@@ -67,7 +77,7 @@ body.font-cursive { --font-family: 'Dancing Script', cursive; }
     margin: 0;
     padding: 0;
     font-family: var(--font-family);
-    transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+    transition: background-color 0.4s ease, color 0.4s ease, border-color 0.4s ease, transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 
 body {
@@ -75,9 +85,15 @@ body {
     color: var(--text-primary);
     min-height: 100vh;
     overflow-x: hidden;
+    background-image:
+        radial-gradient(circle at 50% 0%, rgba(212, 175, 55, 0.08) 0%, transparent 60%),
+        radial-gradient(circle at 100% 100%, rgba(139, 0, 0, 0.1) 0%, transparent 50%);
 }
 
-/* 2. LANDING DOOR OVERLAY */
+/* ==========================================================================
+   2. BORDERLESS MANUSCRIPT LANDING SLIDE OVERLAY
+   ========================================================================== */
+
 .landing-door-overlay {
     position: fixed;
     top: 0;
@@ -89,24 +105,56 @@ body {
     justify-content: center;
     align-items: center;
     overflow: hidden;
+    background-color: #0F0B09;
 }
 
+/* Ambient Particles Atmosphere */
+.particles-bg {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-image: radial-gradient(rgba(212, 175, 55, 0.2) 1px, transparent 1px);
+    background-size: 40px 40px;
+    opacity: 0.3;
+    animation: particleFloat 20s linear infinite;
+    pointer-events: none;
+}
+
+@keyframes particleFloat {
+    0% { transform: translateY(0); }
+    100% { transform: translateY(-40px); }
+}
+
+/* BORDERLESS Manuscript Door Panels */
 .door-panel {
     position: absolute;
     top: 0;
     width: 50.5vw;
     height: 100vh;
-    background: linear-gradient(135deg, var(--surface-variant), var(--surface), var(--bg-color));
-    border: 3px solid var(--gold-accent);
-    transition: transform 1.4s cubic-bezier(0.77, 0, 0.175, 1);
+    border: none !important; /* NO BORDERS */
+    outline: none !important;
+    box-shadow: none !important;
+    transition: transform 1.6s cubic-bezier(0.76, 0, 0.18, 1);
+    background-size: cover;
 }
 
 .door-left {
     left: 0;
+    background: linear-gradient(120deg, #1C140E 0%, #291D15 60%, #160F0A 100%);
 }
 
 .door-right {
     right: 0;
+    background: linear-gradient(-120deg, #1C140E 0%, #291D15 60%, #160F0A 100%);
+}
+
+/* Subtle Vignette Overlay for Manuscript Atmosphere */
+.door-panel::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at center, transparent 40%, rgba(0,0,0,0.8) 100%);
+    pointer-events: none;
 }
 
 .landing-door-overlay.open .door-left {
@@ -117,227 +165,312 @@ body {
     transform: translateX(100%);
 }
 
+/* Center Content */
 .door-content {
     position: relative;
-    z-index: 10;
+    z-index: 20;
     text-align: center;
-    padding: 40px;
-    max-width: 600px;
+    padding: 60px 40px;
+    max-width: 750px;
     transition: opacity 0.8s ease, transform 0.8s ease;
 }
 
 .landing-door-overlay.open .door-content {
     opacity: 0;
-    transform: scale(0.9);
+    transform: scale(0.92);
     pointer-events: none;
 }
 
-.brand-emblem {
-    font-size: 72px;
-    margin-bottom: 20px;
-    filter: drop-shadow(0 8px 16px rgba(0,0,0,0.2));
+/* Luxury Illuminated Emblem */
+.brand-emblem-box {
+    width: 110px;
+    height: 110px;
+    margin: 0 auto 32px auto;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(212, 175, 55, 0.25) 0%, rgba(35, 27, 21, 0.9) 70%);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 0 50px rgba(212, 175, 55, 0.4), inset 0 0 20px rgba(212, 175, 55, 0.3);
+    border: 1px solid rgba(212, 175, 55, 0.5);
+    animation: emblemPulse 4s ease-in-out infinite alternate;
 }
 
+@keyframes emblemPulse {
+    0% { box-shadow: 0 0 30px rgba(212, 175, 55, 0.3), inset 0 0 15px rgba(212, 175, 55, 0.2); }
+    100% { box-shadow: 0 0 60px rgba(212, 175, 55, 0.6), inset 0 0 30px rgba(212, 175, 55, 0.5); }
+}
+
+.brand-emblem-icon {
+    font-size: 52px;
+    filter: drop-shadow(0 4px 10px rgba(0,0,0,0.5));
+}
+
+/* Gold Shimmer Typography */
 .brand-title {
-    font-family: 'Cinzel', serif;
-    font-size: 56px;
+    font-family: 'Cinzel Decorative', 'Cinzel', serif;
+    font-size: 76px;
     font-weight: 900;
-    color: var(--text-primary);
-    letter-spacing: 4px;
-    margin-bottom: 12px;
+    letter-spacing: 6px;
+    margin-bottom: 16px;
+    background: linear-gradient(135deg, #FFF6D6 0%, #D4AF37 50%, #AA820A 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    filter: drop-shadow(0 4px 20px rgba(212, 175, 55, 0.3));
+    text-transform: lowercase;
 }
 
 .brand-tagline {
-    font-size: 20px;
-    color: var(--text-secondary);
+    font-family: 'Playfair Display', serif;
+    font-size: 22px;
     font-style: italic;
-    margin-bottom: 40px;
+    color: var(--text-secondary);
+    letter-spacing: 1px;
+    margin-bottom: 48px;
+    text-shadow: 0 2px 10px rgba(0,0,0,0.7);
 }
 
+/* Luxury "Open the World" Button (No Harsh Borders) */
 .open-world-btn {
-    background-color: var(--accent-color);
-    color: #FFF;
-    border: 2px solid var(--gold-accent);
-    padding: 16px 36px;
-    font-size: 20px;
+    position: relative;
+    background: linear-gradient(135deg, var(--accent-color) 0%, #5E0000 100%);
+    color: var(--gold-light);
+    border: none;
+    padding: 20px 48px;
+    font-size: 22px;
     font-family: 'Cinzel', serif;
     font-weight: 700;
-    border-radius: 40px;
+    letter-spacing: 2px;
+    border-radius: 50px;
     cursor: pointer;
-    box-shadow: 0 10px 24px rgba(0,0,0,0.25);
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    box-shadow: 0 12px 35px rgba(139, 0, 0, 0.5), 0 0 25px rgba(212, 175, 55, 0.3);
+    overflow: hidden;
+}
+
+.open-world-btn::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(212, 175, 55, 0.4) 0%, transparent 60%);
+    opacity: 0;
+    transition: opacity 0.4s ease;
 }
 
 .open-world-btn:hover {
-    transform: translateY(-2px) scale(1.04);
-    box-shadow: 0 14px 28px rgba(0,0,0,0.35);
+    transform: translateY(-3px) scale(1.03);
+    box-shadow: 0 18px 45px rgba(139, 0, 0, 0.7), 0 0 40px rgba(212, 175, 55, 0.5);
 }
 
-/* 3. MAIN APP CONTAINER */
+.open-world-btn:hover::before {
+    opacity: 1;
+}
+
+/* ==========================================================================
+   3. MAIN APP LAYOUT & GLASSMORPHISM MENU
+   ========================================================================== */
+
 .app-container {
-    max-width: 1200px;
+    max-width: 1280px;
     margin: 0 auto;
-    padding: 24px;
+    padding: 36px 24px 80px 24px;
 }
 
 .hidden {
     display: none !important;
 }
 
-/* FLOATING HAMBURGER MENU */
+/* Floating Glassmorphism Hamburger */
 .floating-menu-container {
     position: fixed;
-    top: 24px;
-    right: 24px;
+    top: 32px;
+    right: 36px;
     z-index: 1000;
 }
 
 .floating-fab {
-    width: 56px;
-    height: 56px;
+    width: 60px;
+    height: 60px;
     border-radius: 50%;
-    background-color: var(--surface);
-    color: var(--accent-color);
-    border: 2px solid var(--gold-accent);
-    font-size: 24px;
+    background: var(--glass-bg);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    color: var(--gold-primary);
+    border: 1px solid var(--border-color);
+    font-size: 26px;
     cursor: pointer;
-    box-shadow: 0 8px 20px rgba(0,0,0,0.25);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5), 0 0 15px rgba(212, 175, 55, 0.2);
     display: flex;
     justify-content: center;
     align-items: center;
 }
 
-.floating-dropdown {
-    position: absolute;
-    top: 68px;
-    right: 0;
-    width: 240px;
-    background-color: var(--surface);
-    border: 2px solid var(--gold-accent);
-    border-radius: 20px;
-    padding: 12px;
-    box-shadow: 0 16px 36px rgba(0,0,0,0.3);
-    animation: fadeInScale 0.25s ease-out;
+.floating-fab:hover {
+    transform: scale(1.08);
+    box-shadow: 0 14px 40px rgba(0,0,0,0.6), 0 0 25px rgba(212, 175, 55, 0.4);
 }
 
-@keyframes fadeInScale {
-    from { opacity: 0; transform: scale(0.85); }
-    to { opacity: 1; transform: scale(1); }
+.floating-dropdown {
+    position: absolute;
+    top: 76px;
+    right: 0;
+    width: 260px;
+    background: var(--glass-bg);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid var(--border-color);
+    border-radius: 24px;
+    padding: 16px;
+    box-shadow: var(--shadow-luxury);
+    animation: menuSlideIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+@keyframes menuSlideIn {
+    from { opacity: 0; transform: translateY(-10px) scale(0.92); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
 }
 
 .menu-brand {
-    font-family: 'Cinzel', serif;
-    font-size: 18px;
+    font-family: 'Cinzel Decorative', 'Cinzel', serif;
+    font-size: 20px;
     font-weight: 700;
-    color: var(--accent-color);
+    color: var(--gold-primary);
     padding: 8px 12px;
     border-bottom: 1px solid var(--border-color);
-    margin-bottom: 8px;
+    margin-bottom: 12px;
+    letter-spacing: 2px;
 }
 
 .menu-item {
     display: flex;
     align-items: center;
     width: 100%;
-    padding: 12px;
+    padding: 14px 16px;
     border: none;
     background: transparent;
     color: var(--text-secondary);
-    font-size: 15px;
+    font-size: 16px;
     font-family: var(--font-family);
     font-weight: 600;
-    border-radius: 12px;
+    border-radius: 14px;
     cursor: pointer;
     text-align: left;
 }
 
 .menu-item .icon {
-    margin-right: 12px;
-    font-size: 18px;
+    margin-right: 14px;
+    font-size: 20px;
 }
 
 .menu-item:hover, .menu-item.active {
-    background-color: var(--surface-variant);
+    background: var(--surface-variant);
     color: var(--text-primary);
+    box-shadow: inset 0 0 12px rgba(212, 175, 55, 0.15);
 }
 
-/* LIBRARY SCREEN */
+.menu-item.active {
+    border-left: 3px solid var(--gold-primary);
+}
+
+/* ==========================================================================
+   4. LIBRARY SCREEN (ULTRA PREMIUM)
+   ========================================================================== */
+
 .library-header {
-    margin-bottom: 28px;
+    margin-bottom: 36px;
 }
 
 .library-header h2 {
-    font-family: 'Cinzel', serif;
-    font-size: 36px;
-    color: var(--text-primary);
-    margin-bottom: 6px;
+    font-family: 'Cinzel Decorative', 'Cinzel', serif;
+    font-size: 42px;
+    background: linear-gradient(135deg, var(--text-primary) 0%, var(--gold-light) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 8px;
 }
 
 .library-header p {
     color: var(--text-secondary);
-    font-size: 16px;
+    font-size: 18px;
+    font-style: italic;
 }
 
 /* Category Chips */
 .category-chips-row {
     display: flex;
-    gap: 10px;
+    gap: 12px;
     overflow-x: auto;
     padding-bottom: 16px;
-    margin-bottom: 24px;
+    margin-bottom: 32px;
 }
 
 .chip-btn {
-    padding: 8px 18px;
-    border-radius: 20px;
-    background-color: var(--surface);
+    padding: 10px 22px;
+    border-radius: 30px;
+    background: var(--surface-color);
     border: 1px solid var(--border-color);
-    color: var(--text-primary);
-    font-size: 14px;
+    color: var(--text-secondary);
+    font-size: 15px;
     cursor: pointer;
     white-space: nowrap;
 }
 
 .chip-btn.active {
-    background-color: var(--accent-color);
-    color: #FFF;
-    border-color: var(--gold-accent);
+    background: linear-gradient(135deg, var(--accent-color) 0%, #5E0000 100%);
+    color: var(--gold-light);
+    border-color: var(--gold-primary);
     font-weight: 700;
+    box-shadow: 0 6px 18px rgba(139, 0, 0, 0.4);
 }
 
-/* Featured Book Banner */
+/* Featured Book Banner (3D Luxury Card) */
 .featured-book-card {
-    background-color: var(--surface);
-    border: 2px solid var(--gold-accent);
-    border-radius: 24px;
-    padding: 24px;
-    margin-bottom: 36px;
-    box-shadow: 0 12px 28px rgba(0,0,0,0.15);
+    background: linear-gradient(135deg, var(--surface-color) 0%, var(--surface-variant) 100%);
+    border: 1px solid var(--border-color);
+    border-radius: 28px;
+    padding: 32px;
+    margin-bottom: 44px;
+    box-shadow: var(--shadow-luxury);
     display: flex;
-    gap: 24px;
+    gap: 32px;
     align-items: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.featured-book-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 300px;
+    height: 300px;
+    background: radial-gradient(circle, rgba(212, 175, 55, 0.1) 0%, transparent 70%);
+    pointer-events: none;
 }
 
 .book-cover-box {
-    width: 120px;
-    height: 170px;
-    border-radius: 12px;
+    width: 140px;
+    height: 200px;
+    border-radius: 14px;
     background: var(--accent-color);
-    border: 2px solid var(--gold-accent);
+    border: 2px solid var(--gold-primary);
     color: #FFF;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     text-align: center;
-    padding: 12px;
-    box-shadow: 0 8px 16px rgba(0,0,0,0.25);
+    padding: 16px;
+    box-shadow: 0 12px 30px rgba(0,0,0,0.5), inset 0 0 15px rgba(212, 175, 55, 0.2);
     flex-shrink: 0;
 }
 
 .book-cover-box .cover-title {
     font-family: 'Cinzel', serif;
-    font-size: 14px;
+    font-size: 16px;
     font-weight: 700;
 }
 
@@ -347,105 +480,127 @@ body {
 
 .featured-badge {
     display: inline-block;
-    background-color: var(--accent-color);
-    color: var(--gold-accent);
-    font-size: 11px;
+    background: linear-gradient(135deg, var(--accent-color) 0%, #5E0000 100%);
+    color: var(--gold-light);
+    font-family: 'Cinzel', serif;
+    font-size: 12px;
     font-weight: 700;
-    padding: 4px 10px;
-    border-radius: 10px;
-    margin-bottom: 8px;
+    padding: 6px 14px;
+    border-radius: 14px;
+    margin-bottom: 12px;
+    border: 1px solid var(--border-color);
+    letter-spacing: 1px;
 }
 
 .featured-info h3 {
-    font-size: 24px;
+    font-family: 'Playfair Display', serif;
+    font-size: 30px;
     font-weight: 700;
-    margin-bottom: 4px;
+    margin-bottom: 6px;
+    color: var(--text-primary);
 }
 
 .featured-info .author {
     color: var(--text-secondary);
-    font-size: 15px;
-    margin-bottom: 12px;
+    font-size: 16px;
+    font-style: italic;
+    margin-bottom: 14px;
 }
 
 .featured-info p {
     color: var(--text-secondary);
-    font-size: 14px;
-    line-height: 1.5;
-    margin-bottom: 20px;
+    font-size: 15px;
+    line-height: 1.6;
+    margin-bottom: 24px;
 }
 
 .btn-group {
     display: flex;
-    gap: 12px;
+    gap: 16px;
 }
 
 .primary-btn {
-    background-color: var(--accent-color);
-    color: #FFF;
-    border: 1px solid var(--gold-accent);
-    padding: 10px 24px;
-    border-radius: 16px;
+    background: linear-gradient(135deg, var(--accent-color) 0%, #5E0000 100%);
+    color: var(--gold-light);
+    border: 1px solid var(--gold-primary);
+    padding: 12px 28px;
+    border-radius: 20px;
     font-weight: 700;
+    font-family: 'Cinzel', serif;
     cursor: pointer;
+    box-shadow: 0 8px 20px rgba(139, 0, 0, 0.4);
+}
+
+.primary-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 26px rgba(139, 0, 0, 0.6);
 }
 
 .secondary-btn {
     background: transparent;
     color: var(--text-primary);
-    border: 1.5px solid var(--accent-color);
-    padding: 10px 20px;
-    border-radius: 16px;
+    border: 1.5px solid var(--border-color);
+    padding: 12px 24px;
+    border-radius: 20px;
     font-weight: 600;
+    font-family: 'Cinzel', serif;
     cursor: pointer;
+}
+
+.secondary-btn:hover {
+    background: var(--surface-variant);
+    border-color: var(--gold-primary);
 }
 
 /* Books Grid */
 .section-title {
-    font-family: 'Cinzel', serif;
-    font-size: 24px;
+    font-family: 'Cinzel Decorative', 'Cinzel', serif;
+    font-size: 26px;
     font-weight: 700;
-    margin-bottom: 16px;
+    margin-bottom: 20px;
+    color: var(--text-primary);
 }
 
 .books-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-    gap: 20px;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 24px;
 }
 
 .book-card {
-    background-color: var(--surface);
-    border-radius: 16px;
-    padding: 16px;
+    background: var(--surface-color);
+    border-radius: 20px;
+    padding: 20px;
     border: 1px solid var(--border-color);
     display: flex;
-    gap: 16px;
+    gap: 18px;
     align-items: center;
     cursor: pointer;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.3);
 }
 
 .book-card:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+    transform: translateY(-5px);
+    border-color: var(--gold-primary);
+    box-shadow: var(--shadow-luxury);
 }
 
 .mini-cover {
-    width: 65px;
-    height: 90px;
-    border-radius: 8px;
+    width: 75px;
+    height: 105px;
+    border-radius: 10px;
     background-color: var(--accent-color);
     color: #FFF;
     display: flex;
     justify-content: center;
     align-items: center;
     text-align: center;
-    font-size: 10px;
+    font-size: 11px;
     font-weight: 700;
-    padding: 4px;
-    border: 1px solid var(--gold-accent);
+    padding: 6px;
+    border: 1.5px solid var(--gold-primary);
     flex-shrink: 0;
+    box-shadow: 0 6px 14px rgba(0,0,0,0.4);
 }
 
 .book-card-info {
@@ -453,76 +608,83 @@ body {
 }
 
 .book-card-info h4 {
-    font-size: 16px;
+    font-size: 18px;
     font-weight: 700;
-    margin-bottom: 2px;
+    margin-bottom: 4px;
+    color: var(--text-primary);
 }
 
 .book-card-info .author {
-    font-size: 13px;
+    font-size: 14px;
     color: var(--text-secondary);
-    margin-bottom: 6px;
+    margin-bottom: 8px;
 }
 
 .progress-bar-bg {
     width: 100%;
-    height: 5px;
-    background-color: var(--border-color);
+    height: 6px;
+    background-color: var(--surface-variant);
     border-radius: 3px;
     overflow: hidden;
-    margin-top: 6px;
+    margin-top: 8px;
 }
 
 .progress-fill {
     height: 100%;
-    background-color: var(--gold-accent);
+    background: linear-gradient(90deg, var(--gold-primary), var(--gold-light));
 }
 
-/* READER SCREEN */
+/* ==========================================================================
+   5. BOOK READER SCREEN (ULTRA MANUSCRIPT)
+   ========================================================================== */
+
 .reader-top-bar {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 12px 20px;
-    background-color: var(--surface);
+    padding: 16px 24px;
+    background: var(--surface-color);
     border: 1px solid var(--border-color);
-    border-radius: 16px;
-    margin-bottom: 16px;
+    border-radius: 20px;
+    margin-bottom: 24px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.3);
 }
 
 .reader-book-title {
     font-family: 'Cinzel', serif;
-    font-size: 18px;
+    font-size: 20px;
     font-weight: 700;
+    color: var(--text-primary);
 }
 
 .icon-btn {
     background: transparent;
     border: none;
     color: var(--text-primary);
-    font-size: 18px;
+    font-size: 20px;
     cursor: pointer;
-    padding: 6px 12px;
-    border-radius: 8px;
+    padding: 8px 14px;
+    border-radius: 12px;
 }
 
 .icon-btn:hover {
     background-color: var(--surface-variant);
+    color: var(--gold-primary);
 }
 
 .reader-stage {
     position: relative;
-    margin-bottom: 16px;
+    margin-bottom: 24px;
 }
 
 .book-spine-card {
     position: relative;
-    background-color: var(--surface);
-    border: 2px solid var(--gold-accent);
-    border-radius: 20px;
-    padding: 36px;
-    min-height: 480px;
-    box-shadow: 0 16px 36px rgba(0,0,0,0.2);
+    background: var(--surface-color);
+    border: 1.5px solid var(--border-color);
+    border-radius: 24px;
+    padding: 48px;
+    min-height: 520px;
+    box-shadow: var(--shadow-luxury);
     overflow: hidden;
 }
 
@@ -531,33 +693,33 @@ body {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%) rotate(-25deg);
-    font-family: 'Cinzel', serif;
-    font-size: 110px;
+    font-family: 'Cinzel Decorative', 'Cinzel', serif;
+    font-size: 130px;
     font-weight: 900;
     color: var(--watermark-color);
     pointer-events: none;
     user-select: none;
 }
 
-/* Physical Satin Ribbon Bookmark Animation */
+/* REALISTIC SATIN RIBBON BOOKMARK */
 .physical-ribbon {
     position: absolute;
     top: -4px;
-    right: 48px;
-    width: 32px;
-    height: 200px;
-    background-color: var(--ribbon-color);
-    border: 1px solid var(--gold-accent);
+    right: 56px;
+    width: 36px;
+    height: 220px;
+    background: linear-gradient(180deg, var(--ribbon-color) 0%, #4A0000 100%);
+    border: 1px solid var(--gold-primary);
     border-bottom: none;
-    border-radius: 0 0 10px 10px;
-    box-shadow: 0 8px 16px rgba(0,0,0,0.3);
+    border-radius: 0 0 12px 12px;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.4);
     z-index: 20;
     animation: dropRibbon 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
 @keyframes dropRibbon {
     from { height: 0; }
-    to { height: 200px; }
+    to { height: 220px; }
 }
 
 .ribbon-stitching {
@@ -565,17 +727,18 @@ body {
     bottom: 0;
     left: 0;
     width: 100%;
-    height: 24px;
-    background-color: var(--gold-accent);
+    height: 28px;
+    background-color: var(--gold-primary);
     clip-path: polygon(0 0, 50% 100%, 100% 0, 100% 100%, 0 100%);
 }
 
 .page-text-content {
-    font-size: 18px;
-    line-height: 1.7;
+    font-size: 19px;
+    line-height: 1.8;
     text-align: justify;
     position: relative;
     z-index: 10;
+    color: var(--text-primary);
 }
 
 .page-hotspot {
@@ -591,14 +754,15 @@ body {
 .page-hotspot.right { right: 0; }
 
 .reader-bottom-bar {
-    background-color: var(--surface);
+    background: var(--surface-color);
     border: 1px solid var(--border-color);
-    border-radius: 16px;
-    padding: 16px;
+    border-radius: 20px;
+    padding: 20px;
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 12px;
+    gap: 14px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.3);
 }
 
 .reader-nav-controls {
@@ -609,74 +773,80 @@ body {
 }
 
 .nav-btn {
-    background-color: var(--accent-color);
-    color: #FFF;
-    border: none;
-    padding: 8px 20px;
-    border-radius: 12px;
+    background: linear-gradient(135deg, var(--accent-color) 0%, #5E0000 100%);
+    color: var(--gold-light);
+    border: 1px solid var(--border-color);
+    padding: 10px 24px;
+    border-radius: 14px;
+    font-family: 'Cinzel', serif;
     font-weight: 700;
     cursor: pointer;
 }
 
 .page-counter {
+    font-family: 'Cinzel', serif;
     font-weight: 700;
-    font-size: 15px;
+    font-size: 16px;
 }
 
 .page-slider {
-    width: 80%;
+    width: 85%;
     accent-color: var(--accent-color);
 }
 
 /* SETTINGS CARD */
 .settings-card {
-    background-color: var(--surface);
-    border: 1.5px solid var(--gold-accent);
-    border-radius: 20px;
-    padding: 24px;
-    margin-bottom: 20px;
+    background: var(--surface-color);
+    border: 1px solid var(--border-color);
+    border-radius: 24px;
+    padding: 28px;
+    margin-bottom: 24px;
+    box-shadow: var(--shadow-luxury);
 }
 
 .settings-card h3 {
-    font-size: 20px;
-    margin-bottom: 16px;
+    font-family: 'Cinzel', serif;
+    font-size: 22px;
+    margin-bottom: 20px;
+    color: var(--text-primary);
 }
 
 .theme-options {
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: 16px;
 }
 
 .radio-option {
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: 16px;
     cursor: pointer;
 }
 
-.radio-label strong { display: block; font-size: 16px; }
-.radio-label span { font-size: 13px; color: var(--text-secondary); }
+.radio-label strong { display: block; font-size: 17px; }
+.radio-label span { font-size: 14px; color: var(--text-secondary); }
 
 .font-options {
     display: flex;
-    gap: 10px;
-    margin-bottom: 16px;
+    gap: 12px;
+    margin-bottom: 20px;
 }
 
 .font-chip {
-    padding: 8px 16px;
-    border-radius: 12px;
+    padding: 10px 20px;
+    border-radius: 14px;
     border: 1px solid var(--border-color);
-    background-color: var(--surface-variant);
+    background: var(--surface-variant);
     color: var(--text-primary);
     cursor: pointer;
 }
 
 .font-chip.active {
-    background-color: var(--accent-color);
-    color: #FFF;
+    background: linear-gradient(135deg, var(--accent-color) 0%, #5E0000 100%);
+    color: var(--gold-light);
     font-weight: 700;
+    border-color: var(--gold-primary);
 }
 
 .font-size-control {
@@ -686,13 +856,14 @@ body {
 }
 
 .size-btn {
-    width: 36px;
-    height: 36px;
-    border-radius: 8px;
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
     border: 1px solid var(--border-color);
     background: var(--surface-variant);
-    font-size: 18px;
+    font-size: 20px;
     font-weight: 700;
+    color: var(--text-primary);
     cursor: pointer;
 }
 
@@ -702,6 +873,7 @@ body {
     align-items: center;
     cursor: pointer;
     font-weight: 600;
+    font-size: 16px;
 }
 
 /* MODAL */
@@ -711,7 +883,8 @@ body {
     left: 0;
     width: 100vw;
     height: 100vh;
-    background: rgba(0,0,0,0.5);
+    background: rgba(0,0,0,0.6);
+    backdrop-filter: blur(8px);
     z-index: 2000;
     display: flex;
     justify-content: center;
@@ -719,39 +892,41 @@ body {
 }
 
 .modal-card {
-    background-color: var(--surface);
-    border: 2px solid var(--gold-accent);
-    border-radius: 24px 24px 0 0;
-    padding: 24px;
+    background: var(--surface-color);
+    border: 1px solid var(--border-color);
+    border-radius: 28px 28px 0 0;
+    padding: 28px;
     width: 100%;
-    max-width: 500px;
+    max-width: 540px;
 }
 
 .modal-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 16px;
+    margin-bottom: 20px;
 }
 
 .close-btn {
     background: transparent;
     border: none;
-    font-size: 20px;
+    font-size: 22px;
+    color: var(--text-primary);
     cursor: pointer;
 }
 
 .quick-theme-buttons, .quick-font-buttons {
     display: flex;
-    gap: 8px;
-    margin-bottom: 16px;
+    gap: 10px;
+    margin-bottom: 20px;
 }
 
 .theme-btn, .font-btn {
     flex: 1;
-    padding: 10px;
-    border-radius: 10px;
+    padding: 12px;
+    border-radius: 12px;
     border: 1px solid var(--border-color);
     background: var(--surface-variant);
+    color: var(--text-primary);
     cursor: pointer;
 }
