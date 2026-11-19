@@ -43,6 +43,25 @@ If the browser displays the Data API access message, check the Supabase project'
 - `styles.css` — manuscript design, responsive layout and themes
 - `app.js` — opening animation, library queries, search, filters and reading history
 
+## Phase 3 — Immersive reading experience
+
+- Full-screen PDF reading room powered by PDF.js from a pinned CDN; no Node.js or local build step.
+- Page-by-page rendering with animated page turns, previous/next controls, keyboard arrows and touch swipes.
+- PDF document outline navigation for chapters/sections when the uploaded PDF contains an outline.
+- Reading progress saved per book in the current browser, with a continue-reading action.
+- Optional page-turn sound and PDF download access.
+
+## Phase 4 — Signature reading atmosphere
+
+- Enhanced Manuscript, Classic Vellum and Dark Heritage are selectable inside the reader.
+- Animated physical-style ribbon bookmark for the current page.
+- Theme choice, page bookmark and reading progress persist on the current device.
+- Responsive reading room with reduced-motion support.
+
+## Current boundaries
+
+Reading progress and page bookmarks are local to the current browser/device. Cross-device sync requires authenticated accounts and a protected progress table, planned with the account/backend phase. Chapter navigation uses the PDF's embedded outline; PDFs without one still support page-by-page reading. The admin dashboard and upload workflows remain a later phase.
+
 ## Next work
 
 The admin dashboard, authenticated admin workflows, PDF upload management, and immersive page-turn reader are later development work. They are not faked in this phase.

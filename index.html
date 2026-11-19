@@ -100,7 +100,48 @@
   <dialog class="book-dialog" id="bookDialog">
     <button class="dialog-close" id="dialogClose" aria-label="Close book details">×</button>
     <div class="dialog-cover" id="dialogCover"></div>
-    <div class="dialog-content"><p class="eyebrow" id="dialogGenre">THE VELLORA COLLECTION</p><h2 id="dialogTitle">A story</h2><p class="dialog-author" id="dialogAuthor"></p><p class="dialog-description" id="dialogDescription"></p><div class="dialog-actions"><a class="primary-action" id="downloadBook" href="#" target="_blank" rel="noopener">DOWNLOAD BOOK ↗</a><button class="save-action" id="saveBook">♡ SAVE STORY</button></div></div>
+    <div class="dialog-content"><p class="eyebrow" id="dialogGenre">THE VELLORA COLLECTION</p><h2 id="dialogTitle">A story</h2><p class="dialog-author" id="dialogAuthor"></p><p class="dialog-description" id="dialogDescription"></p><div class="dialog-actions"><a class="primary-action" id="downloadBook" href="#" target="_blank" rel="noopener">DOWNLOAD BOOK ↗</a><button class="save-action" id="readBook">OPEN READER ↗</button><button class="save-action" id="saveBook">♡ SAVE STORY</button></div></div>
+  </dialog>
+
+
+  <dialog class="reader-dialog theme-manuscript" id="readerDialog" aria-label="VELLORA reading room">
+    <header class="reader-toolbar">
+      <button class="reader-icon-button" id="readerClose" aria-label="Close reader">← <span>LIBRARY</span></button>
+      <div class="reader-book-heading"><strong id="readerBookTitle">A VELLORA STORY</strong><small id="readerPageLabel">PAGE 1</small></div>
+      <div class="reader-toolbar-actions">
+        <button class="reader-icon-button" id="readerOutlineToggle" aria-label="Open chapters">☷</button>
+        <button class="reader-icon-button" id="readerSound" aria-label="Toggle page sound" aria-pressed="false">♫</button>
+        <button class="reader-icon-button" id="readerThemeToggle" aria-label="Reading themes">◐</button>
+      </div>
+    </header>
+    <div class="reader-progress-track"><span id="readerProgress"></span></div>
+    <div class="reader-workspace">
+      <aside class="reader-outline" id="readerOutline" aria-hidden="true">
+        <p class="eyebrow">IN THIS BOOK</p><h3>Chapters & sections</h3>
+        <div id="readerOutlineList"><p class="outline-empty">Loading the book's contents…</p></div>
+      </aside>
+      <section class="reader-stage">
+        <div class="reader-theme-popover" id="readerThemePopover" hidden>
+          <p class="eyebrow">READING ATMOSPHERE</p>
+          <button data-reader-theme="manuscript" class="reader-theme-choice selected"><span class="theme-swatch swatch-manuscript"></span>Enhanced Manuscript</button>
+          <button data-reader-theme="vellum" class="reader-theme-choice"><span class="theme-swatch swatch-vellum"></span>Classic Vellum</button>
+          <button data-reader-theme="dark" class="reader-theme-choice"><span class="theme-swatch swatch-dark"></span>Dark Heritage</button>
+        </div>
+        <div class="reader-book-frame">
+          <div class="reader-page-wrap" id="readerPageWrap">
+            <canvas id="readerCanvas" aria-label="Current PDF page"></canvas>
+            <div class="reader-page-loading" id="readerLoading">Preparing your reading room…</div>
+            <button class="page-bookmark-ribbon" id="readerBookmark" aria-label="Bookmark this page" aria-pressed="false"><span>✦</span></button>
+          </div>
+        </div>
+        <div class="reader-controls">
+          <button class="reader-page-button" id="readerPrevious" disabled>← <span>PREVIOUS</span></button>
+          <span class="reader-page-count" id="readerPageCount">1 / —</span>
+          <button class="reader-page-button" id="readerNext" disabled><span>NEXT</span> →</button>
+        </div>
+        <p class="reader-hint">SWIPE OR USE THE ARROWS TO TURN THE PAGE</p>
+      </section>
+    </div>
   </dialog>
 
   <dialog class="settings-dialog" id="settingsDialog">
