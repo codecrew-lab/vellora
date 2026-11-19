@@ -244,6 +244,7 @@ button { font: inherit; }
   transform-origin: right center;
 }
 
+.manuscript-cover.is-opening { background: transparent; pointer-events: none; }
 .manuscript-cover.is-opening .manuscript-left { transform: translateX(-100%); }
 .manuscript-cover.is-opening .manuscript-right { transform: translateX(100%); }
 
