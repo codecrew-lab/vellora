@@ -20,7 +20,7 @@ In Supabase Authentication → Users, invite/create the admin account. Set trust
 The requested code `123098` is not embedded in public browser code because a shared PIN in JavaScript can be discovered. The current login uses Supabase email/password plus the trusted admin role. If a separate PIN is required, it needs server-side verification with an Edge Function secret and rate limiting.
 
 ## Deployment
-Deploy the repository root as a static site. Ensure all site files are published together. No build command is needed.
+Deploy the repository root with the included GitHub Pages workflow. After merging, open repository Settings → Pages and select GitHub Actions as the source. The workflow checks out the repository and publishes the static files directly; no build command or Node.js setup is required. See `TESTING.md` for the release checklist.
 
 ## Verification still required
 A real browser session, real admin upload, live PDF reading/download, and deployed GitHub Pages URL still need testing. The code has not been represented as end-to-end tested against a real browser/admin session.
