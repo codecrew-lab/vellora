@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#211914">
+  <meta name="description" content="VELLORA — A beautiful world where stories come to life.">
+  <title>VELLORA — A world of stories</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script defer src="app.js"></script>
+</head>
+<body data-theme="manuscript">
+  <div class="ambient ambient-one"></div><div class="ambient ambient-two"></div>
+  <header class="topbar">
+    <a class="wordmark" href="#" aria-label="Vellora home">VELLORA<span>✦</span></a>
+    <div class="topbar-actions">
+      <span class="edition-label">THE DIGITAL READING ROOM</span>
+      <button class="icon-button menu-trigger" id="menuTrigger" aria-label="Open menu" aria-expanded="false"><i></i><i></i></button>
+    </div>
+  </header>
+
+  <main>
+    <section class="library-shell" id="library">
+      <div class="hero-copy">
+        <p class="eyebrow"><span class="eyebrow-line"></span> A WORLD BETWEEN THE COVERS</p>
+        <h1>Every story<br><em>opens a world.</em></h1>
+        <p class="hero-description">A quiet place for curious minds, timeless stories, and the joy of getting lost in a book.</p>
+        <a class="text-link" href="#discover">WANDER THROUGH THE LIBRARY <span>↗</span></a>
+      </div>
+      <div class="hero-art" aria-label="An atmospheric still life of antique books">
+        <div class="art-glow"></div><div class="book-stack stack-back"></div><div class="book-stack stack-mid"></div>
+        <div class="hero-book"><div class="book-spine"></div><div class="hero-book-content"><span>VELLORA</span><b>THE ART OF<br>GETTING LOST</b><small>A COLLECTION OF WORLDS</small><i>✦</i></div></div>
+        <div class="art-caption">A LIBRARY WITHOUT END <span>— EST. IN WONDER</span></div>
+      </div>
+    </section>
+
+    <section class="discovery" id="discover">
+      <div class="section-heading">
+        <div><p class="eyebrow">THE COLLECTION</p><h2>Find your next <em>somewhere.</em></h2></div>
+        <p class="section-note">A story for every season of the soul.</p>
+      </div>
+      <div class="search-row">
+        <label class="search-box"><span>⌕</span><input id="searchInput" type="search" placeholder="Search titles, authors, or stories…" autocomplete="off"><kbd>↵</kbd></label>
+        <button class="filter-button" id="clearSearch" type="button">CLEAR</button>
+      </div>
+      <div class="genre-row" id="genreFilters" aria-label="Filter by genre">
+        <button class="genre-chip active" data-genre="all">All stories</button>
+        <span class="genre-loading">Genres appear as books are published</span>
+      </div>
+      <div class="collection-heading"><h3 id="collectionTitle">The library</h3><span id="bookCount">0 STORIES</span></div>
+      <div class="book-grid" id="bookGrid">
+        <div class="empty-library"><span class="empty-mark">✧</span><h3>The shelves are waiting.</h3><p>New stories will appear here as soon as the VELLORA team publishes them.</p></div>
+      </div>
+      <div class="load-status" id="loadStatus" role="status"></div>
+    </section>
+
+    <section class="recent-section" id="recentSection" hidden>
+      <div class="section-heading compact"><div><p class="eyebrow">PICK UP WHERE YOU LEFT OFF</p><h2>Recently <em>opened.</em></h2></div></div>
+      <div class="recent-list" id="recentList"></div>
+    </section>
+    <section class="closing-note"><span>✦</span><p>Take your time.<br><em>The best worlds are never rushed.</em></p></section>
+  </main>
+
+  <footer><a class="wordmark" href="#">VELLORA<span>✦</span></a><p>A beautiful world where stories come to life.</p><span>MADE FOR THE LOVE OF STORIES</span></footer>
+
+  <div class="menu-backdrop" id="menuBackdrop"></div>
+  <aside class="side-menu" id="sideMenu" aria-hidden="true">
+    <div class="menu-head"><span class="eyebrow">YOUR READING ROOM</span><button class="icon-button" id="menuClose" aria-label="Close menu">×</button></div>
+    <nav><a href="#library" data-menu-close>Library <span>01</span></a><a href="#recentSection" data-menu-close>Recently Read <span>02</span></a><button id="settingsToggle">Settings <span>03</span></button></nav>
+    <div class="settings-panel" id="settingsPanel" hidden><p class="eyebrow">READING ATMOSPHERE</p><button data-theme-choice="manuscript">Enhanced Manuscript <span>✦</span></button><button data-theme-choice="vellum">Classic Vellum <span>✦</span></button><button data-theme-choice="heritage">Dark Heritage <span>✦</span></button></div>
+    <p class="menu-footer">A LITTLE MORE WONDER, EVERY DAY.</p>
+  </aside>
+
+  <dialog class="book-dialog" id="bookDialog">
+    <button class="dialog-close" id="dialogClose" aria-label="Close book details">×</button>
+    <div class="dialog-cover" id="dialogCover"></div>
+    <div class="dialog-copy"><p class="eyebrow" id="dialogGenre">A VELLORA STORY</p><h2 id="dialogTitle"></h2><p class="dialog-author" id="dialogAuthor"></p><p id="dialogDescription"></p><a class="primary-button" id="downloadBook" href="#" target="_blank" rel="noopener" hidden>READ / DOWNLOAD PDF ↗</a><p class="dialog-hint" id="dialogHint">The reading file will be available when the team publishes it.</p></div>
+  </dialog>
+
+  <div class="entrance" id="entrance" aria-label="VELLORA opening cover">
+    <div class="entrance-panel entrance-left"><div class="cover-grain"></div><div class="cover-inner"><span class="cover-ornament">✦</span><span class="cover-small">A PLACE FOR THE IMAGINATION</span><span class="cover-title">VELLO<span>RA</span></span><span class="cover-rule"></span><span class="cover-tagline">A beautiful world<br>where stories come to life.</span><span class="cover-bottom">THE DIGITAL READING ROOM · MMXXVI</span></div></div>
+    <div class="entrance-panel entrance-right"><div class="cover-grain"></div><div class="cover-inner right-inner"><span class="cover-ornament">✦</span><span class="cover-small">TURN THE FIRST PAGE</span><span class="cover-monogram">V</span><span class="cover-rule"></span><span class="cover-tagline">A thousand lives.<br>One beautiful escape.</span><button class="open-world" id="openWorld">OPEN THE WORLD <span>→</span></button><span class="cover-bottom">EST. IN WONDER · ALWAYS OPEN</span></div></div>
+    <div class="cover-seam"></div>
+  </div>
+  <noscript><p class="noscript">Please enable JavaScript to explore VELLORA.</p></noscript>
+</body>
+</html>
