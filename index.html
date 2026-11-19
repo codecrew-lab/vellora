@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#e9dfca">
+  <meta name="description" content="VELLORA — A beautiful world where stories come to life. Discover and read stories in an immersive literary library.">
+  <title>VELLORA — A world of stories</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./styles.css">
+  <script defer src="./app.js"></script>
+</head>
+<body class="theme-manuscript is-locked">
+  <div class="intro" id="intro" aria-label="VELLORA opening cover">
+    <div class="intro-grain"></div>
+    <div class="intro-cover">
+      <div class="cover-panel cover-left">
+        <span class="cover-ornament">✦</span>
+        <span class="cover-rule"></span>
+        <span class="cover-small">THE ART OF GETTING LOST</span>
+      </div>
+      <div class="cover-panel cover-right">
+        <span class="cover-mark">V</span>
+        <span class="cover-name">VELLORA</span>
+        <span class="cover-tagline">A beautiful world where stories come to life.</span>
+        <span class="cover-rule"></span>
+        <button class="open-world" id="openWorld">OPEN THE WORLD <span aria-hidden="true">↗</span></button>
+      </div>
+      <div class="cover-spine"></div>
+    </div>
+    <div class="intro-footnote">A LIBRARY BEYOND THE ORDINARY <span>EST. MMXXVI</span></div>
+  </div>
+
+  <div class="site-shell" id="siteShell" aria-hidden="true">
+    <header class="topbar">
+      <button class="menu-trigger" id="menuTrigger" aria-label="Open navigation" aria-expanded="false"><span></span><span></span></button>
+      <a class="wordmark" href="#home" aria-label="VELLORA home">VELLORA<span>®</span></a>
+      <div class="topbar-right"><span class="edition-label">THE DIGITAL LIBRARY</span><span class="topbar-seal">✦</span></div>
+    </header>
+
+    <aside class="side-menu" id="sideMenu" aria-hidden="true">
+      <div class="menu-heading">THE COLLECTION</div>
+      <button class="menu-link active" data-menu="library"><span>01</span> Library</button>
+      <button class="menu-link" data-menu="recent"><span>02</span> Recently Read</button>
+      <button class="menu-link" data-menu="settings"><span>03</span> Settings</button>
+      <div class="menu-bottom"><span>VELLORA</span><small>TURN A PAGE. ENTER A WORLD.</small></div>
+    </aside>
+    <button class="menu-scrim" id="menuScrim" aria-label="Close navigation"></button>
+
+    <main id="home">
+      <section class="hero">
+        <div class="hero-copy">
+          <p class="eyebrow"><span class="eyebrow-line"></span> A QUIETER KIND OF ESCAPE</p>
+          <h1>Somewhere between<br><em>the pages</em> and the world.</h1>
+          <p class="hero-description">A considered collection of stories, waiting to take you somewhere unforgettable.</p>
+          <a class="text-link" href="#library">EXPLORE THE LIBRARY <span>↘</span></a>
+        </div>
+        <div class="hero-art" aria-hidden="true">
+          <div class="sun-disc"></div><div class="art-orbit orbit-one"></div><div class="art-orbit orbit-two"></div>
+          <div class="hero-book"><div class="hero-book-inner"><span>V</span><small>THE WORLD<br>IN WORDS</small></div></div>
+          <div class="hero-art-caption">VOL. I <span>—</span> STORIES THAT STAY</div>
+        </div>
+        <div class="hero-index"><span>01</span><span class="index-line"></span><span>THE BEGINNING</span></div>
+      </section>
+
+      <section class="library-section" id="library">
+        <div class="section-heading">
+          <div><p class="eyebrow">THE VELLORA COLLECTION</p><h2>A world of <em>stories.</em></h2></div>
+          <p class="section-note">Every story has a place.<br>Find the one that feels like yours.</p>
+        </div>
+
+        <div class="discovery-bar">
+          <label class="search-box"><span aria-hidden="true">⌕</span><input id="bookSearch" type="search" placeholder="Search titles, authors, genres..." autocomplete="off"><kbd>↵</kbd></label>
+          <button class="sort-button" id="sortButton" aria-label="Sort books">LATEST <span>⌄</span></button>
+        </div>
+
+        <div class="genre-row" id="genreFilters" aria-label="Filter by genre">
+          <button class="genre-chip active" data-genre="all">All stories</button>
+        </div>
+
+        <div class="collection-meta"><span id="collectionLabel">THE COLLECTION</span><span id="bookCount">0 STORIES</span></div>
+        <div class="book-grid" id="bookGrid">
+          <div class="empty-library"><span class="empty-star">✳</span><h3>The first page is waiting.</h3><p>Our collection will appear here as soon as the VELLORA team publishes its first stories.</p></div>
+        </div>
+        <div class="library-footer"><span>END OF COLLECTION</span><span>✦</span><span>MORE STORIES, IN TIME</span></div>
+      </section>
+
+      <section class="quote-section">
+        <span class="quote-mark">“</span>
+        <blockquote>There is no friend as loyal<br>as a <em>book.</em></blockquote>
+        <p>— ERNEST HEMINGWAY</p>
+      </section>
+
+      <footer class="site-footer"><a class="footer-wordmark" href="#home">VELLORA</a><span>A beautiful world where stories come to life.</span><span>© 2026 VELLORA</span></footer>
+    </main>
+  </div>
+
+  <dialog class="book-dialog" id="bookDialog">
+    <button class="dialog-close" id="dialogClose" aria-label="Close book details">×</button>
+    <div class="dialog-cover" id="dialogCover"></div>
+    <div class="dialog-content"><p class="eyebrow" id="dialogGenre">THE VELLORA COLLECTION</p><h2 id="dialogTitle">A story</h2><p class="dialog-author" id="dialogAuthor"></p><p class="dialog-description" id="dialogDescription"></p><div class="dialog-actions"><a class="primary-action" id="downloadBook" href="#" target="_blank" rel="noopener">DOWNLOAD BOOK ↗</a><button class="save-action" id="saveBook">♡ SAVE STORY</button></div></div>
+  </dialog>
+
+  <dialog class="settings-dialog" id="settingsDialog">
+    <button class="dialog-close" id="settingsClose" aria-label="Close settings">×</button>
+    <p class="eyebrow">YOUR READING ATMOSPHERE</p><h2>Choose your <em>world.</em></h2>
+    <div class="theme-options">
+      <button class="theme-option selected" data-theme="manuscript"><span class="theme-swatch swatch-manuscript"></span><span><strong>Enhanced Manuscript</strong><small>Warm, aged paper</small></span><span class="theme-check">✓</span></button>
+      <button class="theme-option" data-theme="vellum"><span class="theme-swatch swatch-vellum"></span><span><strong>Classic Vellum</strong><small>Soft ivory and ink</small></span><span class="theme-check">✓</span></button>
+      <button class="theme-option" data-theme="dark"><span class="theme-swatch swatch-dark"></span><span><strong>Dark Heritage</strong><small>Deep, quiet tones</small></span><span class="theme-check">✓</span></button>
+    </div>
+    <p class="settings-note">Your choice is saved on this device.</p>
+  </dialog>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+</body>
+</html>
