@@ -56,14 +56,13 @@ Deno.serve(async(req:Request)=>{
  const allowedCovers=new Set(["nocturne","botanical","gilded","midnight","terracotta"]);
  const pdf=form.get("pdf");
  if(!title||title.length>180||!author||author.length>160||!genre||genre.length>80||!language||language.length>80||!allowedCovers.has(coverStyle))return json({error:"Complete required book details and choose a VELLORA cover."},400);
- if(pdf!==null&&!(pdf instanceof File))return json({error:"Invalid PDF upload."},400);
- if(pdf instanceof File&&pdf.size>0&&(pdf.size>80*1024*1024||pdf.type!=="application/pdf"))return json({error:"Choose a valid PDF smaller than 80 MB."},400);
+ if(!(pdf instanceof File)||pdf.size===0||pdf.type!=="application/pdf"||pdf.size>80*1024*1024)return json({error:"The generated VELLORA PDF is missing or invalid. Please try publishing again."},400);
  const id=crypto.randomUUID(),base=id+"-"+title.toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"").slice(0,100);
- const pdfPath=pdf instanceof File&&pdf.size>0?base+".pdf":null;
- if(pdfPath){const bytes=new Uint8Array(await pdf.arrayBuffer());const upload=await db.storage.from("book-files").upload(pdfPath,bytes,{upsert:false,contentType:"application/pdf"});if(upload.error)return json({error:"PDF upload failed: "+upload.error.message},400);}
+ const pdfPath=base+".pdf";
+ const bytes=new Uint8Array(await pdf.arrayBuffer());const upload=await db.storage.from("book-files").upload(pdfPath,bytes,{upsert:false,contentType:"application/pdf"});if(upload.error)return json({error:"Generated PDF upload failed: "+upload.error.message},400);
  const reading=form.get("reading_time_minutes");
- const row={id,title,author,slug:base+"-"+id.slice(0,8),description:String(form.get("description")||"").slice(0,3000),genre,cover_url:"vellora-cover://"+coverStyle,pdf_path:pdfPath,language,reading_time_minutes:reading?Math.max(1,Math.min(100000,Number(reading)||1)):null,is_featured:form.get("is_featured")==="on",is_recommended:form.get("is_recommended")==="on",is_published:form.get("is_published")==="on",created_by:null};
+ const row={id,title,author,slug:base+"-"+id.slice(0,8),description:String(form.get("description")||"").slice(0,3000),manuscript_content:String(form.get("manuscript_content")||"").trim(),genre,cover_url:"vellora-cover://"+coverStyle,pdf_path:pdfPath,language,reading_time_minutes:reading?Math.max(1,Math.min(100000,Number(reading)||1)):null,is_featured:form.get("is_featured")==="on",is_recommended:form.get("is_recommended")==="on",is_published:form.get("is_published")==="on",created_by:null};
  const {error}=await db.from("books").insert(row);
- if(error){if(pdfPath)await db.storage.from("book-files").remove([pdfPath]);return json({error:"Book record could not be saved: "+error.message},400);}
+ if(error){await db.storage.from("book-files").remove([pdfPath]);return json({error:"Book record could not be saved: "+error.message},400);}
  return json({ok:true,id});
 });
