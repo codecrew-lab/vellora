@@ -33,7 +33,7 @@ The app reads these fields from the existing `public.books` table:
 - `cover_url, pdf_path, language, reading_time_minutes`
 - `is_featured, is_recommended, is_published, created_at`
 
-Published records are selected with `is_published = true`. The existing Row Level Security policies are retained. The public Storage bucket used for downloadable editions is `vellora-books`.
+Published records are selected with `is_published = true`. The existing Row Level Security policies are retained. Public book metadata is read from `public.books`; downloadable PDF editions are stored in the private `book-files` bucket and delivered through short-lived signed URLs.
 
 If the browser displays the Data API access message, check the Supabase project's **Integrations → Data API** settings and ensure the `public` schema and `books` table are exposed to the Data API. Keep RLS enabled; public visitors should only be able to read published records. Admin write permissions must remain restricted to trusted admin accounts.
 
@@ -87,6 +87,14 @@ If the browser displays the Data API access message, check the Supabase project'
 - `book-covers` — public image delivery; only authorised admins can upload, replace or delete objects.
 - `book-files` — private PDF storage; admins can manage files, while public visitors can obtain a signed download/reader URL only for a PDF path linked to a published book.
 - `vellora-books` — legacy bucket retained untouched; new admin uploads use the existing dedicated cover and PDF buckets.
+
+## Phase 7 — Testing and deployment
+
+- `TESTING.md` contains the desktop/mobile, reader, admin, Supabase security and release checklist.
+- `scripts/validate_site.py` runs dependency-free static smoke checks for required files, local page references, duplicate IDs and key security/design invariants.
+- `.github/workflows/site.yml` runs the checks on pull requests and pushes to `main`; after a successful push to `main`, it can deploy the static site to GitHub Pages.
+- `DEPLOYMENT.md` explains the one-time GitHub Pages setup, production Supabase configuration, optional custom domain and rollback process.
+- No Node.js, package installation or local build command is introduced. GitHub Pages must be enabled with **GitHub Actions** as its source before the first deployment.
 
 ## Current boundaries
 
