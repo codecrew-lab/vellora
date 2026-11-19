@@ -82,7 +82,7 @@ async function draw(n,dir){
  const availableWidth=Math.max(1,stage.clientWidth-(window.matchMedia("(max-width:650px)").matches?8:112));
  const availableHeight=Math.max(1,stage.clientHeight-12);
  const scale=Math.max(.1,Math.min(availableWidth/v.width,availableHeight/v.height,2));
- const dpr=Math.max(1,Math.min(window.devicePixelRatio||1,2.5));
+ const dpr=Math.max(1,Math.min(window.devicePixelRatio||1,3));
  const vp=p.getViewport({scale:scale*dpr}),c=$("#pdfCanvas");
  const displayWidth=vp.width/dpr,displayHeight=vp.height/dpr;
  frame.style.width=displayWidth+"px";frame.style.height=displayHeight+"px";
