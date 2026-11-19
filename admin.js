@@ -19,7 +19,7 @@ pages.forEach((s,i)=>{let p=6+i*2,q=p+1;kids.push(p+" 0 R");o[p]="<< /Type /Page
 o[2]="<< /Type /Pages /Kids ["+kids.join(" ")+"] /Count "+pages.length+" >>";let out="%PDF-1.4\n",off=[0];for(let i=1;i<o.length;i++){off[i]=out.length;out+=i+" 0 obj\n"+o[i]+"\nendobj\n"}let x=out.length;out+="xref\n0 "+o.length+"\n0000000000 65535 f \n";for(let i=1;i<o.length;i++)out+=String(off[i]).padStart(10,"0")+" 00000 n \n";out+="trailer\n<< /Size "+o.length+" /Root 1 0 R /Info << /Title ("+esc(title)+") /Author ("+esc(author)+") /Creator (VELLORA Editions) >> >>\nstartxref\n"+x+"\n%%EOF";return new Blob([out],{type:"application/pdf"});
 }
 
-function status(el,msg,kind){el.textContent=msg;el.className="admin-status"+(kind?" "+kind)}
+function status(el,msg,kind){el.textContent=msg;el.className="admin-status"+(kind?" "+kind:"")}
 function lock(){sessionToken="";localStorage.removeItem(SESSION_KEY);$("#loginPanel").classList.remove("admin-hidden");$("#dashboard").classList.add("admin-hidden");$("#loginForm").reset()}
 function unlock(token){sessionToken=token;$("#loginPanel").classList.add("admin-hidden");$("#dashboard").classList.remove("admin-hidden");status($("#adminStatus"),"Private publishing workspace unlocked. Session valid for 7 days.","success");loadBooks()}
 async function callApi(body,token){const headers={};if(token)headers.Authorization="Bearer "+token;const isForm=body instanceof FormData;if(!isForm)headers["Content-Type"]="application/json";const response=await fetch(API,{method:"POST",headers,body:isForm?body:JSON.stringify(body)});let data={};try{data=await response.json()}catch(_){}if(!response.ok)throw new Error(data.error||"The request could not be completed.");return data}
