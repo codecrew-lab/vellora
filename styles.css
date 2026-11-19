@@ -229,3 +229,26 @@ dialog{inset:0;margin:auto;max-height:min(90dvh,900px);overscroll-behavior:conta
  .reader-bottom input{order:0;flex:1 1 100%;max-width:none;min-width:0;}
  .reader-bottom #soundToggle{font-size:.68rem;padding:6px 8px;white-space:nowrap;}
 }
+
+
+/* VELLORA cover typography: consistent geometry + individual art direction */
+.cover{position:relative;display:flex;flex-direction:column;justify-content:space-between;align-items:stretch;box-sizing:border-box;isolation:isolate;overflow:hidden;aspect-ratio:2/3;width:100%;min-width:0;height:auto;min-height:0;padding:10% 9%;color:#f7edda;text-align:center;container-type:inline-size;}
+.cover:before{content:"";position:absolute;inset:5%;border:1px solid rgba(230,205,160,.42);pointer-events:none;z-index:0}
+.cover em,.cover b,.cover small{position:relative;display:block;z-index:1;box-sizing:border-box;min-width:0;margin:0;color:inherit;overflow-wrap:anywhere;word-break:normal;}
+.cover em{flex:0 0 auto;font:italic 500 clamp(.48rem,5.2cqi,.9rem)/1.25 var(--display);max-width:100%;letter-spacing:.07em;}
+.cover b{flex:1 1 auto;display:flex;align-items:center;justify-content:center;width:100%;max-height:none;padding:7% 2%;font:600 clamp(.68rem,calc(13cqi * var(--title-scale,1)),1.7rem)/1.08 var(--display);letter-spacing:-.025em;text-align:center;text-wrap:balance;overflow:hidden;}
+.cover small{flex:0 0 auto;max-width:100%;font:500 clamp(.43rem,4.5cqi,.72rem)/1.2 var(--ui);letter-spacing:.09em;text-align:center;white-space:normal;overflow-wrap:anywhere;}
+.cover-nocturne{padding:10% 9%;justify-content:space-between;text-align:left;background:radial-gradient(circle at 70% 25%,#9c7952 0 2%,transparent 3%),linear-gradient(145deg,#3e3029,#171310)}
+.cover-nocturne:before{inset:5% 6%;border-color:rgba(218,187,143,.55)}.cover-nocturne em{text-align:left;align-self:flex-start;font-style:italic}.cover-nocturne b{justify-content:flex-start;text-align:left;padding:6% 2%;font-size:clamp(.68rem,calc(12.5cqi * var(--title-scale,1)),1.6rem)}.cover-nocturne small{text-align:left;align-self:flex-start}
+.cover-botanical{padding:12% 10%;justify-content:space-between;text-align:center;background:radial-gradient(ellipse at 50% 40%,#9b9b70,transparent 48%),linear-gradient(145deg,#354638,#17271f)}
+.cover-botanical:before{inset:7%;border-radius:48% 48% 3px 3px;border-color:rgba(222,220,177,.52)}.cover-botanical em{align-self:center;font-style:italic;letter-spacing:.13em}.cover-botanical b{font-style:italic;font-weight:500;letter-spacing:0}.cover-botanical small{align-self:center;letter-spacing:.12em}
+.cover-gilded{padding:13% 10%;justify-content:space-between;text-align:center;background:repeating-linear-gradient(45deg,transparent 0 12px,rgba(220,187,120,.09) 13px 14px),linear-gradient(145deg,#987346,#39271c)}
+.cover-gilded:before{inset:6%;border:2px double rgba(231,200,143,.7)}.cover-gilded em{align-self:center;font-style:normal;text-transform:uppercase;letter-spacing:.18em}.cover-gilded b{font-weight:600;letter-spacing:.015em}.cover-gilded small{align-self:center;text-transform:uppercase;letter-spacing:.15em}
+.cover-midnight{padding:11% 9%;justify-content:space-between;text-align:center;background:radial-gradient(circle at 70% 24%,#b69a75 0 1px,transparent 2px),linear-gradient(145deg,#242c43,#101521)}
+.cover-midnight:before{inset:5% 8%;border-color:rgba(190,173,145,.46)}.cover-midnight em{align-self:flex-end;text-align:right;font-style:normal;text-transform:uppercase;letter-spacing:.16em}.cover-midnight b{font-weight:600;letter-spacing:-.035em}.cover-midnight small{align-self:center;letter-spacing:.2em}
+.cover-terracotta{padding:11% 9%;justify-content:space-between;text-align:left;background:radial-gradient(ellipse at 50% 35%,#d49b70,transparent 45%),linear-gradient(145deg,#a65f43,#542e27)}
+.cover-terracotta:before{inset:7%;border:1px solid rgba(247,218,187,.5);border-radius:45% 45% 2px 2px}.cover-terracotta em{align-self:flex-start;font-style:italic}.cover-terracotta b{justify-content:flex-start;text-align:left;font-weight:600}.cover-terracotta small{align-self:flex-end;text-align:right}
+#dCover .cover{width:100%;max-width:190px;min-height:0;height:auto;}
+.featured .cover{width:100%;height:auto;aspect-ratio:2/3;}
+.card .cover{width:100%;height:auto;aspect-ratio:2/3;}
+@media(max-width:639px){.featured .cover{width:min(58%,190px);max-width:190px;height:auto;aspect-ratio:2/3}.card .cover{width:100%;height:auto;aspect-ratio:2/3}}

@@ -31,7 +31,7 @@ $("#open").onclick=()=>{
    previous preview already set the old one-time seen flag. */
 showLanding();
 
-function cover(b){const styles={nocturne:"cover-nocturne",botanical:"cover-botanical",gilded:"cover-gilded",midnight:"cover-midnight",terracotta:"cover-terracotta"};const key=String(b.cover_url||"").replace("vellora-cover://","");const cls=styles[key]||"cover-nocturne";return '<div class="cover '+cls+'"><em>'+esc(b.genre||"VELLORA EDITIONS")+'</em><b>'+esc(b.title)+'</b><small>'+esc(b.author||"VELLORA")+'</small></div>'}
+function cover(b){const styles={nocturne:"cover-nocturne",botanical:"cover-botanical",gilded:"cover-gilded",midnight:"cover-midnight",terracotta:"cover-terracotta"};const key=String(b.cover_url||"").replace("vellora-cover://","");const cls=styles[key]||"cover-nocturne";const titleLength=String(b.title||"").trim().length;const titleScale=titleLength>42?0.66:titleLength>30?0.76:titleLength>22?0.86:titleLength>14?0.94:1;return '<div class="cover '+cls+'" style="--title-scale:'+titleScale+'"><em>'+esc(b.genre||"VELLORA EDITIONS")+'</em><b>'+esc(b.title||"Untitled") +'</b><small>'+esc(b.author||"VELLORA")+'</small></div>'}
 function card(b){return '<button class="card" data-id="'+esc(b.id)+'">'+cover(b)+'<h3>'+esc(b.title)+'</h3><p>'+esc(b.description||"")+'</p><div class="meta">'+esc(b.author||"VELLORA")+' · '+esc(b.genre||"")+'</div></button>'}
 function empty(el,title,msg){el.innerHTML='<div class="empty-state"><h3>'+title+'</h3><p>'+msg+'</p></div>'}
 function recent(){return store.get("vellora.recent",[]).map(id=>books.find(b=>b.id===id)).filter(Boolean)}
