@@ -1,6 +1,6 @@
 (function(){
 "use strict";
-const API="https://egyrlxgpgkflcejtgvvc.supabase.co/functions/v1/vellora-admin";
+const API="https://egyrlxgpgkflcejtgvvc.supabase.co/functions/v1/vellora-admin-";
 const $=s=>document.querySelector(s);
 const SESSION_KEY="vellora.admin.session.v1";
 let sessionToken="";
