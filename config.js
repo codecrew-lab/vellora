@@ -1,0 +1,2 @@
+/* Public browser configuration only. Never add a secret/service-role key here. */
+window.VELLORA_CONFIG={url:"https://egyrlxgpgkflcejtgvvc.supabase.co",publishableKey:"sb_publishable_AyNnLpE63guwq4SLMQR31g_-id54atp"};

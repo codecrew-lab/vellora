@@ -1,23 +1,26 @@
 # VELLORA
+A manuscript-inspired static reading website built with HTML, CSS and JavaScript. No Node.js, local terminal or build step is required.
 
-A manuscript-inspired digital library.
+## Included
+- Preserves the supplied homepage and centre-split manuscript opening animation.
+- Removes hardcoded sample books; public catalogue loads only published rows from Supabase `public.books`.
+- Search, genre filters, featured story, Recently Read, and exactly three themes: Enhanced Manuscript, Classic Vellum, Dark Heritage.
+- PDF.js reader with page navigation, chapter outline, keyboard/touch navigation, local progress, bookmarks and optional page-turn sound.
+- Private PDF access through short-lived signed URLs from `book-files`.
+- Add-only admin dashboard at `admin.html`, using Supabase email/password Auth and trusted `app_metadata.role === "admin"`.
+- No public signup, font controls, sample catalogue, or admin edit/delete controls.
 
-## Current foundation
+## Supabase
+Project ref: `egyrlxgpgkflcejtgvvc`; URL and public publishable key are in `config.js`. These are public-client values; never put a secret/service-role key in GitHub or browser code.
+Existing objects are reused: `public.books`, public `book-covers`, private `book-files`, and legacy `vellora-books`. The books table and all three buckets were verified empty.
+This implementation does not change the database schema or buckets. It adds a migration that removes admin UPDATE/DELETE policies on `public.books` and on the two book-storage buckets. The remaining rules permit admin INSERT/upload and published-book reads. Admin role checks use trusted `app_metadata`, not editable User Metadata.
 
-- `index.html` is the user-provided VELLORA homepage, committed as the visual and interaction baseline.
-- The page currently contains its CSS and JavaScript inline, so it does not require separate `styles.css` or `app.js` files to render.
-- The current page contains demonstration book entries and a placeholder book dialog. These are not production catalogue records.
+## Admin setup
+In Supabase Authentication → Users, invite/create the admin account. Set trusted **App Metadata** to `{"role":"admin"}` (not User Metadata), then sign out and back in. Open `/admin.html`.
+The requested code `123098` is not embedded in public browser code because a shared PIN in JavaScript can be discovered. The current login uses Supabase email/password plus the trusted admin role. If a separate PIN is required, it needs server-side verification with an Edge Function secret and rate limiting.
 
-## Next implementation work
+## Deployment
+Deploy the repository root with the included GitHub Pages workflow. After merging, open repository Settings → Pages and select GitHub Actions as the source. The workflow checks out the repository and publishes the static files directly; no build command or Node.js setup is required. See `TESTING.md` for the release checklist.
 
-1. Preserve the supplied homepage design and central split-manuscript opening.
-2. Replace demonstration catalogue data with published books loaded from Supabase.
-3. Implement the real PDF reader and signed download flow.
-4. Add the admin dashboard using the existing Supabase project and its established schema, buckets, and access policies.
-5. Keep the three themes: Enhanced Manuscript, Classic Vellum, and Dark Heritage.
-
-## Development constraints
-
-- Static HTML, CSS, and JavaScript; no Node.js or local build commands.
-- GitHub pull requests for changes; merge only after explicit approval.
-- Do not reset or modify Supabase as part of the website source reset.
+## Verification still required
+A real browser session, real admin upload, live PDF reading/download, and deployed GitHub Pages URL still need testing. The code has not been represented as end-to-end tested against a real browser/admin session.

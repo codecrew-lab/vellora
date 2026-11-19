@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>VELLORA – A beautiful world where stories come to life</title>
-<meta name="description" content="Vellora is a digital library of original stories, designed for beautiful reading.">
+<meta name="description" content="VELLORA is a manuscript-inspired digital library of stories.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Lora:ital,wght@0,400;0,500;1,400&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
 <style>
@@ -122,6 +122,7 @@ dialog p{margin:8px 0 0;color:var(--text2);font-size:.95rem}
 }
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition-duration:.01ms!important}}
 </style>
+<link rel="stylesheet" href="styles.css"><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.119.1/dist/umd/supabase.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script><script src="config.js"></script>
 </head>
 <body>
 
@@ -147,112 +148,16 @@ dialog p{margin:8px 0 0;color:var(--text2);font-size:.95rem}
   <section id="continue" hidden><div class="bar"><h2>Continue reading</h2></div><div class="cont" id="contRow"></div></section>
 
   <section id="library">
-    <div class="bar"><h2>The Library</h2><div id="chips" role="group" aria-label="Filter by genre" style="display:flex;flex-wrap:wrap;gap:8px"></div></div>
+    <div class="bar"><h2>The Library</h2><input id="search" type="search" placeholder="Search books or authors…" aria-label="Search books or authors"><div id="chips" role="group" aria-label="Filter by genre" style="display:flex;flex-wrap:wrap;gap:8px"></div></div>
     <div class="grid" id="grid"></div>
   </section>
 </main>
 
 <footer><span class="logo">VELLORA</span>A beautiful world where stories come to life.<br>© 2026 Vellora. A world of stories.</footer>
 
-<dialog id="dlg"><h3 id="dT"></h3><p>The page-turning reader arrives in the next phase. This book is now saved in your Recently Read list.</p><button class="btn" id="dClose">Close</button></dialog>
+<dialog id="dlg"><button class="dialog-close" id="dClose" aria-label="Close">×</button><div id="dCover"></div><div class="dialog-copy"><div class="meta" id="dMeta"></div><h3 id="dT"></h3><p id="dDesc"></p><div class="dialog-actions"><button class="btn" id="readBook">Read book</button><button class="btn secondary" id="downloadBook">Download PDF</button></div></div></dialog>
+<div id="reader" class="reader" hidden><div class="reader-top"><button id="closeReader" class="reader-back">← Library</button><strong id="readerTitle">VELLORA Reader</strong><button id="bookmarkPage" class="ribbon">Bookmark</button></div><div class="reader-main"><aside class="reader-side"><label for="chapterSelect">Chapters</label><select id="chapterSelect"><option value="">Page navigation</option></select><div id="readerProgress"></div></aside><div class="page-stage"><button id="prevPage" class="page-arrow">‹</button><div id="pageFrame" class="page-frame"><canvas id="pdfCanvas"></canvas></div><button id="nextPage" class="page-arrow">›</button></div></div><div class="reader-bottom"><span id="pageLabel">Page 0 of 0</span><input id="pageRange" type="range" min="1" max="1" value="1"><button id="soundToggle">Page sound: Off</button></div></div>
 
-<script>
-/* Sample books – in Phase 6 these come from Supabase via the admin dashboard */
-const BOOKS=[
- {id:1,t:"The Lantern Keeper of Mistral Bay",g:"Fantasy",d:"A lighthouse keeper discovers the flame she tends is guiding something far older than ships.",m:42,c:9,a:["#3b2a52","#1d1530"],f:1},
- {id:2,t:"Nine Letters from the Ashgrove",g:"Mystery",d:"Nine unsigned letters arrive at a quiet manor, each revealing one secret too many.",m:35,c:9,a:["#4a2c2a","#251413"]},
- {id:3,t:"The Fox Who Borrowed the Moon",g:"Fables",d:"A clever fox learns what it costs to keep something that was only ever meant to be shared.",m:12,c:4,a:["#6b4a22","#35240f"]},
- {id:4,t:"Salt Road",g:"Adventure",d:"Two cousins follow a forgotten trade route across the desert to find their grandfather's last caravan.",m:58,c:12,a:["#7a5a2e","#3d2c15"]},
- {id:5,t:"A Winter at Hollowell",g:"Drama",d:"A family gathers for one last winter in the house that holds every argument they never finished.",m:47,c:10,a:["#2f4a4a","#16262a"]},
- {id:6,t:"The Cartographer's Daughter",g:"Historical",d:"In 1790s Lisbon, a mapmaker's daughter redraws the coastline to hide a stranger.",m:63,c:14,a:["#5a2f3c","#2c1520"]},
- {id:7,t:"Letters Across the Tide",g:"Romance",d:"Two harbour towns, one pen-friendship, and a storm season that changes everything.",m:39,c:8,a:["#6a3a3a","#331c1f"]},
- {id:8,t:"Orbit of Small Hours",g:"Science Fiction",d:"The night-shift engineer of a silent station hears someone knocking from outside.",m:51,c:11,a:["#1f3a52","#0e1c2b"]}
-];
-const $=s=>document.querySelector(s);
-const store={get(k,d){try{return JSON.parse(localStorage.getItem(k))??d}catch{return d}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch{}}};
-const THEMES=[["manuscript","Enhanced Manuscript","Faded manuscript","#EDE3D0"],["vellum","Classic Vellum","Warm ivory","#FFFCF7"],["heritage","Dark Heritage","Deep antique brown","#2D231C"]];
-
-/* ---- theme ---- */
-function setTheme(t){document.documentElement.dataset.theme=t;store.set("vellora.theme",t)}
-setTheme(store.get("vellora.theme","manuscript"));
-
-/* ---- landing ---- */
-const landing=$("#landing");
-function showLanding(){
-  landing.hidden=false;landing.className="";
-  const dust=$("#dust");dust.innerHTML="";
-  for(let i=0;i<26;i++){const p=document.createElement("i");
-    p.style.cssText=`left:${Math.random()*100}%;top:${50+Math.random()*50}%;animation-duration:${9+Math.random()*10}s;animation-delay:${-Math.random()*12}s;transform:scale(${.6+Math.random()*1.4})`;dust.appendChild(p)}
-  $("#open").focus();
-}
-$("#open").onclick=()=>{
-  landing.classList.add("opening");store.set("vellora.seen",1);
-  setTimeout(()=>{landing.hidden=true},1800);
-};
-if(!store.get("vellora.seen",0))showLanding();
-
-/* ---- covers & cards ---- */
-const cover=b=>`<div class="cover" style="background:linear-gradient(160deg,${b.a[0]},${b.a[1]})"><em>${b.g}</em><b>${b.t}</b></div>`;
-const card=b=>`<button class="card" data-id="${b.id}">${cover(b)}<h3>${b.t}</h3><p>${b.d}</p><div class="meta">${b.g}, ${b.m} min read</div></button>`;
-
-/* featured */
-const F=BOOKS.find(b=>b.f);
-$("#featured").innerHTML=`<div class="featured"><span class="tag">Editor's pick</span>${cover(F)}<div><div class="meta">${F.g}, ${F.m} min read, ${F.c} chapters</div><h2>${F.t}</h2><p>${F.d}</p><button class="btn" data-id="${F.id}">Read story</button></div></div>`;
-
-/* filters + grid */
-let genre="All";
-function drawGrid(){
-  $("#chips").innerHTML=["All",...new Set(BOOKS.map(b=>b.g))].map(g=>`<button class="chip" aria-pressed="${g===genre}" data-g="${g}">${g}</button>`).join("");
-  $("#grid").innerHTML=BOOKS.filter(b=>genre==="All"||b.g===genre).map(card).join("");
-}
-$("#chips").onclick=e=>{const g=e.target.dataset.g;if(g){genre=g;drawGrid()}};
-drawGrid();
-
-/* ---- recent ---- */
-function drawContinue(){
-  const r=store.get("vellora.recent",[]).map(id=>BOOKS.find(b=>b.id===id)).filter(Boolean);
-  $("#continue").hidden=!r.length;
-  $("#contRow").innerHTML=r.map(card).join("");
-}
-function openBook(id){
-  const b=BOOKS.find(x=>x.id==id);if(!b)return;
-  store.set("vellora.recent",[b.id,...store.get("vellora.recent",[]).filter(x=>x!==b.id)].slice(0,8));
-  $("#dT").textContent=b.t;$("#dlg").showModal();drawContinue();
-}
-document.addEventListener("click",e=>{const el=e.target.closest("[data-id]");if(el)openBook(el.dataset.id)});
-$("#dClose").onclick=()=>$("#dlg").close();
-drawContinue();
-
-/* ---- floating menu ---- */
-const panel=$("#panel"),fab=$("#fab");
-function menu(view="menu"){
-  let h="";
-  if(view==="menu"){
-    h=`<button class="mi" data-go="library">Library</button><button class="mi" data-v="settings">Settings</button><button class="mi" data-v="recent">Recently read</button><button class="mi" data-v="intro">Replay opening</button>`;
-  }else{
-    h=`<button class="back" data-v="menu">Back</button>`;
-    if(view==="settings"){
-      const cur=document.documentElement.dataset.theme;
-      h+=`<h2>Reading theme</h2><div class="themes">`+THEMES.map(([k,n,s,c])=>`<button class="th" data-theme-pick="${k}" aria-pressed="${k===cur}"><span class="sw" style="background:${c}"></span><span><b>${n}</b><small>${s}</small></span></button>`).join("")+`</div>`;
-    }else if(view==="recent"){
-      const r=store.get("vellora.recent",[]).map(id=>BOOKS.find(b=>b.id===id)).filter(Boolean);
-      h+=`<h2>Recently read</h2>`+(r.length?r.map(b=>`<button class="recent-row" data-id="${b.id}"><span class="mini" style="background:linear-gradient(160deg,${b.a[0]},${b.a[1]})"></span><span>${b.t}<br><small class="meta">${b.g}</small></span></button>`).join(""):`<p class="empty">Books you open will appear here.</p>`);
-    }
-  }
-  panel.innerHTML=h;
-}
-function toggle(open){panel.classList.toggle("show",open);fab.setAttribute("aria-expanded",open);if(open)menu()}
-fab.onclick=()=>toggle(!panel.classList.contains("show"));
-panel.onclick=e=>{
-  const t=e.target.closest("button");if(!t)return;
-  if(t.dataset.v==="intro"){toggle(false);showLanding();return}
-  if(t.dataset.v)return menu(t.dataset.v);
-  if(t.dataset.go){toggle(false);$("#library").scrollIntoView();return}
-  if(t.dataset.themePick){setTheme(t.dataset.themePick);menu("settings")}
-  if(t.dataset.id)toggle(false);
-};
-document.addEventListener("keydown",e=>{if(e.key==="Escape")toggle(false)});
-document.addEventListener("click",e=>{if(!e.target.closest("#panel,#fab"))toggle(false)});
-</script>
+<script src="app.js"></script>
 </body>
 </html>
