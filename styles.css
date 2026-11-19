@@ -84,3 +84,23 @@ footer .logo{font-size:.9rem}
 #library .bar{gap:12px}
 #library .bar h2{margin-bottom:4px}
 @media(max-width:639px){#sortBooks{width:100%}.genre-tiles{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.genre-tile{min-height:92px;padding:13px}.genre-tile span{font-size:1.15rem}.discovery-section{margin-top:38px}#recommendedShelf .cont .card{width:clamp(118px,37vw,150px)}}
+
+/* Phase 2 — advanced reading experience */
+.reader-side label.bookmark-label{margin-top:22px}
+#bookmarkSelect{margin-bottom:22px}
+#readerProgress{display:block;padding:16px 12px;margin-top:10px;border:1px solid var(--border);border-radius:5px;background:var(--bg)}
+.progress-copy{display:flex;justify-content:space-between;gap:8px;font-size:.72rem;letter-spacing:.04em;text-transform:uppercase}
+.progress-copy b{color:var(--accent)}
+.progress-track{height:5px;margin:10px 0 8px;background:var(--border);overflow:hidden;border-radius:8px}
+.progress-track i{display:block;height:100%;background:var(--accent);transition:width .35s ease}
+#readerProgress small{font-size:.72rem;color:var(--text2)}
+#bookmarkPage{position:relative;border-radius:2px 2px 7px 7px;border:1px solid var(--accent);background:var(--accent);color:#241b14;min-width:104px;box-shadow:0 3px 7px #0002}
+#bookmarkPage:after{content:"";position:absolute;bottom:-7px;left:calc(50% - 6px);width:12px;height:12px;background:var(--accent);transform:rotate(45deg);z-index:-1}
+#bookmarkPage[aria-pressed=true]{background:var(--text);color:var(--bg);border-color:var(--text)}
+#bookmarkPage[aria-pressed=true]:after{background:var(--text)}
+.page-arrow:disabled{opacity:.28;cursor:not-allowed}
+#pageFrame{perspective:1200px;transform-style:preserve-3d}
+#pageFrame.turn-next{transform:translateX(24px) rotateY(-7deg);box-shadow:0 14px 36px #0002}
+#pageFrame.turn-prev{transform:translateX(-24px) rotateY(7deg);box-shadow:0 14px 36px #0002}
+#pageRange{cursor:pointer}
+@media(max-width:650px){.reader-main{display:flex;flex-direction:column}.reader-side{display:flex;align-items:center;gap:8px;flex-wrap:wrap;padding:8px 10px;border-right:0;border-bottom:1px solid var(--border);overflow:visible}.reader-side label{font-size:.7rem;margin:0}.reader-side select{width:auto;max-width:44%;font-size:.72rem;padding:6px}.reader-side label.bookmark-label{margin:0}#readerProgress{flex:1 1 100%;max-width:none;margin:2px 0;padding:7px 10px}.reader-top{padding:10px 12px}.reader-top strong{max-width:42vw;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}#bookmarkPage{min-width:90px;padding:7px 9px}.page-stage{flex:1;min-height:0}.page-frame{height:100%;min-height:0}}
