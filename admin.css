@@ -61,3 +61,5 @@ a{color:var(--accent);text-decoration:none}a:hover{color:#e5c58e}
 .admin-help{font-size:.8rem;color:var(--text2);margin:-8px 0 4px}
 .admin-kicker,.admin-eyebrow{font:.68rem var(--ui);letter-spacing:.2em;color:var(--accent);text-transform:uppercase;margin-top:5px}
 @media(max-width:620px){.cover-options{grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}.cover-picker{padding:12px}.cover-options strong{font-size:.68rem}}
+
+.manuscript-field textarea{min-height:320px;line-height:1.8;font-family:Georgia,serif;font-size:1rem;resize:vertical}.manuscript-field small{display:block;color:var(--text2);font-size:.78rem;margin-top:8px;line-height:1.5}.required-tag{color:#d5b77f;font-size:.68rem;text-transform:uppercase;letter-spacing:.12em;margin-left:8px}
