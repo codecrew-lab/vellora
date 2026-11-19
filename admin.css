@@ -88,3 +88,35 @@ html,body{width:100%;max-width:100%;overflow-x:hidden}
 .overview-grid article strong{display:block;margin-top:5px;color:var(--accent);font:600 1.8rem var(--display);font-variant-numeric:tabular-nums}
 .management-tools select{min-height:44px;padding:10px 13px;border:1px solid rgba(197,161,107,.3);border-radius:2px;background:#2b211a;color:var(--text);font:.82rem var(--ui)}
 @media(max-width:680px){.overview-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.overview-grid article:last-child{grid-column:span 2}.overview-heading{align-items:flex-start;flex-direction:column}.management-tools select{width:100%}}
+
+
+/* Phase 5 — Admin Hub cross-device safeguards */
+html,body{min-width:320px;max-width:100%;overflow-x:clip}
+.admin-wrap{width:min(1040px,calc(100% - 32px))}
+.admin-card,.admin-form,.book-management,.book-list{min-width:0}
+.admin-form>*{min-width:0}
+.book-row{min-width:0}
+.book-row-copy{overflow-wrap:anywhere}
+.management-tools{min-width:0}
+.management-tools input,.management-tools select{min-width:0;max-width:100%;font-size:16px}
+.admin-overview{min-width:0;overflow:hidden}
+.overview-grid{grid-template-columns:repeat(5,minmax(0,1fr))}
+@media(max-width:760px){
+ .admin-wrap{width:calc(100% - 24px);margin:14px auto}
+ .admin-card{padding:clamp(18px,4vw,30px)}
+ .overview-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .overview-grid article:last-child{grid-column:auto}
+ .management-head,.management-tools{align-items:stretch}
+ .management-tools input,.management-tools select,.management-tools button{width:100%;flex:1 1 100%}
+}
+@media(max-width:420px){
+ .admin-wrap{width:calc(100% - 16px);margin:8px auto}
+ .admin-card{padding:18px 13px}
+ .admin-card h1{font-size:clamp(2rem,10vw,2.7rem)}
+ .overview-grid{gap:7px}
+ .overview-grid article{padding:10px 8px}
+ .overview-grid article strong{font-size:1.45rem}
+ .book-row-actions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}
+ .book-row-actions button{min-width:0;overflow-wrap:anywhere}
+}
+@media(min-width:1200px){.admin-wrap{width:min(1100px,calc(100% - 48px))}}
