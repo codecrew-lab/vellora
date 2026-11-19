@@ -210,3 +210,22 @@ dialog{inset:0;margin:auto;max-height:min(90dvh,900px);overscroll-behavior:conta
 .cover-gilded{padding:12% 9%;justify-content:space-around}.cover-gilded em{text-align:center;align-self:center;letter-spacing:.2em;text-transform:uppercase}.cover-gilded b{text-align:center;align-self:center;padding:0 4%;letter-spacing:.035em;font-size:clamp(.7rem,10cqi,1.45rem)}.cover-gilded small{align-self:center;letter-spacing:.18em;text-transform:uppercase}
 .cover-midnight{padding:10% 9%;justify-content:space-between}.cover-midnight em{text-align:right;align-self:flex-end;letter-spacing:.16em;text-transform:uppercase}.cover-midnight b{text-align:center;align-self:stretch;padding:0 3%;font-size:clamp(.72rem,10.5cqi,1.5rem)}.cover-midnight small{align-self:center;letter-spacing:.2em}
 .cover-terracotta{padding:10% 9%;justify-content:space-between}.cover-terracotta em{text-align:left;align-self:flex-start;font-style:italic;letter-spacing:.06em}.cover-terracotta b{text-align:left;align-self:stretch;padding:0 2%;font-size:clamp(.78rem,11cqi,1.55rem)}.cover-terracotta small{align-self:flex-end;letter-spacing:.1em}
+
+
+/* Focused, full-page reading mode */
+#pageStage{overflow:hidden;touch-action:pan-y;}
+#pageFrame{flex:0 0 auto;max-width:100%;max-height:100%;background:transparent;border:0;box-shadow:none;overflow:hidden;}
+#pdfCanvas{display:block;max-width:100%;max-height:100%;}
+@media(max-width:650px){
+ #reader{height:100dvh;height:100svh;}
+ .reader-top{flex:0 0 auto;min-height:48px;padding:6px 9px;gap:6px;}
+ .reader-main{flex:1 1 0;min-height:0;overflow:hidden;}
+ .reader-side{display:none!important;}
+ .page-stage{flex:1 1 0;min-height:0;width:100%;padding:4px 0;gap:0;justify-content:center;align-items:center;}
+ #pageFrame{width:auto;height:auto;max-width:100%;max-height:100%;border:0;border-radius:0;box-shadow:none;}
+ #pdfCanvas{max-width:100%;max-height:100%;object-fit:contain;}
+ .page-arrow{display:none!important;}
+ .reader-bottom{flex:0 0 auto;padding:6px 10px;gap:8px;min-height:48px;}
+ .reader-bottom input{order:0;flex:1 1 100%;max-width:none;min-width:0;}
+ .reader-bottom #soundToggle{font-size:.68rem;padding:6px 8px;white-space:nowrap;}
+}
