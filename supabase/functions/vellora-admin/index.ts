@@ -42,10 +42,12 @@ Deno.serve(async(req:Request)=>{
        return json({error:"The login code or secret access code is incorrect."},401);
      }
      await db.from("vellora_admin_login_attempts").delete().eq("ip_hash",ipHash);
-     const issued=await issueToken(secret,serviceKey);\n     return json({...issued,expiresIn:7*24*60*60});
+     const issued=await issueToken(secret,serviceKey);
+     return json({...issued,expiresIn:7*24*60*60});
    }
  }
- if(action==="verify"){if(!await validToken(bearer,secret,serviceKey))return json({error:"Admin session is invalid or expired. Please unlock the Admin Hub again."},401);return json({ok:true});}\n if(!await validToken(bearer,secret,serviceKey))return json({error:"Admin session is invalid or expired. Please unlock the Admin Hub again."},401);
+ if(action==="verify"){if(!await validToken(bearer,secret,serviceKey))return json({error:"Admin session is invalid or expired. Please unlock the Admin Hub again."},401);return json({ok:true});}
+ if(!await validToken(bearer,secret,serviceKey))return json({error:"Admin session is invalid or expired. Please unlock the Admin Hub again."},401);
  if(!contentType.includes("multipart/form-data"))return json({error:"Invalid upload request."},400);
  let form:FormData;try{form=await req.formData()}catch{return json({error:"Could not read upload form."},400)}
  if(String(form.get("action")||"")!=="add-book")return json({error:"Unknown admin action."},400);
