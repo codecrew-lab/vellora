@@ -19,3 +19,91 @@ body.is-locked{overflow:hidden}.intro{position:fixed;inset:0;z-index:50;backgrou
 
 /* Phase 5 — print action and bookmark navigation */
 .admin-entry{color:var(--muted);font-size:8px;letter-spacing:.16em;text-decoration:none;border-bottom:1px solid var(--line);padding-bottom:4px}.admin-entry:hover{color:var(--accent);border-color:var(--accent)}#readerGoBookmark{font-size:8px;white-space:nowrap}#readerGoBookmark:disabled{opacity:.35}@media(max-width:600px){#readerGoBookmark{font-size:7px;padding:8px 3px}.reader-controls{gap:3px}.reader-page-button span{padding:0 3px}}
+
+
+/* VELLORA Premium refinement — unified palette, surfaces and entrance */
+:root{
+  --paper:#e9dfcc;--paper-light:#f5eee1;--ink:#30271f;--muted:#827362;
+  --line:rgba(70,52,34,.16);--accent:#98704a;--shadow:rgba(43,31,20,.12);
+  --serif:"Cormorant Garamond",Georgia,serif;--sans:"DM Sans",Arial,sans-serif;
+}
+.theme-manuscript{
+  --paper:#e9dfcc;--paper-light:#f5eee1;--ink:#30271f;--muted:#827362;
+  --line:rgba(70,52,34,.16);--accent:#98704a;--shadow:rgba(43,31,20,.12);
+}
+.theme-vellum{
+  --paper:#f1eee4;--paper-light:#fbf9f2;--ink:#333128;--muted:#817d6d;
+  --line:rgba(65,61,48,.14);--accent:#81765b;--shadow:rgba(45,42,32,.09);
+}
+.theme-dark{
+  --paper:#211f1c;--paper-light:#2c2924;--ink:#eee5d5;--muted:#b0a48f;
+  --line:rgba(238,226,204,.15);--accent:#c19a69;--shadow:rgba(0,0,0,.3);
+}
+body{background-image:radial-gradient(ellipse at 50% -20%,rgba(255,255,255,.16),transparent 55%);letter-spacing:.005em}
+.intro{background:#d7c6a7;opacity:1;transition:opacity .85s ease .22s,visibility .1s 1.55s}
+.intro-cover{perspective:2200px}
+.cover-panel{
+  background:radial-gradient(ellipse at 50% 42%,#f5ead3 0,#e7d8bb 66%,#d3c09d 100%);
+  box-shadow:inset 0 0 90px rgba(75,51,28,.12);
+  transition:transform 1.22s cubic-bezier(.76,0,.18,1),opacity .75s ease;
+}
+.cover-panel:after{inset:clamp(12px,2.2vw,28px);border-color:rgba(117,83,48,.25)}
+.cover-left{border-right:1px solid rgba(98,69,38,.12)}
+.cover-mark{font-size:clamp(82px,12vw,160px);font-weight:500;letter-spacing:-.04em}
+.cover-name{letter-spacing:.2em;font-size:clamp(24px,3.4vw,42px)}
+.cover-tagline{max-width:280px;text-align:center;line-height:1.5}
+.open-world{margin-top:5px;min-height:46px;padding:0 24px;letter-spacing:.16em;border-color:#9b7b54;transition:background .25s,color .25s,transform .25s}
+.open-world:hover{transform:translateY(-2px)}
+.intro-footnote{bottom:clamp(18px,3vh,30px);font-size:8px}
+.intro.is-opening{opacity:0;pointer-events:none}
+.intro.is-opening .cover-left{transform:translateX(-108%) rotateY(-3deg);opacity:.92}
+.intro.is-opening .cover-right{transform:translateX(108%) rotateY(3deg);opacity:.92}
+.intro.is-opening .cover-spine{opacity:0}
+.site-shell{opacity:0;transform:translateY(18px) scale(.992);filter:blur(3px);transition:opacity .85s ease .28s,transform .95s cubic-bezier(.2,.7,.2,1) .24s,filter .85s ease .24s}
+.site-shell.is-visible{opacity:1;transform:none;filter:none}
+.topbar{backdrop-filter:blur(12px)}
+.wordmark{letter-spacing:.19em}
+.hero{min-height:620px;padding-top:clamp(76px,9vw,118px);padding-bottom:clamp(70px,8vw,105px)}
+.hero h1{letter-spacing:-.045em;line-height:.94}
+.hero-description{font-size:17px;max-width:390px}
+.hero-art .sun-disc{filter:blur(.2px);opacity:.76}
+.library-section{padding-top:clamp(70px,9vw,112px);padding-bottom:clamp(70px,9vw,112px)}
+.section-heading h2{letter-spacing:-.035em}
+.discovery-bar,.search-box{border-color:var(--line)}
+.search-box{background:var(--paper-light);border-radius:2px}
+.sort-button,.genre-chip{transition:background .22s,border-color .22s,color .22s,transform .22s}
+.genre-chip{border-radius:999px;padding:10px 17px}
+.genre-chip.active{background:var(--ink);color:var(--paper-light);border-color:var(--ink)}
+.book-card,.featured-card,.book-tile{border-color:var(--line);box-shadow:0 12px 34px var(--shadow)}
+.book-card{transition:transform .28s ease,box-shadow .28s ease}
+.book-card:hover{transform:translateY(-5px);box-shadow:0 20px 42px var(--shadow)}
+.book-dialog,.settings-dialog{background:var(--paper-light);color:var(--ink);border:1px solid var(--line);box-shadow:0 24px 80px var(--shadow)}
+.book-dialog::backdrop,.settings-dialog::backdrop{background:rgba(19,16,12,.55);backdrop-filter:blur(5px)}
+.primary-action{background:var(--ink);color:var(--paper-light);border-color:var(--ink)}
+.save-action,.theme-option{border-color:var(--line)}
+.theme-option{background:transparent;border-radius:3px}
+.theme-option.selected{background:color-mix(in srgb,var(--accent) 9%,var(--paper-light));border-color:var(--accent)}
+.quote-section{background:var(--paper-light)}
+.site-footer{border-color:var(--line)}
+.reader-toolbar{backdrop-filter:blur(12px)}
+.reader-page-wrap{box-shadow:0 20px 65px var(--shadow)}
+.admin-entry{transition:color .2s,border-color .2s}
+button:focus-visible,a:focus-visible,input:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+@media(max-width:760px){
+ .hero{min-height:unset;padding:76px 7vw 65px;grid-template-columns:1fr}
+ .hero-art{height:300px;margin-top:22px}
+ .hero-index{bottom:18px}
+ .section-heading{gap:18px}
+ .section-note{font-size:12px}
+ .intro-footnote{left:18px;right:18px;font-size:7px}
+ .cover-panel:after{inset:10px}
+ .cover-small{font-size:7px;letter-spacing:.18em}
+ .cover-name{letter-spacing:.12em}
+ .cover-tagline{max-width:180px;font-size:13px}
+ .open-world{padding:0 13px;font-size:8px;letter-spacing:.1em}
+}
+@media(prefers-reduced-motion:reduce){
+ .intro,.cover-panel,.site-shell{transition:none!important}
+ .intro.is-opening .cover-left{transform:translateX(-100%)}
+ .intro.is-opening .cover-right{transform:translateX(100%)}
+}
