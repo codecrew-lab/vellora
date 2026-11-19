@@ -251,5 +251,244 @@
     $("#library").scrollIntoView({ behavior: "smooth" });
   }));
 
+
+  // Phase 3: browser-based PDF reading room. PDF.js is loaded from a pinned CDN;
+  // the site itself remains plain HTML/CSS/JS and needs no build tools.
+  const readerState = { pdf: null, book: null, page: 1, rendering: false, queuedPage: null, sound: false, audio: null, touchX: 0 };
+  let pdfLibraryPromise = null;
+
+  function loadPdfLibrary() {
+    if (window.pdfjsLib) return Promise.resolve(window.pdfjsLib);
+    if (pdfLibraryPromise) return pdfLibraryPromise;
+    pdfLibraryPromise = new Promise((resolve, reject) => {
+      const script = document.createElement("script");
+      script.src = "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js";
+      script.onload = () => {
+        if (!window.pdfjsLib) return reject(new Error("PDF reader library did not initialise."));
+        window.pdfjsLib.GlobalWorkerOptions.workerSrc = "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
+        resolve(window.pdfjsLib);
+      };
+      script.onerror = () => reject(new Error("Could not load the PDF reading engine. Check your connection and try again."));
+      document.head.appendChild(script);
+    });
+    return pdfLibraryPromise;
+  }
+
+  const progressMap = () => safeRead("vellora:reading-progress", {});
+  const bookmarkMap = () => safeRead("vellora:page-bookmarks", {});
+  function saveReaderProgress() {
+    if (!readerState.book || !readerState.pdf) return;
+    const map = progressMap();
+    map[readerState.book.id] = { page: readerState.page, total: readerState.pdf.numPages, updatedAt: new Date().toISOString() };
+    safeWrite("vellora:reading-progress", map);
+    const history = recentIds().filter(id => id !== readerState.book.id);
+    safeWrite("vellora:recent", [readerState.book.id, ...history].slice(0, 30));
+  }
+  function updateReaderControls() {
+    if (!readerState.pdf) return;
+    const total = readerState.pdf.numPages;
+    $("#readerPageLabel").textContent = "PAGE " + readerState.page;
+    $("#readerPageCount").textContent = readerState.page + " / " + total;
+    $("#readerProgress").style.width = (readerState.page / total * 100) + "%";
+    $("#readerPrevious").disabled = readerState.page <= 1;
+    $("#readerNext").disabled = readerState.page >= total;
+    const savedPage = bookmarkMap()[readerState.book.id];
+    const marked = savedPage === readerState.page;
+    $("#readerBookmark").classList.toggle("is-bookmarked", marked);
+    $("#readerBookmark").setAttribute("aria-pressed", String(marked));
+    $("#readerBookmark").setAttribute("aria-label", marked ? "Remove bookmark from this page" : "Bookmark this page");
+  }
+  async function renderReaderPage(pageNumber, direction = 1) {
+    if (!readerState.pdf) return;
+    const target = Math.max(1, Math.min(readerState.pdf.numPages, pageNumber));
+    if (readerState.rendering) { readerState.queuedPage = target; return; }
+    readerState.rendering = true;
+    const wrap = $("#readerPageWrap");
+    wrap.classList.remove("turn-next", "turn-previous");
+    void wrap.offsetWidth;
+    wrap.classList.add(direction >= 0 ? "turn-next" : "turn-previous");
+    $("#readerLoading").hidden = false;
+    $("#readerLoading").textContent = "Turning the page…";
+    try {
+      const page = await readerState.pdf.getPage(target);
+      const canvas = $("#readerCanvas");
+      const context = canvas.getContext("2d", { alpha: false });
+      const base = page.getViewport({ scale: 1 });
+      const maxWidth = Math.max(260, wrap.clientWidth - 34);
+      const maxHeight = Math.max(360, window.innerHeight - 240);
+      const scale = Math.min(maxWidth / base.width, maxHeight / base.height, 1.8);
+      const viewport = page.getViewport({ scale });
+      const ratio = Math.min(window.devicePixelRatio || 1, 2);
+      canvas.width = Math.floor(viewport.width * ratio);
+      canvas.height = Math.floor(viewport.height * ratio);
+      canvas.style.width = Math.floor(viewport.width) + "px";
+      canvas.style.height = Math.floor(viewport.height) + "px";
+      context.setTransform(ratio, 0, 0, ratio, 0, 0);
+      await page.render({ canvasContext: context, viewport }).promise;
+      readerState.page = target;
+      updateReaderControls();
+      saveReaderProgress();
+    } catch (error) {
+      console.error("VELLORA page render failed:", error);
+      notify("This page could not be rendered. Please try again.");
+    } finally {
+      $("#readerLoading").hidden = true;
+      readerState.rendering = false;
+      window.setTimeout(() => wrap.classList.remove("turn-next", "turn-previous"), 380);
+      if (readerState.queuedPage && readerState.queuedPage !== readerState.page) {
+        const queued = readerState.queuedPage;
+        readerState.queuedPage = null;
+        renderReaderPage(queued, queued > readerState.page ? 1 : -1);
+      } else readerState.queuedPage = null;
+    }
+  }
+  async function renderPdfOutline() {
+    const host = $("#readerOutlineList");
+    host.innerHTML = '<p class="outline-empty">This book has no chapter outline.</p>';
+    try {
+      const outline = await readerState.pdf.getOutline();
+      if (!outline || !outline.length) return;
+      host.innerHTML = "";
+      const addItems = (items, parent) => items.forEach(item => {
+        const button = document.createElement("button");
+        button.className = "outline-entry";
+        button.textContent = item.title || "Untitled section";
+        button.addEventListener("click", async () => {
+          if (item.dest) {
+            const destination = typeof item.dest === "string" ? await readerState.pdf.getDestination(item.dest) : item.dest;
+            if (destination) {
+              const ref = destination[0];
+              const pageIndex = await readerState.pdf.getPageIndex(ref);
+              renderReaderPage(pageIndex + 1, pageIndex + 1 > readerState.page ? 1 : -1);
+            }
+          }
+          $("#readerOutline").classList.remove("is-open");
+          $("#readerOutline").setAttribute("aria-hidden", "true");
+        });
+        parent.appendChild(button);
+        if (item.items && item.items.length) {
+          const nested = document.createElement("div");
+          nested.className = "outline-nested";
+          parent.appendChild(nested);
+          addItems(item.items, nested);
+        }
+      });
+      addItems(outline, host);
+    } catch (error) {
+      console.warn("PDF outline unavailable:", error);
+    }
+  }
+  async function openReader(book) {
+    const url = pdfFor(book);
+    if (!url) { notify("The reading edition has not been uploaded yet."); return; }
+    readerState.book = book;
+    readerState.pdf = null;
+    readerState.page = 1;
+    $("#readerBookTitle").textContent = book.title || "VELLORA STORY";
+    $("#readerLoading").hidden = false;
+    $("#readerLoading").textContent = "Preparing your reading room…";
+    $("#readerDialog").showModal();
+    try {
+      const pdfjs = await loadPdfLibrary();
+      const task = pdfjs.getDocument({ url, withCredentials: false });
+      readerState.pdf = await task.promise;
+      const progress = progressMap()[book.id];
+      const initialPage = progress && progress.page ? progress.page : 1;
+      await renderPdfOutline();
+      await renderReaderPage(initialPage, 1);
+    } catch (error) {
+      console.error("VELLORA could not open this PDF:", error);
+      $("#readerLoading").hidden = false;
+      $("#readerLoading").textContent = error.message || "This book could not be opened. Please try the download instead.";
+    }
+  }
+  function closeReader() {
+    saveReaderProgress();
+    $("#readerDialog").close();
+    $("#readerOutline").classList.remove("is-open");
+    $("#readerThemePopover").hidden = true;
+  }
+  function playPageSound() {
+    if (!readerState.sound) return;
+    try {
+      const AudioContext = window.AudioContext || window.webkitAudioContext;
+      if (!AudioContext) return;
+      readerState.audio = readerState.audio || new AudioContext();
+      if (readerState.audio.state === "suspended") readerState.audio.resume();
+      const oscillator = readerState.audio.createOscillator();
+      const gain = readerState.audio.createGain();
+      oscillator.type = "sine";
+      oscillator.frequency.setValueAtTime(540, readerState.audio.currentTime);
+      oscillator.frequency.exponentialRampToValueAtTime(230, readerState.audio.currentTime + .055);
+      gain.gain.setValueAtTime(.035, readerState.audio.currentTime);
+      gain.gain.exponentialRampToValueAtTime(.001, readerState.audio.currentTime + .06);
+      oscillator.connect(gain); gain.connect(readerState.audio.destination);
+      oscillator.start(); oscillator.stop(readerState.audio.currentTime + .065);
+    } catch (error) { console.warn("Page sound unavailable:", error); }
+  }
+  function turnPage(direction) {
+    if (!readerState.pdf) return;
+    const next = Math.max(1, Math.min(readerState.pdf.numPages, readerState.page + direction));
+    if (next === readerState.page) return;
+    playPageSound();
+    renderReaderPage(next, direction);
+  }
+
+  $("#readBook").addEventListener("click", () => {
+    if (!state.selectedBook) return;
+    const book = state.selectedBook;
+    $("#bookDialog").close();
+    openReader(book);
+  });
+  $("#readerClose").addEventListener("click", closeReader);
+  $("#readerPrevious").addEventListener("click", () => turnPage(-1));
+  $("#readerNext").addEventListener("click", () => turnPage(1));
+  $("#readerBookmark").addEventListener("click", () => {
+    if (!readerState.book || !readerState.pdf) return;
+    const map = bookmarkMap();
+    if (map[readerState.book.id] === readerState.page) delete map[readerState.book.id];
+    else map[readerState.book.id] = readerState.page;
+    safeWrite("vellora:page-bookmarks", map);
+    updateReaderControls();
+    notify(map[readerState.book.id] ? "Page bookmarked with your VELLORA ribbon." : "Page bookmark removed.");
+  });
+  $("#readerSound").addEventListener("click", () => {
+    readerState.sound = !readerState.sound;
+    $("#readerSound").setAttribute("aria-pressed", String(readerState.sound));
+    $("#readerSound").classList.toggle("is-active", readerState.sound);
+    if (readerState.sound) playPageSound();
+    notify(readerState.sound ? "Page-turn sound is on." : "Page-turn sound is off.");
+  });
+  $("#readerOutlineToggle").addEventListener("click", () => {
+    const panel = $("#readerOutline");
+    const open = !panel.classList.contains("is-open");
+    panel.classList.toggle("is-open", open);
+    panel.setAttribute("aria-hidden", String(!open));
+  });
+  $("#readerThemeToggle").addEventListener("click", () => {
+    $("#readerThemePopover").hidden = !$("#readerThemePopover").hidden;
+  });
+  $(".reader-theme-choice").forEach(button => button.addEventListener("click", () => {
+    setTheme(button.dataset.readerTheme);
+    $("#readerDialog").classList.remove("theme-manuscript", "theme-vellum", "theme-dark");
+    $("#readerDialog").classList.add("theme-" + button.dataset.readerTheme);
+    $(".reader-theme-choice").forEach(item => item.classList.toggle("selected", item === button));
+    $("#readerThemePopover").hidden = true;
+  }));
+  $("#readerPageWrap").addEventListener("touchstart", event => { readerState.touchX = event.changedTouches[0].clientX; }, { passive: true });
+  $("#readerPageWrap").addEventListener("touchend", event => {
+    const delta = event.changedTouches[0].clientX - readerState.touchX;
+    if (Math.abs(delta) > 55) turnPage(delta < 0 ? 1 : -1);
+  }, { passive: true });
+  document.addEventListener("keydown", event => {
+    if (!$("#readerDialog").open) return;
+    if (event.key === "ArrowRight" || event.key === " ") { event.preventDefault(); turnPage(1); }
+    if (event.key === "ArrowLeft") { event.preventDefault(); turnPage(-1); }
+    if (event.key === "Escape") closeReader();
+  });
+  window.addEventListener("resize", () => {
+    if ($("#readerDialog").open && readerState.pdf && !readerState.rendering) renderReaderPage(readerState.page, 1);
+  });
+
   loadBooks();
 })();
