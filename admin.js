@@ -4,9 +4,10 @@
   const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_AyNnLpE63guwq4SLMQR31g_-id54atp";
   const COVER_BUCKET = "book-covers";
   const PDF_BUCKET = "book-files";
-  const client = window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
+  const client = window.supabase && window.supabase.createClient ? window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY) : null;
   const $ = selector => document.querySelector(selector);
   let books = [];
+  let currentAdmin = null;
   let editingId = null;
   let busy = false;
   let toastTimer = null;
@@ -44,6 +45,7 @@
       await client.auth.signOut();
       return;
     }
+    currentAdmin = user;
     $("#loginPanel").hidden = true;
     $("#dashboard").hidden = false;
     $("#signOut").hidden = false;
@@ -51,7 +53,8 @@
     await loadBooks();
   }
   async function initialise() {
-    if (!window.supabase || !window.supabase.createClient) {
+    if (!client) {
+      $("#loginButton").disabled = true;
       showLogin("The secure sign-in service could not load. Refresh and try again.");
       return;
     }
@@ -193,6 +196,7 @@
       const desiredPublished = $("#bookPublished").checked;
       const payload = {
         title, author, genre, slug,
+        created_by: currentAdmin ? currentAdmin.id : null,
         description: $("#bookDescription").value.trim(),
         language: $("#bookLanguage").value.trim() || "English",
         reading_time_minutes: $("#bookReadingTime").value ? Number($("#bookReadingTime").value) : null,
