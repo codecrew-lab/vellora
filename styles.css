@@ -405,3 +405,74 @@ body::after{content:"";position:fixed;inset:0;z-index:0;pointer-events:none;back
 .btn{letter-spacing:.1em;text-transform:uppercase;font-size:.74rem;box-shadow:0 8px 22px rgba(90,62,25,.18)}
 .reader-top strong{background:linear-gradient(180deg,var(--text),var(--accent));-webkit-background-clip:text;background-clip:text;color:transparent}
 @media(prefers-reduced-motion:reduce){#open::after{animation:none}.card,.card h3::after{transition:none}}
+
+
+/* VELLORA Reader — manuscript edition, faithfully adapted from the supplied reader reference.
+   Keeps the live PDF canvas, Supabase signed URLs, progress and bookmark logic intact. */
+#reader{
+  position:fixed;isolation:isolate;overflow:hidden;
+  background:radial-gradient(ellipse at 50% 38%,color-mix(in srgb,var(--surface) 92%,#fff4dc),var(--bg) 78%);
+  color:var(--text);
+}
+#reader::before{content:"";position:absolute;inset:0;z-index:0;pointer-events:none;opacity:.26;background-image:radial-gradient(rgba(120,95,60,.18) .7px,transparent .9px);background-size:5px 5px}
+#reader>*{position:relative;z-index:1}
+#reader .reader-top{
+  flex:0 0 auto;min-height:66px;display:flex;align-items:center;gap:clamp(8px,1.5vw,18px);
+  padding:9px clamp(12px,2.6vw,32px);background:color-mix(in srgb,var(--surface) 94%,transparent);
+  border-bottom:1px solid color-mix(in srgb,var(--accent) 38%,var(--border));
+  box-shadow:0 5px 22px rgba(49,33,17,.07);backdrop-filter:blur(16px)
+}
+#readerTitle{flex:1;min-width:0;text-align:center;font:600 clamp(1.1rem,2.2vw,1.55rem)/1.1 var(--display);letter-spacing:.035em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:var(--text)}
+#reader .reader-tools{display:flex;align-items:center;justify-content:flex-end;gap:7px;flex:0 0 auto}
+#reader .reader-back,#reader .reader-tools button,#reader .reader-tools select{
+  min-height:36px;padding:7px 12px;border:1px solid color-mix(in srgb,var(--accent) 42%,var(--border));
+  border-radius:3px;background:color-mix(in srgb,var(--surface) 92%,#fff);color:var(--text);
+  font:500 .68rem/1.1 var(--ui);letter-spacing:.075em;text-transform:uppercase;white-space:nowrap;
+  box-shadow:0 2px 7px rgba(55,37,19,.06);transition:background .2s,border-color .2s,transform .2s
+}
+#reader .reader-tools select{max-width:116px;padding-right:22px}
+#reader .reader-back:hover,#reader .reader-tools button:hover,#reader .reader-tools select:hover{border-color:var(--accent);transform:translateY(-1px)}
+#reader #bookmarkPage{position:relative;min-width:76px;border-color:color-mix(in srgb,var(--accent) 70%,var(--border));background:linear-gradient(145deg,#b99761,#8f6b3d);color:#fff8e9;box-shadow:0 4px 12px rgba(93,64,29,.2)}
+#reader #bookmarkPage::after{content:"";position:absolute;left:calc(50% - 5px);bottom:-7px;width:10px;height:10px;background:inherit;border-right:1px solid rgba(255,255,255,.25);border-bottom:1px solid rgba(255,255,255,.25);transform:rotate(45deg);clip-path:polygon(0 0,100% 0,100% 100%)}
+#reader #bookmarkPage[aria-pressed=true]{background:linear-gradient(145deg,#76512d,#4f3522)}
+#reader .reader-pdf{background:transparent!important}
+#reader .reader-main{flex:1 1 auto;min-height:0;grid-template-columns:170px minmax(0,1fr)}
+#reader .reader-side{padding:25px 18px;background:color-mix(in srgb,var(--surface) 72%,transparent);border-right:1px solid color-mix(in srgb,var(--accent) 24%,var(--border));font-family:var(--ui)}
+#reader .reader-side label{margin:0 0 9px;font-size:.64rem;letter-spacing:.16em;text-transform:uppercase;color:var(--text2)}
+#reader .reader-side select{margin-bottom:22px;padding:10px 9px;border:1px solid var(--border);border-radius:3px;background:var(--surface);font-size:.78rem}
+#readerProgress{margin-top:20px;padding-top:16px;border-top:1px solid var(--border);font-size:.72rem;line-height:1.6}
+#readerProgress .progress-copy{display:flex;justify-content:space-between;gap:8px;color:var(--text2)}
+#readerProgress .progress-copy b{color:var(--accent)}
+#readerProgress .progress-track{height:3px;margin:9px 0;background:var(--border)}
+#readerProgress .progress-track i{display:block;height:100%;background:linear-gradient(90deg,#98703d,#d9bc80)}
+#readerProgress small{color:var(--text2)}
+#reader .page-stage{min-width:0;min-height:0;position:relative;gap:clamp(8px,2vw,24px);padding:clamp(14px,3vh,30px);background:radial-gradient(ellipse at 50% 46%,color-mix(in srgb,var(--surface) 84%,transparent),transparent 70%)}
+#reader .page-frame{position:relative;isolation:isolate;flex:0 0 auto;max-width:100%;max-height:100%;overflow:hidden;border:1px solid color-mix(in srgb,var(--accent) 42%,var(--border));border-radius:2px;background:linear-gradient(145deg,#fbf5e8,#eee2cb);box-shadow:0 28px 58px rgba(40,27,15,.24),0 7px 15px rgba(40,27,15,.12),1px 0 0 #fff8e9,3px 1px 0 #cbbb9e,5px 2px 0 #f4ead7}
+#reader .page-frame::before{content:"";position:absolute;z-index:2;inset:13px;border:1px solid rgba(169,138,89,.35);pointer-events:none}
+#reader .page-frame::after{content:"";position:absolute;z-index:2;inset:18px;border:1px solid rgba(169,138,89,.15);pointer-events:none}
+#reader #pdfCanvas{position:relative;z-index:1;display:block;max-width:100%;max-height:100%;filter:sepia(.055) contrast(.99)}
+#reader .page-arrow{flex:0 0 auto;width:40px;min-width:40px;height:42px;padding:0;border:1px solid color-mix(in srgb,var(--accent) 38%,var(--border));border-radius:3px;background:color-mix(in srgb,var(--surface) 92%,transparent);color:var(--text2);font:2rem/1 var(--display);box-shadow:0 4px 12px rgba(45,30,14,.08)}
+#reader .page-arrow:disabled{opacity:.25}
+#reader .page-arrow:not(:disabled):hover{border-color:var(--accent);color:var(--accent)}
+#reader .reader-bottom{flex:0 0 auto;min-height:48px;display:flex;align-items:center;gap:18px;padding:9px clamp(14px,3vw,34px);background:color-mix(in srgb,var(--surface) 94%,transparent);border-top:1px solid color-mix(in srgb,var(--accent) 30%,var(--border));font:.72rem var(--ui);backdrop-filter:blur(14px)}
+#reader .reader-bottom #pageLabel{min-width:max-content;color:var(--text2);letter-spacing:.08em;font-variant-numeric:tabular-nums}
+#reader .reader-bottom input{flex:1;max-width:720px;margin:auto;accent-color:var(--accent);cursor:pointer}
+@media(max-width:760px){
+ #reader .reader-top{min-height:0;display:flex;flex-wrap:wrap;gap:7px;padding:8px 9px 9px}
+ #reader .reader-back{order:0;min-height:33px;padding:6px 9px;font-size:.61rem}
+ #readerTitle{order:1;flex:1 1 0;text-align:center;font-size:1.08rem}
+ #reader .reader-tools{order:2;flex:1 0 100%;width:100%;justify-content:center;gap:6px;overflow-x:auto;padding:1px 0 3px;scrollbar-width:none}
+ #reader .reader-tools::-webkit-scrollbar{display:none}
+ #reader .reader-tools button,#reader .reader-tools select{min-height:32px;padding:6px 9px;font-size:.59rem}
+ #reader .reader-tools select{max-width:104px}
+ #reader .reader-main{grid-template-columns:minmax(0,1fr)}
+ #reader .reader-side{display:none!important}
+ #reader .page-stage{padding:10px 7px;gap:0;justify-content:center}
+ #reader .page-arrow{display:none!important}
+ #reader .page-frame{border-radius:1px;box-shadow:0 16px 34px rgba(40,27,15,.2),0 3px 8px rgba(40,27,15,.1)}
+ #reader .page-frame::before{inset:9px}#reader .page-frame::after{inset:13px}
+ #reader .reader-bottom{display:flex;min-height:48px;gap:10px;padding:8px 12px max(8px,env(safe-area-inset-bottom))}
+ #reader .reader-bottom #pageLabel{font-size:.66rem}
+ #reader .reader-bottom input{min-width:0}
+}
+@media(prefers-reduced-motion:reduce){#reader .reader-back,#reader .reader-tools button,#reader .reader-tools select{transition:none}}
