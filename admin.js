@@ -29,11 +29,11 @@ $("#signOut").addEventListener("click",lock);
 /* Structured chapter and part editor. Stored as the existing markdown manuscript format. */
 let studioParts=[];
 const defaultStudio=()=>[{title:"Part I",chapters:[{title:"Chapter 1",content:""}]}];
-function countStudioWords(){return studioParts.reduce((n,p)=>n+p.chapters.reduce((m,ch)=>m+(ch.content.trim().match(/\\S+/g)||[]).length,0),0)}
+function countStudioWords(){return studioParts.reduce((n,p)=>n+p.chapters.reduce((m,ch)=>m+(ch.content.trim().match(/\S+/g)||[]).length,0),0)}
 function updateStudioStats(){const parts=studioParts.length,chapters=studioParts.reduce((n,p)=>n+p.chapters.length,0),words=countStudioWords();$("#studioStats").textContent=parts+" part"+(parts===1?"":"s")+" · "+chapters+" chapter"+(chapters===1?"":"s")+" · "+words.toLocaleString()+" words"}
 function renderStudio(){
 const host=$("#studioParts");
-host.innerHTML=studioParts.map((part,pi)=>'<section class="studio-part" data-part-index="'+pi+'"><header class="studio-part-head"><div class="studio-part-title"><span class="studio-index">PART '+String(pi+1).padStart(2,"0")+'</span><input type="text" maxlength="100" aria-label="Part '+(pi+1)+' title" data-part-title="'+pi+'" value="'+escapeHtml(part.title)+'" placeholder="Part title"></div><div class="studio-actions"><button type="button" data-part-up="'+pi+'" aria-label="Move part up" '+(pi===0?'disabled':'')+'>↑</button><button type="button" data-part-down="'+pi+'" aria-label="Move part down" '+(pi===studioParts.length-1?'disabled':'')+'>↓</button><button type="button" data-part-remove="'+pi+'" class="studio-remove" '+(studioParts.length===1?'disabled':'')+'>Remove part</button></div></header><div class="studio-chapters">'+part.chapters.map((ch,ci)=>'<article class="studio-chapter" data-chapter-index="'+ci+'"><div class="studio-chapter-head"><label><span>CHAPTER '+(ci+1)+'</span><input type="text" maxlength="160" data-chapter-title="'+pi+':'+ci+'" value="'+escapeHtml(ch.title)+'" placeholder="Enter chapter title"></label><div class="studio-actions"><button type="button" data-chapter-up="'+pi+':'+ci+'" aria-label="Move chapter up" '+(ci===0?'disabled':'')+'>↑</button><button type="button" data-chapter-down="'+pi+':'+ci+'" aria-label="Move chapter down" '+(ci===part.chapters.length-1?'disabled':'')+'>↓</button><button type="button" data-chapter-remove="'+pi+':'+ci+'" class="studio-remove" '+(part.chapters.length===1?'disabled':'')+'>Remove</button></div></div><textarea data-chapter-content="'+pi+':'+ci+'" rows="18" maxlength="1500000" placeholder="Start writing this chapter here…&#10;&#10;Use blank lines to separate paragraphs. You can use ## for a section heading.">'+escapeHtml(ch.content)+'</textarea><div class="studio-chapter-foot"><span>'+((ch.content.trim().match(/\\S+/g)||[]).length).toLocaleString()+' words</span><span>Large writing area · Auto-counted</span></div></article>').join("")+'</div><button type="button" class="studio-add-chapter" data-add-chapter="'+pi+'">＋ Add chapter to '+escapeHtml(part.title||("Part "+(pi+1)))+'</button></section>').join("");
+host.innerHTML=studioParts.map((part,pi)=>'<section class="studio-part" data-part-index="'+pi+'"><header class="studio-part-head"><div class="studio-part-title"><span class="studio-index">PART '+String(pi+1).padStart(2,"0")+'</span><input type="text" maxlength="100" aria-label="Part '+(pi+1)+' title" data-part-title="'+pi+'" value="'+escapeHtml(part.title)+'" placeholder="Part title"></div><div class="studio-actions"><button type="button" data-part-up="'+pi+'" aria-label="Move part up" '+(pi===0?'disabled':'')+'>↑</button><button type="button" data-part-down="'+pi+'" aria-label="Move part down" '+(pi===studioParts.length-1?'disabled':'')+'>↓</button><button type="button" data-part-remove="'+pi+'" class="studio-remove" '+(studioParts.length===1?'disabled':'')+'>Remove part</button></div></header><div class="studio-chapters">'+part.chapters.map((ch,ci)=>'<article class="studio-chapter" data-chapter-index="'+ci+'"><div class="studio-chapter-head"><label><span>CHAPTER '+(ci+1)+'</span><input type="text" maxlength="160" data-chapter-title="'+pi+':'+ci+'" value="'+escapeHtml(ch.title)+'" placeholder="Enter chapter title"></label><div class="studio-actions"><button type="button" data-chapter-up="'+pi+':'+ci+'" aria-label="Move chapter up" '+(ci===0?'disabled':'')+'>↑</button><button type="button" data-chapter-down="'+pi+':'+ci+'" aria-label="Move chapter down" '+(ci===part.chapters.length-1?'disabled':'')+'>↓</button><button type="button" data-chapter-remove="'+pi+':'+ci+'" class="studio-remove" '+(part.chapters.length===1?'disabled':'')+'>Remove</button></div></div><textarea data-chapter-content="'+pi+':'+ci+'" rows="18" maxlength="1500000" placeholder="Start writing this chapter here…&#10;&#10;Use blank lines to separate paragraphs. You can use ## for a section heading.">'+escapeHtml(ch.content)+'</textarea><div class="studio-chapter-foot"><span>'+((ch.content.trim().match(/\S+/g)||[]).length).toLocaleString()+' words</span><span>Large writing area · Auto-counted</span></div></article>').join("")+'</div><button type="button" class="studio-add-chapter" data-add-chapter="'+pi+'">＋ Add chapter to '+escapeHtml(part.title||("Part "+(pi+1)))+'</button></section>').join("");
 updateStudioStats();
 }
 function captureStudio(){
@@ -45,31 +45,38 @@ function serializeStudio(){
 captureStudio();
 return studioParts.flatMap((part,pi)=>part.chapters.map((ch,ci)=>{
 const heading=[part.title.trim(),ch.title.trim()||("Chapter "+(ci+1))].filter(Boolean).join(" — ");
-return "# "+heading+"\\n\\n"+ch.content.trim();
-})).filter(s=>s.trim().length>0).join("\\n\\n");
+return "# "+heading+"\n\n"+ch.content.trim();
+})).filter(s=>s.trim().length>0).join("\n\n");
 }
 function syncStudioToManuscript(){const value=serializeStudio();$("#manuscriptContentStore").value=value;return value}
 function resetBookStudio(){studioParts=defaultStudio();renderStudio();$("#manuscriptContentStore").value=""}
 function loadManuscriptIntoStudio(source){
-const text=String(source||"").replace(/\\r\\n?/g,"\\n").trim();
+const text=String(source||"").replace(/\r\n?/g,"\n").trim();
 if(!text){resetBookStudio();return}
-const chunks=[];let current=null;
-for(const line of text.split("\\n")){
-const match=line.match(/^#\\s+(.+)$/);
-if(match){if(current)chunks.push(current);current={title:match[1].trim(),lines:[]}}
-else if(current)current.lines.push(line);
-else if(line.trim()){current={title:"Chapter 1",lines:[line]}}
+const parts=[];let currentPart=null,currentChapter=null;
+const flushChapter=()=>{if(currentChapter&&currentPart)currentPart.chapters.push(currentChapter);currentChapter=null};
+for(const line of text.split("\n")){
+const match=line.match(/^#\s+(.+)$/);
+if(match){
+flushChapter();
+const heading=match[1].trim(),structured=heading.match(/^(Part\s+[^—]+)\s+—\s+(.+)$/i);
+const partTitle=structured?structured[1]:"";
+if(!currentPart||currentPart.title!==partTitle){currentPart={title:partTitle,chapters:[]};parts.push(currentPart)}
+currentChapter={title:structured?structured[2]:heading,lines:[]};
+}else if(currentChapter)currentChapter.lines.push(line);
+else if(line.trim()){if(!currentPart){currentPart={title:"",chapters:[]};parts.push(currentPart)}currentChapter={title:"Chapter 1",lines:[line]}}
 }
-if(current)chunks.push(current);
-if(!chunks.length){studioParts=defaultStudio();studioParts[0].chapters[0].content=text}
-else{studioParts=[{title:"Part I",chapters:chunks.map((c,i)=>({title:c.title||("Chapter "+(i+1)),content:c.lines.join("\\n").trim()}))}]}
+flushChapter();
+studioParts=parts.length?parts:defaultStudio();
+studioParts.forEach(p=>{if(!p.chapters.length)p.chapters.push({title:"Chapter 1",lines:[]})});
+studioParts=studioParts.map(p=>({...p,chapters:p.chapters.map(c=>({title:c.title,content:(c.lines||[]).join("\n").trim()}))}));
 renderStudio();syncStudioToManuscript();
 }
 $("#studioParts").addEventListener("input",e=>{
 const el=e.target;
 if(el.matches("[data-part-title]")){const p=Number(el.dataset.partTitle);if(studioParts[p])studioParts[p].title=el.value}
 if(el.matches("[data-chapter-title]")){const [p,c]=el.dataset.chapterTitle.split(":").map(Number);if(studioParts[p]?.chapters[c])studioParts[p].chapters[c].title=el.value}
-if(el.matches("[data-chapter-content]")){const [p,c]=el.dataset.chapterContent.split(":").map(Number);if(studioParts[p]?.chapters[c])studioParts[p].chapters[c].content=el.value;const card=el.closest(".studio-chapter");const words=(el.value.trim().match(/\\S+/g)||[]).length;card.querySelector(".studio-chapter-foot span").textContent=words.toLocaleString()+" words"}
+if(el.matches("[data-chapter-content]")){const [p,c]=el.dataset.chapterContent.split(":").map(Number);if(studioParts[p]?.chapters[c])studioParts[p].chapters[c].content=el.value;const card=el.closest(".studio-chapter");const words=(el.value.trim().match(/\S+/g)||[]).length;card.querySelector(".studio-chapter-foot span").textContent=words.toLocaleString()+" words"}
 updateStudioStats();
 });
 $("#studioParts").addEventListener("click",e=>{
@@ -87,12 +94,13 @@ renderStudio();
 });
 $("#addBookPart").addEventListener("click",()=>{captureStudio();studioParts.push({title:"Part "+["I","II","III","IV","V","VI","VII","VIII","IX","X"][studioParts.length]||("Part "+(studioParts.length+1)),chapters:[{title:"Chapter 1",content:""}]});renderStudio();$("#studioParts .studio-part:last-child").scrollIntoView({behavior:"smooth",block:"center"})});
 resetBookStudio();
-\nlet previewObjectUrl="";
+let previewObjectUrl="";
 function closeBookPreview(){const dialog=$("#bookPreviewDialog");if(dialog.open)dialog.close();$("#bookPreviewFrame").src="about:blank";if(previewObjectUrl){URL.revokeObjectURL(previewObjectUrl);previewObjectUrl="";}}
 $("#previewBook").addEventListener("click",()=>{
-const form=$("#bookForm");
+const form=$("#bookForm"),manuscript=syncStudioToManuscript();
 if(!form.reportValidity())return;
-const f=new FormData(form),title=String(f.get("title")||"").trim(),author=String(f.get("author")||"").trim(),genre=String(f.get("genre")||"").trim(),style=String(f.get("cover_style")||"nocturne"),manuscript=String(f.get("manuscript_content")||"");
+if(manuscript.trim().length<20){status($("#adminStatus"),"Add at least 20 characters of manuscript text before previewing.","error");return}
+const f=new FormData(form),title=String(f.get("title")||"").trim(),author=String(f.get("author")||"").trim(),genre=String(f.get("genre")||"").trim(),style=String(f.get("cover_style")||"nocturne");
 try{
 const blob=makeBookPdf(title,author,genre,style,manuscript);
 if(previewObjectUrl)URL.revokeObjectURL(previewObjectUrl);
