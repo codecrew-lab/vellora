@@ -593,3 +593,16 @@ dialog::backdrop{background:rgba(20,14,10,.68);backdrop-filter:blur(5px)}
  .page-frame,.btn,.card,.genre-tile,dialog[open]{animation:none!important;transition:none!important}
  html{scroll-behavior:auto}
 }
+
+
+/* VELLORA favourites */
+.book-card{position:relative;min-width:0}
+.book-card>.card{width:100%;height:100%;text-align:left}
+.book-card .fav-toggle{position:absolute;top:9px;right:9px;z-index:5;width:36px;height:36px;display:grid;place-items:center;border:1px solid rgba(217,182,115,.5);border-radius:50%;background:rgba(35,25,18,.78);color:#f3dfb8;font-family:Georgia,serif;font-size:25px;line-height:1;box-shadow:0 4px 14px rgba(0,0,0,.24);backdrop-filter:blur(8px);transition:transform .2s,background .2s,color .2s}
+.book-card .fav-toggle:hover{transform:scale(1.1);background:#d9b673;color:#2a1d0c}
+.book-card .fav-toggle[aria-pressed=true]{background:#d9b673;color:#2a1d0c}
+.cont .book-card{width:120px;flex:0 0 120px}
+.cont .book-card>.card{width:100%}
+#favoriteBook[aria-pressed=true]{border-color:var(--accent);color:var(--accent)}
+.saved-chip[aria-pressed=true]{background:linear-gradient(180deg,#f8ebc8 0%,#d9b673 45%,#a77d3e 100%);color:#2a1d0c;border-color:transparent}
+@media(max-width:639px){.book-card .fav-toggle{width:34px;height:34px;top:7px;right:7px}}
