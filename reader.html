@@ -182,7 +182,7 @@ function parseManuscript(source){
     const section=line.match(/^##\s+(.+)$/);
     if(chapter||section){
       flushChapter();
-      current={h:(chapter||section)[1].trim(),s:section?"Section":"",p:[]};
+      current={h:safeText((chapter||section)[1].trim()),s:section?"Section":"",p:[]};
       hasHeading=true;continue;
     }
     paragraph.push(line);
