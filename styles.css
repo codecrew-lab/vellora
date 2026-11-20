@@ -606,3 +606,11 @@ dialog::backdrop{background:rgba(20,14,10,.68);backdrop-filter:blur(5px)}
 #favoriteBook[aria-pressed=true]{border-color:var(--accent);color:var(--accent)}
 .saved-chip[aria-pressed=true]{background:linear-gradient(180deg,#f8ebc8 0%,#d9b673 45%,#a77d3e 100%);color:#2a1d0c;border-color:transparent}
 @media(max-width:639px){.book-card .fav-toggle{width:34px;height:34px;top:7px;right:7px}}
+
+/* Personal reading progress on saved and recently read cards. */
+.card-progress{display:grid;gap:6px;margin-top:13px;padding-top:10px;border-top:1px solid color-mix(in srgb,var(--accent) 35%,transparent);font-family:var(--ui);text-align:left}
+.card-progress>div{display:flex;justify-content:space-between;gap:8px;color:var(--text2);font-size:.62rem;letter-spacing:.08em;text-transform:uppercase}
+.card-progress strong{color:var(--accent);font-variant-numeric:tabular-nums}
+.card-progress>i{display:block;height:3px;overflow:hidden;background:color-mix(in srgb,var(--border) 75%,transparent);border-radius:9px}
+.card-progress>i>span{display:block;height:100%;background:linear-gradient(90deg,#a77d3e,#f3dfa8);border-radius:9px}
+.card-progress small{font-size:.62rem;color:var(--text2)}
