@@ -71,3 +71,13 @@ The checklist is a manual acceptance plan, not a claim that every end-to-end che
 - [ ] Featured story, recommendations, genre tiles and book cards reveal without blocking interaction.
 - [ ] Reduced-motion preference disables reveal and shimmer animation.
 - [ ] Verify loading and reveal behavior on narrow Android, tablet and desktop viewports.
+
+
+## Phase 4 — premium book details
+- [ ] Opening a book shows title, author, genre, language and reading-time metadata without exposing unpublished books.
+- [ ] A saved reading position displays a bounded progress percentage and page count.
+- [ ] The primary action changes to Continue reading when local progress exists and restores the saved page.
+- [ ] Share book invokes the native share sheet where supported and copies a short share description where clipboard sharing is supported.
+- [ ] Download and reader actions remain unavailable when no PDF path exists.
+- [ ] Detail dialog remains scrollable, keyboard accessible and usable on narrow phones, tablets and desktop.
+- [ ] Verify no database or Supabase policy changes are required.
