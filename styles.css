@@ -499,9 +499,9 @@ body::after{content:"";position:fixed;inset:0;z-index:0;pointer-events:none;back
 #landing .door-in::after{inset:34px;border:1px solid rgba(217,182,115,.13);box-shadow:inset 0 0 0 7px rgba(217,182,115,.12);animation:vellora-fade 1.8s ease .45s both}
 #landing .door-in h1{font-weight:500;font-size:clamp(3.2rem,11.5vw,9rem);letter-spacing:.24em;padding-left:.24em;background:linear-gradient(180deg,#fff2d0,#d9b673 48%,#9c7437);background-size:200% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 4px 18px rgba(177,138,85,.3));animation:vellora-rise 1.7s var(--vellora-ease) .25s both,vellora-metal 8s linear 2s infinite}
 #landing .door-in .rule{position:relative;width:min(300px,46vw);height:1px;margin:2.2rem 0 1.6rem;background:linear-gradient(90deg,transparent,#c9a45f,transparent);animation:vellora-grow 1.4s var(--vellora-ease) .9s both}
-#landing .door-in .rule::after{content:"";position:absolute;left:50%;top:50%;width:7px;height:7px;background:#d9b673;transform:translate(-50%,-50%) rotate(45deg)}
+#landing .door-in .rule::after{content:none!important;display:none!important}
 #landing .door-in p{font-size:clamp(1rem,2.2vw,1.4rem);color:#cdb894;letter-spacing:.1em;animation:vellora-rise-soft 1.4s ease 1.35s both}
-#landing .door-in h1::after{content:"❦";display:block;margin-top:.8em;font-size:.22em;letter-spacing:0;color:#b18a55;-webkit-text-fill-color:#b18a55}
+#landing .door-in h1::after{content:none!important;display:none!important}
 #open{bottom:12%;padding:1rem 2.6rem;border:1px solid #d9b673;border-radius:2px;background:rgba(22,15,10,.5);color:#ecdcb8;font:500 .72rem var(--ui);letter-spacing:.22em;text-indent:.22em;text-transform:uppercase;white-space:nowrap;box-shadow:0 0 0 5px rgba(217,182,115,.08),0 10px 30px rgba(0,0,0,.42);overflow:hidden;animation:vellora-fade 1.3s ease 1.8s both}
 #open::after{content:"";position:absolute;top:0;left:-60%;width:40%;height:100%;background:linear-gradient(100deg,transparent,rgba(255,235,190,.42),transparent);animation:vellora-button-shine 3.8s ease-in-out 2.4s infinite}
 #open:hover{background:#d9b673;color:#1b130d;border-color:#d9b673}
