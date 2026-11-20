@@ -1,8 +1,0 @@
-/* Phase 7 — weekly reading goal */
-.weekly-goal{display:grid;grid-template-columns:minmax(0,1fr) minmax(180px,230px);gap:22px;align-items:center;margin-top:20px;padding:20px;border:1px solid var(--border);border-radius:10px;background:color-mix(in srgb,var(--surface) 88%,var(--bg));}
-.weekly-goal h3{font:600 clamp(1.25rem,2.5vw,1.65rem)/1.2 var(--display);margin:5px 0}.weekly-goal p,.weekly-goal small{color:var(--text2);font:.8rem/1.5 var(--ui)}
-.weekly-goal-numbers{display:flex;align-items:baseline;gap:8px;margin:14px 0 8px;font-family:var(--ui)}.weekly-goal-numbers strong{font:600 2rem/1 var(--display);font-variant-numeric:tabular-nums}.weekly-goal-numbers span{color:var(--text2);font-size:.82rem}.weekly-goal-numbers b{margin-left:auto;font-size:.9rem;color:var(--accent)}
-.weekly-goal-track{height:9px;overflow:hidden;border-radius:99px;background:var(--border);margin-bottom:8px}.weekly-goal-track i{display:block;height:100%;border-radius:inherit;background:var(--accent);transition:width .35s ease}
-.weekly-goal-form{display:grid;gap:8px}.weekly-goal-form label{font:.78rem var(--ui);color:var(--text2)}.weekly-goal-form input{width:100%;padding:10px 12px;border:1px solid var(--border);border-radius:7px;background:var(--surface);color:var(--text);font:inherit}.weekly-goal-form button{padding:10px 14px;border-radius:7px;background:var(--accent);color:#211A16;font:600 .82rem var(--ui)}
-@media(max-width:620px){.weekly-goal{grid-template-columns:1fr;padding:16px}.weekly-goal-form{grid-template-columns:minmax(0,1fr) auto;align-items:end}.weekly-goal-form label{grid-column:1/-1}.weekly-goal-form button{white-space:nowrap}}
-@media(prefers-reduced-motion:reduce){.weekly-goal-track i{transition:none}}
