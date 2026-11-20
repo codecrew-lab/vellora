@@ -25,6 +25,26 @@ async function callApi(body,token){const headers={};if(token)headers["X-Vellora-
 async function restore(){try{const s=JSON.parse(localStorage.getItem(SESSION_KEY)||"null");if(!s||!s.token||!s.expiresAt||s.expiresAt<=Date.now()){lock();return}await callApi({action:"verify"},s.token);unlock(s.token)}catch(_){lock()}}
 $("#loginForm").addEventListener("submit",async e=>{e.preventDefault();const form=e.currentTarget;const f=new FormData(form);status($("#loginStatus"),"Verifying access…");try{const r=await callApi({action:"login",loginCode:String(f.get("loginCode")||""),secretCode:String(f.get("secretCode")||"")});localStorage.setItem(SESSION_KEY,JSON.stringify({token:r.token,expiresAt:r.expiresAt}));unlock(r.token);form.reset()}catch(err){status($("#loginStatus"),err.message,"error")}});
 $("#signOut").addEventListener("click",lock);
+let previewObjectUrl="";
+function closeBookPreview(){const dialog=$("#bookPreviewDialog");if(dialog.open)dialog.close();$("#bookPreviewFrame").src="about:blank";if(previewObjectUrl){URL.revokeObjectURL(previewObjectUrl);previewObjectUrl="";}}
+$("#previewBook").addEventListener("click",()=>{
+const form=$("#bookForm");
+if(!form.reportValidity())return;
+const f=new FormData(form),title=String(f.get("title")||"").trim(),author=String(f.get("author")||"").trim(),genre=String(f.get("genre")||"").trim(),style=String(f.get("cover_style")||"nocturne"),manuscript=String(f.get("manuscript_content")||"");
+try{
+const blob=makeBookPdf(title,author,genre,style,manuscript);
+if(previewObjectUrl)URL.revokeObjectURL(previewObjectUrl);
+previewObjectUrl=URL.createObjectURL(blob);
+$("#bookPreviewTitle").textContent=title;
+$("#bookPreviewMeta").textContent="By "+author+" · "+genre+" · "+(blob.size/1024).toFixed(0)+" KB";
+$("#bookPreviewFrame").src=previewObjectUrl;
+$("#bookPreviewDialog").showModal();
+}catch(err){status($("#adminStatus"),"Could not create the book preview: "+err.message,"error");}
+});
+$("#closeBookPreview").addEventListener("click",closeBookPreview);
+$("#bookPreviewDialog").addEventListener("click",e=>{if(e.target===$("#bookPreviewDialog"))closeBookPreview();});
+$("#bookPreviewDialog").addEventListener("close",()=>{if($("#bookPreviewFrame").src!=="about:blank")$("#bookPreviewFrame").src="about:blank";if(previewObjectUrl){URL.revokeObjectURL(previewObjectUrl);previewObjectUrl="";}});
+
 $("#bookForm").addEventListener("submit",async e=>{e.preventDefault();const form=e.currentTarget;if(!sessionToken){lock();return}const f=new FormData(form);if(!f.get("manuscript_content")||String(f.get("manuscript_content")).trim().length<20){status($("#adminStatus"),"Please add the complete story or manuscript before publishing.","error");return}if(!f.get("cover_style")){status($("#adminStatus"),"Choose a signature cover.","error");return}f.set("action",editingSubmissionId?"approve-submission":editingId?"update-book":"add-book");f.set("is_published","on");if(editingId)f.set("id",editingId);if(editingSubmissionId)f.set("submission_id",editingSubmissionId);status($("#adminStatus"),editingSubmissionId?"Preparing the verified submission as a VELLORA edition…":"Designing the cover and typesetting your complete book…");try{const blob=makeBookPdf(String(f.get("title")),String(f.get("author")),String(f.get("genre")),String(f.get("cover_style")),String(f.get("manuscript_content")));const safe=String(f.get("title")).toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"")||"vellora-book";f.set("pdf",new File([blob],safe+".pdf",{type:"application/pdf"}));status($("#adminStatus"),"Uploading your finished VELLORA edition…");await callApi(f,sessionToken);form.reset();editingId=null;editingSubmissionId=null;$("#cancelSubmissionReview").hidden=true;document.querySelector('input[name="cover_style"][value="nocturne"]').checked=true;$("#bookForm").querySelector("button[type=submit]").textContent="Publish to VELLORA";$("#bookFormHeading").textContent="Add a book";status($("#adminStatus"),"Book published successfully. It is now available in the public Library. Its downloadable PDF has been generated.","success");await loadBooks();await loadSubmissions()}catch(err){if(/session|access code|expired/i.test(err.message))lock();status($("#adminStatus"),err.message,"error")}});
 
 function escapeHtml(v){return String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
