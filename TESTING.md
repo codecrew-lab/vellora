@@ -114,3 +114,14 @@ The checklist is a manual acceptance plan, not a claim that every end-to-end che
 - [ ] Goal interface is keyboard accessible and usable on narrow mobile screens.
 - [ ] Existing reading insights, favourites, bookmarks, themes and reader controls continue working.
 - [ ] Weekly goals remain device-local; no Supabase schema or policy changes.
+
+
+## Phase 8 — advanced library discovery
+- [ ] Search matches book title, author, description, genre and language.
+- [ ] Language filter lists only languages present in the published catalogue.
+- [ ] Genre and language filters can be combined with search.
+- [ ] Clear filters resets search, genre, language and sorting to newest first.
+- [ ] Result count updates for combined filters and empty results show helpful guidance.
+- [ ] Search and filter controls remain usable on narrow Android, tablet and desktop layouts.
+- [ ] Existing favourites, weekly goals, reading insights, reader, menu and admin workflows remain intact.
+- [ ] No Supabase schema, RLS, storage or Edge Function changes.
