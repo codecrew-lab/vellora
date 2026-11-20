@@ -51,3 +51,15 @@ This is a manual acceptance checklist. Repository inspection and static checks d
 - [ ] Complete one real admin create/edit operation and one public read/download test.
 
 The checklist is a manual acceptance plan, not a claim that every end-to-end check has already passed.
+
+## Phase 2 — Reader experience
+- [ ] Opening a book announces its loading state to assistive technology.
+- [ ] Reader displays a clear page-loading indicator while a PDF page is rendering.
+- [ ] Page status announces the current page and total page count.
+- [ ] Resize the browser and rotate a phone while reading; the current page is re-rendered to fit without losing progress.
+- [ ] Horizontal swipe on the page advances/returns; vertical page scrolling remains natural.
+- [ ] Keyboard Arrow Left/Right changes pages; Home/End jumps to the first/last page.
+- [ ] Arrow keys on the page slider and chapter/bookmark selectors continue to operate those controls instead of changing pages unexpectedly.
+- [ ] Previous/next buttons expose accessible names and disable correctly at the first/last page.
+- [ ] Reduced-motion preference suppresses reader transitions and loading animation.
+- [ ] Rapid page changes and closing the reader during rendering do not leave stale pages or unhandled rendering errors.
