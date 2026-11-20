@@ -155,30 +155,57 @@ body::after{content:"";position:fixed;inset:0;pointer-events:none;background:rad
 <div id="print"></div>
 
 <script>
-/* Sample content. Phase 6 loads books and chapters from Supabase instead. */
-const META={1:["The Lantern Keeper of Mistral Bay","Fantasy"],2:["Nine Letters from the Ashgrove","Mystery"],3:["The Fox Who Borrowed the Moon","Fables"],4:["Salt Road","Adventure"],5:["A Winter at Hollowell","Drama"],6:["The Cartographer's Daughter","Historical"],7:["Letters Across the Tide","Romance"],8:["Orbit of Small Hours","Science Fiction"]};
-const S1=[{h:"The Last Flame",s:"Chapter one",p:[
-"Mara had tended the lantern at Mistral Bay for eleven winters, and in all that time no ship had ever asked her to.",
-"The fishermen said the light was for them. The harbour master said it was for the tax ledger. Mara, who climbed the one hundred and four steps each dusk with a tin of oil and a heel of bread, had stopped asking who it was for, and simply kept it burning.",
-"On the first night of the autumn storms the flame leaned toward the land, not the sea. She watched it for a long while, one hand on the cold brass rail. Flames did not do that. Flames rose, or flickered, or died. This one bowed, as if somebody very large had walked up to the glass and was waiting to be noticed.",
-"She said, to nobody, \"I am here.\" The flame turned from gold to a pale and steady blue.",
-"Far down the coast, something that had slept beneath the cliffs since before the harbour was a harbour opened one enormous eye."]},
-{h:"What the Tide Kept",s:"Chapter two",p:[
-"By morning the bay was strange. The boats sat higher than they should have, and the water at the harbour wall had drawn back to show stairs, wide and green with weed, going down.",
-"Old Tomas said they had always been there. Mara knew he was lying, because Tomas only lied when he was afraid, and he was gripping his hat with both hands.",
-"She took the lantern oil, the bread, and her mother's iron key, which had never fitted any lock in the village. At the bottom of the fourth stair, the key grew warm in her palm.",
-"Behind her, high on its tower, the lantern burned blue and waited for her to come back."]}];
-const fallback=(id,t)=>[{h:"Chapter one",s:t,p:["This is sample text so you can try the reader. Your real story will appear here once it is added from the admin dashboard.","A beautiful page is quiet. The words sit at an easy width, the margins are generous, and nothing moves unless you turn the page.","Try the controls at the top. Change the theme, make the text larger, and drop the ribbon on a page you want to return to."]},{h:"Chapter two",s:"Where the story continues",p:["Each chapter begins on a fresh page with its title and a small ornament beneath it.","When you close the book and open it again later, it opens on the page you were reading."]}];
-
+/* Live VELLORA stories are loaded from the published Supabase catalogue. */
 const $=s=>document.querySelector(s);
 const st={get(k,d){try{return JSON.parse(localStorage.getItem(k))??d}catch{return d}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch{}}};
-const id=+new URLSearchParams(location.search).get("id")||1;
-const [title,genre]=META[id]||META[1];
-const chapters=id===1?S1:fallback(id,title);
-$("#ttl").textContent=title;document.title=title+" – VELLORA";
-
-/* recent */
-st.set("vellora.recent",[id,...st.get("vellora.recent",[]).filter(x=>x!==id)].slice(0,8));
+const id=new URLSearchParams(location.search).get("id")||"";
+let title="Loading story…",genre="VELLORA EDITIONS",author="VELLORA Editions",chapters=[];
+$("#ttl").textContent=title;document.title="Loading story – VELLORA";
+function safeText(value){return String(value??"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#39;")}
+function formatParagraph(value){return safeText(value).replace(/\*\*(.+?)\*\*/g,"<strong>$1</strong>").replace(/\*(.+?)\*/g,"<em>$1</em>").replace(/`(.+?)`/g,"<code>$1</code>")}
+function parseManuscript(source){
+  const lines=String(source||"").replace(/\r\n?/g,"\n").split("\n");
+  const result=[];let current={h:"The Story",s:"",p:[]},paragraph=[],hasHeading=false;
+  const flushParagraph=()=>{const value=paragraph.join(" ").trim();if(value)current.p.push(formatParagraph(value));paragraph=[]};
+  const flushChapter=()=>{flushParagraph();if(current.p.length||hasHeading)result.push(current)};
+  for(const raw of lines){
+    const line=raw.trim();
+    if(!line){flushParagraph();continue}
+    const chapter=line.match(/^#\s+(.+)$/);
+    const section=line.match(/^##\s+(.+)$/);
+    if(chapter||section){
+      flushChapter();
+      current={h:(chapter||section)[1].trim(),s:section?"Section":"",p:[]};
+      hasHeading=true;continue;
+    }
+    paragraph.push(line);
+  }
+  flushChapter();
+  return result.length?result:[{h:"The Story",s:"",p:[formatParagraph("This story has no manuscript text yet. Please contact the VELLORA editor.")] }];
+}
+function markRecent(){st.set("vellora.recent",[id,...st.get("vellora.recent",[]).filter(x=>String(x)!==String(id))].slice(0,12))}
+async function loadStory(){
+  try{
+    const cfg=window.VELLORA_CONFIG||{};
+    if(!window.supabase||!cfg.url||!cfg.publishableKey)throw new Error("The VELLORA library connection is unavailable.");
+    if(!id)throw new Error("No story was selected. Return to the Library and choose a story.");
+    const client=window.supabase.createClient(cfg.url,cfg.publishableKey);
+    const {data,error}=await client.from("books").select("id,title,author,genre,manuscript_content,is_published").eq("id",id).eq("is_published",true).maybeSingle();
+    if(error)throw error;
+    if(!data)throw new Error("This story is unavailable or is no longer published.");
+    if(!String(data.manuscript_content||"").trim())throw new Error("This story does not have manuscript text yet.");
+    title=data.title||"Untitled story";genre=data.genre||"VELLORA EDITIONS";author=data.author||"VELLORA Editions";
+    chapters=parseManuscript(data.manuscript_content);
+    $("#ttl").textContent=title+" · "+author;document.title=title+" – VELLORA";
+    markRecent();pos=st.get("vellora.pos."+id,0);bm=st.get("vellora.bm."+id,null);
+    await (document.fonts?document.fonts.ready:Promise.resolve());setup();
+  }catch(error){
+    $("#ttl").textContent="Story unavailable";document.title="Story unavailable – VELLORA";
+    $("#book").className="book";$("#book").innerHTML='<div class="pg" style="display:flex;flex-direction:column;justify-content:center;text-align:center"><h2>Unable to open this story</h2><p>'+safeText(error.message||"Please return to the Library and try again.")+'</p><p><a href="index.html">Return to VELLORA Library</a></p></div>';
+    $("#pl").textContent="";$("#pv").disabled=true;$("#nx").disabled=true;
+    console.error("VELLORA reader:",error);
+  }
+}
 
 /* theme, font, sound */
 const root=document.documentElement;
@@ -187,7 +214,7 @@ function applyPrefs(){root.dataset.theme=st.get("vellora.theme","manuscript");$(
 applyPrefs();
 
 /* pagination: pages hold HTML and the index of their first word */
-let pages=[],idx=0,two=false,bm=st.get("vellora.bm."+id,null),pos=st.get("vellora.pos."+id,0);
+let pages=[],idx=0,two=false,bm=null,pos=0;
 const probe=document.createElement("div");probe.className="pg probe";document.body.appendChild(probe);
 const fits=h=>{probe.innerHTML=h;return probe.scrollHeight<=probe.clientHeight+1};
 function paginate(){
@@ -288,12 +315,12 @@ let rt;addEventListener("resize",()=>{clearTimeout(rt);rt=setTimeout(()=>{if((in
 
 /* PDF: prints a clean book layout (cover, chapters, page numbers, faint VELLORA mark) in the chosen theme. Choose "Save as PDF" in the print dialog. */
 $("#pdf").onclick=()=>{
-  $("#print").innerHTML=`<div class="wmf">VELLORA</div><div class="cov"><h1>${title}</h1><small>${genre.toUpperCase()}</small><small style="margin-top:30mm">VELLORA</small></div>`+
+  $("#print").innerHTML=`<div class="wmf">VELLORA</div><div class="cov"><h1>${safeText(title)}</h1><small>${safeText(genre.toUpperCase())}</small><small style="margin-top:8mm">${safeText(author)}</small><small style="margin-top:30mm">VELLORA</small></div>`+
    chapters.map(c=>`<h2>${c.h}</h2><div class="sub">${c.s||""}</div><div class="orn">&#10086;</div>`+c.p.map((t,i)=>`<p class="${i===0?"first":""}">${t}</p>`).join("")).join("");
   print();
 };
 
-(document.fonts?document.fonts.ready:Promise.resolve()).then(setup);
+loadStory();
 
 /* settings panel */
 (function(){
