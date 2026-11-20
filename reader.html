@@ -151,7 +151,7 @@ body::after{content:"";position:fixed;inset:0;pointer-events:none;background:rad
 </nav>
 <div id="prog"></div>
 <div class="stage"><div class="book" id="book"></div></div>
-<div id="nav" class="ui"><button id="pv">Previous</button><span id="pl"></span><button id="nx">Next</button></div>
+<div id="nav" class="ui"><button id="pv">Previous</button><span id="pl" aria-live="polite"></span><button id="nx">Next</button></div>
 <div id="print"></div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.119.1/dist/umd/supabase.min.js"></script>
@@ -254,27 +254,38 @@ function render(){
   book.className="book"+(two?" two":"");
   book.innerHTML=pageEl(idx)+(two?pageEl(idx+1):"");
   const last=pages.length-1;
-  $("#pl").textContent=two&&pages[idx+1]?`Pages ${idx+1}-${idx+2} of ${pages.length}`:`Page ${idx+1} of ${pages.length}`;
+  const visibleEnd=Math.min(pages.length,idx+(two&&pages[idx+1]?2:1));
+  const pct=Math.max(0,Math.min(100,Math.round((visibleEnd/pages.length)*100)));
+  $("#pl").textContent=(two&&pages[idx+1]?"Pages "+(idx+1)+"-"+(idx+2):"Page "+(idx+1))+" of "+pages.length+" · "+pct+"%";
   $("#pv").disabled=idx<=0;$("#nx").disabled=idx+(two?2:1)>last;
-  const pct=Math.round(((idx+(two?2:1))/pages.length)*100);
-  $("#prog").style.width=Math.min(100,pct)+"%";
+  $("#prog").style.width=pct+"%";
   pos=pages[idx].w;st.set("vellora.pos."+id,pos);
+  st.set("vellora.progress."+id,{page:idx+1,totalPages:pages.length,percent:pct,wordPosition:pos,updatedAt:Date.now()});
 }
 function setup(){
   two=innerWidth>=900;paginate();
   idx=pageIndexForWord(pos);if(two)idx-=idx%2;render();
 }
 
-/* sound: soft paper rustle made in the browser */
+/* Layered original audio: soft interface taps and a textured paper-page sweep. */
 let ac;
+function audioContext(){ac=ac||new (window.AudioContext||window.webkitAudioContext)();if(ac.state==="suspended")ac.resume();return ac}
+function clickSound(){
+  if(!sound)return;try{
+    const ctx=audioContext(),now=ctx.currentTime;
+    [980,1480].forEach((hz,i)=>{const o=ctx.createOscillator(),g=ctx.createGain();o.type="sine";o.frequency.setValueAtTime(hz,now);o.frequency.exponentialRampToValueAtTime(hz*.72,now+.035);g.gain.setValueAtTime(i?.018:.026,now);g.gain.exponentialRampToValueAtTime(.0001,now+.055);o.connect(g);g.connect(ctx.destination);o.start(now);o.stop(now+.06)});
+  }catch{}
+}
 function rustle(){
   if(!sound)return;try{
-    ac=ac||new (window.AudioContext||window.webkitAudioContext)();
-    const len=ac.sampleRate*.3,b=ac.createBuffer(1,len,ac.sampleRate),d=b.getChannelData(0);
-    for(let i=0;i<len;i++){const a=Math.min(1,i/(len*.12)),r=Math.pow(1-i/len,2.2);d[i]=(Math.random()*2-1)*a*r*(.6+.4*Math.sin(i/90))}
-    const s=ac.createBufferSource();s.buffer=b;
-    const f=ac.createBiquadFilter();f.type="bandpass";f.frequency.value=2200;f.Q.value=.5;
-    const g=ac.createGain();g.gain.value=.4;s.connect(f);f.connect(g);g.connect(ac.destination);s.start();
+    const ctx=audioContext(),duration=.62,len=Math.floor(ctx.sampleRate*duration),buffer=ctx.createBuffer(1,len,ctx.sampleRate),data=buffer.getChannelData(0);
+    for(let i=0;i<len;i++){const t=i/len,attack=Math.min(1,t/.09),decay=Math.pow(1-t,1.9),flutter=.62+.38*Math.sin(i/37)*Math.sin(i/113);data[i]=(Math.random()*2-1)*attack*decay*flutter}
+    const source=ctx.createBufferSource();source.buffer=buffer;
+    const high=ctx.createBiquadFilter();high.type="bandpass";high.frequency.setValueAtTime(1450,ctx.currentTime);high.frequency.exponentialRampToValueAtTime(3300,ctx.currentTime+.22);high.Q.value=.65;
+    const low=ctx.createBiquadFilter();low.type="lowpass";low.frequency.value=950;
+    const gain=ctx.createGain();gain.gain.setValueAtTime(.0001,ctx.currentTime);gain.gain.linearRampToValueAtTime(.17,ctx.currentTime+.08);gain.gain.exponentialRampToValueAtTime(.0001,ctx.currentTime+duration);
+    source.connect(high);high.connect(low);low.connect(gain);gain.connect(ctx.destination);source.start();
+    const thump=ctx.createOscillator(),tg=ctx.createGain();thump.type="triangle";thump.frequency.setValueAtTime(175,ctx.currentTime);thump.frequency.exponentialRampToValueAtTime(72,ctx.currentTime+.12);tg.gain.setValueAtTime(.035,ctx.currentTime);tg.gain.exponentialRampToValueAtTime(.0001,ctx.currentTime+.14);thump.connect(tg);tg.connect(ctx.destination);thump.start();thump.stop(ctx.currentTime+.15);
   }catch{}
 }
 
@@ -308,6 +319,8 @@ book.addEventListener("click",e=>{
 });
 $("#rj").onclick=()=>{if(bm===null)return;const n=pageIndexForWord(bm);const d=n>idx?1:-1;idx=n-(two?n%2:0);render();rustle()};
 
+/* UI click feedback; page navigation adds its own paper sweep. */
+document.addEventListener("click",e=>{if(e.target.closest("button,a,select,[role=button]"))clickSound()});
 /* controls */
 $("#ap").onclick=()=>{fs=Math.min(26,fs+2);st.set("vellora.fs",fs);applyPrefs();setup()};
 $("#am").onclick=()=>{fs=Math.max(14,fs-2);st.set("vellora.fs",fs);applyPrefs();setup()};
