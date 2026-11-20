@@ -232,3 +232,44 @@ html,body{min-width:320px;max-width:100%;overflow-x:clip}
 .book-preview-dialog iframe{display:block;width:100%;height:calc(100% - 104px);border:0;background:#d8d2c7}
 @media(max-width:520px){.book-form-actions{display:grid;grid-template-columns:1fr}.book-form-actions>*{width:100%}.book-preview-dialog{width:calc(100% - 12px);height:94vh;max-height:94vh}.book-preview-head{padding:12px;align-items:flex-start}.book-preview-head h2{font-size:1.5rem}.book-preview-head button{padding:8px;font-size:.65rem}.book-preview-dialog iframe{height:calc(100% - 108px)}}
 @media(prefers-reduced-motion:reduce){.preview-book-btn{transition:none}}
+
+
+/* VELLORA Book Studio — roomy part and chapter writing workspace. */
+.book-studio{display:grid;gap:18px;padding:clamp(16px,3vw,26px);border:1px solid rgba(197,161,107,.35);background:linear-gradient(145deg,rgba(20,15,12,.36),rgba(20,15,12,.18));}
+.studio-heading{display:flex;align-items:flex-start;justify-content:space-between;gap:18px;flex-wrap:wrap}
+.studio-kicker{font:600 .65rem var(--ui);letter-spacing:.2em;color:var(--accent)}
+.studio-heading h2{margin:5px 0 3px;font:600 clamp(1.8rem,4vw,2.5rem)/1 var(--display);color:var(--text)}
+.studio-heading p{max-width:600px;margin:8px 0 0;font-size:.84rem}
+.studio-stats{padding:9px 12px;border:1px solid rgba(197,161,107,.28);color:var(--accent);font:600 .7rem var(--ui);letter-spacing:.04em;white-space:nowrap}
+.studio-parts{display:grid;gap:20px}
+.studio-part{min-width:0;border:1px solid rgba(197,161,107,.36);background:rgba(0,0,0,.13)}
+.studio-part-head{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 16px;background:rgba(197,161,107,.08);border-bottom:1px solid rgba(197,161,107,.22)}
+.studio-part-title{display:grid;gap:5px;min-width:0;flex:1}
+.studio-index{font:600 .62rem var(--ui);letter-spacing:.18em;color:var(--accent)}
+.studio-part-title input,.studio-chapter-head input{width:100%;min-width:0;padding:8px 10px;border:1px solid rgba(197,161,107,.3);border-radius:2px;background:rgba(20,15,12,.48);color:var(--text);font:600 1.3rem var(--display)}
+.studio-actions{display:flex;align-items:center;gap:5px;flex-wrap:wrap}
+.studio-actions button{min-width:34px;min-height:34px;padding:6px 9px;border:1px solid rgba(197,161,107,.3);background:transparent;color:var(--text2);font:600 .7rem var(--ui);cursor:pointer}
+.studio-actions button:disabled{opacity:.25;cursor:not-allowed}
+.studio-actions .studio-remove{color:#e5a99a}
+.studio-chapters{display:grid;gap:16px;padding:16px}
+.studio-chapter{min-width:0;padding:16px;border:1px solid rgba(197,161,107,.22);background:rgba(0,0,0,.17)}
+.studio-chapter-head{display:flex;justify-content:space-between;align-items:flex-end;gap:12px;margin-bottom:12px}
+.studio-chapter-head label{display:grid;gap:5px;flex:1;min-width:0;font:600 .64rem var(--ui);letter-spacing:.15em;color:var(--accent)}
+.studio-chapter-head input{font-size:1.55rem}
+.studio-chapter textarea{display:block;width:100%;min-height:390px;padding:22px 24px;resize:vertical;border:1px solid rgba(197,161,107,.32);border-radius:2px;background:#f2e8d6;color:#403226;font:1.04rem/1.95 var(--body);letter-spacing:.005em;outline:none;white-space:pre-wrap}
+.studio-chapter textarea:focus{border-color:#c5a16b;box-shadow:0 0 0 3px rgba(197,161,107,.15)}
+.studio-chapter-foot{display:flex;justify-content:space-between;gap:12px;padding-top:9px;color:var(--text2);font:.67rem var(--ui);letter-spacing:.04em}
+.studio-add-chapter,.studio-add-part{min-height:42px;padding:10px 14px;border:1px dashed rgba(197,161,107,.48);background:rgba(197,161,107,.06);color:var(--accent);font:600 .72rem var(--ui);letter-spacing:.08em;text-transform:uppercase;cursor:pointer}
+.studio-add-chapter{margin:0 16px 16px}
+.studio-add-part{justify-self:start;padding:12px 18px}
+.studio-footnote{color:var(--text2);font:.72rem/1.6 var(--ui)}
+#manuscriptContentStore{position:absolute!important;width:1px!important;height:1px!important;min-height:1px!important;padding:0!important;margin:-1px!important;overflow:hidden!important;clip:rect(0,0,0,0)!important;white-space:nowrap!important;border:0!important}
+@media(max-width:650px){
+ .studio-part-head,.studio-chapter-head{align-items:stretch;flex-direction:column}
+ .studio-actions{justify-content:flex-start}
+ .studio-chapter textarea{min-height:300px;padding:16px;font-size:.98rem;line-height:1.85}
+ .studio-chapters{padding:10px}
+ .studio-chapter{padding:12px}
+ .studio-stats{white-space:normal}
+}
+@media(prefers-reduced-motion:reduce){.studio-add-chapter,.studio-add-part{transition:none}}
