@@ -275,8 +275,10 @@ header.hero h1{font-size:clamp(2.4rem,6vw,4rem)}
     <div class="finder">
       <div class="sbox"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg><input id="search" type="search" placeholder="Search title, genre or story  ( / )" aria-label="Search the library" autocomplete="off"><button id="qx" hidden aria-label="Clear search">&#10005;</button><button id="adv" aria-expanded="false" aria-controls="advp">Filters</button></div>
       <div class="advp" id="advp" hidden>
+        <label>Author<select id="fa"><option value="">All authors</option></select></label>
+        <label>Language<select id="fl"><option value="">All languages</option></select></label>
         <label>Reading time<select id="ft"><option value="">Any length</option><option value="s">Under 30 min</option><option value="m">30 &ndash; 49 min</option><option value="l">50 min or more</option></select></label>
-        <label>Sort by<select id="fs"><option value="">Best match</option><option value="az">Title A&ndash;Z</option><option value="short">Shortest first</option><option value="long">Longest first</option></select></label>
+        <label>Sort by<select id="fs"><option value="">Newest first</option><option value="az">Title A&ndash;Z</option><option value="author">Author A&ndash;Z</option><option value="genre">Genre A&ndash;Z</option><option value="short">Shortest first</option><option value="long">Longest first</option></select></label>
         <button class="ghost" id="reset">Reset all</button>
       </div>
       <div id="chips" role="group" aria-label="Filter by genre"></div>
@@ -293,7 +295,7 @@ header.hero h1{font-size:clamp(2.4rem,6vw,4rem)}
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.119.1/dist/umd/supabase.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
 <script src="config.js"></script>
-<script src="app.js?v=20261120-favourites"></script>
+<script src="app.js?v=20261120-library-filters"></script>
 
 
 </body>
