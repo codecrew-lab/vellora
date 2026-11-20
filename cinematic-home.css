@@ -1,0 +1,29 @@
+/* VELLORA Phase 3 — cinematic discovery layer */
+.hero{position:relative}
+.hero::after{content:"";display:block;width:min(180px,32vw);height:1px;margin-top:34px;background:linear-gradient(90deg,var(--accent),transparent);opacity:.75}
+.hero-cta{display:inline-flex;align-items:center;gap:18px;margin-top:28px;padding:13px 20px;border:1px solid var(--border);border-radius:999px;color:var(--text);font:600 .82rem var(--ui);letter-spacing:.035em;text-decoration:none;background:color-mix(in srgb,var(--surface) 76%,transparent);box-shadow:0 8px 24px rgba(55,38,20,.06);transition:transform .25s,border-color .25s,box-shadow .25s}
+.hero-cta span{font-size:1.1rem;color:var(--accent);transition:transform .25s}
+.hero-cta:hover{transform:translateY(-3px);border-color:var(--accent);box-shadow:0 14px 30px rgba(55,38,20,.11)}
+.hero-cta:hover span{transform:translate(3px,-3px)}
+#featured:not([hidden]){animation:feature-arrive .65s cubic-bezier(.2,.7,.2,1) both}
+@keyframes feature-arrive{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+.card{transform-origin:center bottom}
+.card.reveal-pending,.discovery-section.reveal-pending,.featured.reveal-pending{opacity:0;transform:translateY(18px)}
+.card.reveal-ready,.discovery-section.reveal-ready,.featured.reveal-ready{opacity:1;transform:translateY(0);transition:opacity .55s ease,transform .55s cubic-bezier(.2,.7,.2,1)}
+#grid .card:nth-child(3n+2){transition-delay:55ms}
+#grid .card:nth-child(3n){transition-delay:100ms}
+#grid .card:focus-visible{outline-offset:6px}
+.library-skeleton{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:clamp(22px,3.2vw,42px) clamp(16px,2.6vw,32px)}
+.skeleton-card{min-width:0}
+.skeleton-cover,.skeleton-line{position:relative;overflow:hidden;border-radius:10px;background:color-mix(in srgb,var(--border) 48%,var(--surface))}
+.skeleton-cover{aspect-ratio:2/3;border-radius:5px 13px 13px 5px}
+.skeleton-line{height:12px;margin:14px 5px 0;width:72%}
+.skeleton-line.short{width:46%;height:9px;margin-top:9px}
+.skeleton-cover::after,.skeleton-line::after{content:"";position:absolute;inset:0;transform:translateX(-100%);background:linear-gradient(90deg,transparent,rgba(255,255,255,.36),transparent);animation:skeleton-sweep 1.45s ease-in-out infinite}
+@keyframes skeleton-sweep{to{transform:translateX(100%)}}
+#featured .feature-skeleton{height:250px;border-radius:18px;background:color-mix(in srgb,var(--border) 35%,var(--surface));position:relative;overflow:hidden}
+.feature-skeleton::after{content:"";position:absolute;inset:0;transform:translateX(-100%);background:linear-gradient(90deg,transparent,rgba(255,255,255,.32),transparent);animation:skeleton-sweep 1.5s infinite}
+#grid[aria-busy=true],#featured[aria-busy=true]{min-height:120px}
+@media(max-width:900px){.library-skeleton{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:650px){.hero-cta{margin-top:22px}.library-skeleton{grid-template-columns:repeat(2,minmax(0,1fr));gap:24px 14px}.feature-skeleton{height:390px!important}}
+@media(prefers-reduced-motion:reduce){.card.reveal-pending,.discovery-section.reveal-pending,.featured.reveal-pending{opacity:1;transform:none}.card.reveal-ready,.discovery-section.reveal-ready,.featured.reveal-ready{transition:none}.skeleton-cover::after,.skeleton-line::after,.feature-skeleton::after{animation:none}}

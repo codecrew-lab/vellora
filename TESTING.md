@@ -63,3 +63,11 @@ The checklist is a manual acceptance plan, not a claim that every end-to-end che
 - [ ] Previous/next buttons expose accessible names and disable correctly at the first/last page.
 - [ ] Reduced-motion preference suppresses reader transitions and loading animation.
 - [ ] Rapid page changes and closing the reader during rendering do not leave stale pages or unhandled rendering errors.
+
+
+## Phase 3 — cinematic discovery
+- [ ] Hero library CTA scrolls to the catalogue and remains keyboard accessible.
+- [ ] Library cards show skeleton placeholders while the catalogue request is pending, then replace them with real results or a clear empty/error state.
+- [ ] Featured story, recommendations, genre tiles and book cards reveal without blocking interaction.
+- [ ] Reduced-motion preference disables reveal and shimmer animation.
+- [ ] Verify loading and reveal behavior on narrow Android, tablet and desktop viewports.
