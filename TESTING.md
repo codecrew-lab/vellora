@@ -93,3 +93,14 @@ The checklist is a manual acceptance plan, not a claim that every end-to-end che
 - [ ] Favourite controls are keyboard accessible and announce their pressed state.
 - [ ] Existing recently-read, progress, bookmarks, PDF, sharing and theme features still work.
 - [ ] Confirm no Supabase schema, policy or Edge Function changes were introduced.
+
+
+## Phase 6 — reading insights
+- [ ] Reading insights shows pages reached, completed books, books in progress and active days in the past seven days.
+- [ ] Opening a PDF and turning pages updates the saved reading position and insights.
+- [ ] Revisiting an earlier page does not reduce the highest page reached.
+- [ ] A book counts as completed only after reaching its final page.
+- [ ] Active days are unique local calendar dates and do not double-count multiple page turns on one day.
+- [ ] Existing progress from before this upgrade remains readable.
+- [ ] Insights render correctly with no reading history and on narrow mobile screens.
+- [ ] Reading insights remain device-local; no Supabase schema or policy changes.
