@@ -126,6 +126,7 @@ body::after{content:"";position:fixed;inset:0;pointer-events:none;background:rad
 #panel .themes+.mi{margin-top:6px;border-top:1px solid var(--border);border-radius:0 0 8px 8px}
 @media(max-width:639px){#top .back{padding:10px 8px;letter-spacing:.08em}#top .sp small{display:none}.stage{inset:64px 0 56px}}
 @media print{#panel{display:none!important}}
+.preview-flag{font:600 .58rem var(--ui);letter-spacing:.13em;color:var(--accent);border:1px solid var(--border);border-radius:999px;padding:6px 9px;white-space:nowrap}@media(max-width:639px){.preview-flag{font-size:.5rem;padding:5px 6px;letter-spacing:.06em}}
 </style>
 </head>
 <body>
@@ -161,8 +162,10 @@ body::after{content:"";position:fixed;inset:0;pointer-events:none;background:rad
 <script>
 /* Live VELLORA stories are loaded from the published Supabase catalogue. */
 const $=s=>document.querySelector(s);
-const st={get(k,d){try{return JSON.parse(localStorage.getItem(k))??d}catch{return d}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch{}}};
-const id=new URLSearchParams(location.search).get("id")||"";
+const previewMode=new URLSearchParams(location.search).get("preview")==="1";
+const previewMemory=Object.create(null);
+const st={get(k,d){if(previewMode)return Object.prototype.hasOwnProperty.call(previewMemory,k)?previewMemory[k]:d;try{return JSON.parse(localStorage.getItem(k))??d}catch{return d}},set(k,v){if(previewMode){previewMemory[k]=v;return}try{localStorage.setItem(k,JSON.stringify(v))}catch{}}};
+let id=new URLSearchParams(location.search).get("id")||"";
 let title="Loading story…",genre="VELLORA EDITIONS",author="VELLORA Editions",chapters=[];
 $("#ttl").textContent=title;document.title="Loading story – VELLORA";
 function safeText(value){return String(value??"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#39;")}
@@ -179,7 +182,7 @@ function parseManuscript(source){
     const section=line.match(/^##\s+(.+)$/);
     if(chapter||section){
       flushChapter();
-      current={h:(chapter||section)[1].trim(),s:section?"Section":"",p:[]};
+      current={h:safeText((chapter||section)[1].trim()),s:section?"Section":"",p:[]};
       hasHeading=true;continue;
     }
     paragraph.push(line);
@@ -340,7 +343,23 @@ $("#pdf").onclick=()=>{
   print();
 };
 
-loadStory();
+if(previewMode){
+  const back=$(".back");back.href="admin.html";back.textContent="‹ Admin Hub";
+  const flag=document.createElement("span");flag.className="preview-flag";flag.textContent="DRAFT PREVIEW";flag.setAttribute("aria-label","Unpublished draft preview");$("#top").appendChild(flag);
+  document.title="Reader preview – VELLORA";
+  $("#ttl").textContent="Waiting for draft…";
+  $("#book").innerHTML='<div class="pg" style="display:flex;flex-direction:column;justify-content:center;text-align:center"><h2>Preparing your preview</h2><p>Your draft will appear here shortly.</p></div>';
+  window.addEventListener("message",async event=>{
+    if(event.origin!==location.origin||event.source!==window.opener||event.data?.type!=="vellora-reader-preview-data")return;
+    const data=event.data.payload||{};
+    title=String(data.title||"Untitled story");author=String(data.author||"VELLORA Editions");genre=String(data.genre||"VELLORA EDITIONS");
+    chapters=parseManuscript(String(data.manuscript||""));id="admin-draft-preview";pos=0;bm=null;
+    $("#ttl").textContent=title+" · "+author;document.title=title+" – VELLORA Reader Preview";
+    await (document.fonts?document.fonts.ready:Promise.resolve());setup();
+  });
+  if(window.opener)window.opener.postMessage({type:"vellora-reader-preview-ready"},location.origin);
+  else $("#book").innerHTML='<div class="pg" style="display:flex;flex-direction:column;justify-content:center;text-align:center"><h2>Preview connection unavailable</h2><p>Open this preview from the VELLORA Admin Hub.</p></div>';
+}else loadStory();
 
 /* settings panel */
 (function(){
