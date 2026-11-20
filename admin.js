@@ -96,6 +96,20 @@ $("#addBookPart").addEventListener("click",()=>{captureStudio();studioParts.push
 resetBookStudio();
 let previewObjectUrl="";
 function closeBookPreview(){const dialog=$("#bookPreviewDialog");if(dialog.open)dialog.close();$("#bookPreviewFrame").src="about:blank";if(previewObjectUrl){URL.revokeObjectURL(previewObjectUrl);previewObjectUrl="";}}
+let readerPreviewWindow=null;
+window.addEventListener("message",event=>{
+if(event.origin!==location.origin||event.source!==readerPreviewWindow||event.data?.type!=="vellora-reader-preview-ready")return;
+const form=$("#bookForm"),manuscript=syncStudioToManuscript(),f=new FormData(form);
+readerPreviewWindow.postMessage({type:"vellora-reader-preview-data",payload:{title:String(f.get("title")||"Untitled story"),author:String(f.get("author")||"VELLORA Editions"),genre:String(f.get("genre")||"VELLORA EDITIONS"),manuscript}},location.origin);
+});
+$("#previewReader").addEventListener("click",()=>{
+const form=$("#bookForm"),manuscript=syncStudioToManuscript();
+if(!form.reportValidity())return;
+if(readerPreviewWindow&&!readerPreviewWindow.closed)readerPreviewWindow.close();
+readerPreviewWindow=window.open("reader.html?preview=1","_blank");
+if(!readerPreviewWindow){status($("#adminStatus"),"Your browser blocked the preview window. Allow pop-ups for VELLORA and try again.","error");return}
+status($("#adminStatus"),"Opening the real VELLORA reader with your current draft. Nothing has been saved or published.","success");
+});
 $("#previewBook").addEventListener("click",()=>{
 const form=$("#bookForm"),manuscript=syncStudioToManuscript();
 if(!form.reportValidity())return;
