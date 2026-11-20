@@ -42,7 +42,7 @@ button{font:inherit;color:inherit;cursor:pointer;background:none;border:0}
 background:linear-gradient(100deg,#9c7437 0%,#e9cf93 18%,#fff3d0 26%,#d9b673 34%,#a77d3e 52%,#e9cf93 72%,#9c7437 100%);background-size:200% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;
 animation:rise 2.4s cubic-bezier(.2,.7,.2,1) .3s both,shine 9s linear 2.7s infinite}
 .door-in .rule{position:relative;width:min(300px,46vw);height:1px;margin:2.4rem 0 1.8rem;background:linear-gradient(90deg,transparent,#c9a45f,transparent);animation:grow 1.8s cubic-bezier(.2,.7,.2,1) 1.2s both}
-.door-in .rule::after{content:"";position:absolute;left:50%;top:50%;width:7px;height:7px;background:#c9a45f;transform:translate(-50%,-50%) rotate(45deg)}
+.door-in .rule::after{display:none}
 .door-in p{font-family:var(--display);font-style:italic;font-size:clamp(1rem,2.2vw,1.4rem);color:#c4b08a;letter-spacing:.14em;padding:0 24px;animation:rise2 1.8s ease 1.9s both}
 @keyframes rise{from{opacity:0;transform:translateY(14px);letter-spacing:.44em}to{opacity:1;transform:none;letter-spacing:.24em}}
 @keyframes rise2{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
