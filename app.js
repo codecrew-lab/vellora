@@ -79,8 +79,9 @@ async function draw(n,dir){
  if(version!==drawVersion||pdf!==currentPdf)return;
  const v=p.getViewport({scale:1});
  const stage=$("#pageStage");
- const availableWidth=Math.max(1,stage.clientWidth-(window.matchMedia("(max-width:650px)").matches?8:112));
- const availableHeight=Math.max(1,stage.clientHeight-12);
+ const compact=window.matchMedia("(max-width:650px)").matches;
+ const availableWidth=Math.max(1,Math.min(stage.clientWidth-(compact?24:112),compact?560:760));
+ const availableHeight=Math.max(1,stage.clientHeight-(compact?22:24));
  const scale=Math.max(.1,Math.min(availableWidth/v.width,availableHeight/v.height,2));
  const dpr=Math.max(1,Math.min(window.devicePixelRatio||1,3));
  const vp=p.getViewport({scale:scale*dpr}),c=$("#pdfCanvas");
