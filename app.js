@@ -52,7 +52,8 @@ function updateFavoriteButton(){
  const saved=isFavorite(active.id);button.setAttribute("aria-pressed",String(saved));
  button.textContent=saved?"♥ Saved to favourites":"♡ Save to favourites";
 }
-function drawRecent(){const r=recent();$("#continue").hidden=!r.length;$("#contRow").innerHTML=r.map(card).join("")}\nfunction readingStats(){
+function drawRecent(){const r=recent();$("#continue").hidden=!r.length;$("#contRow").innerHTML=r.map(card).join("")}
+function readingStats(){
  const progress=books.map(b=>({book:b,data:store.get("vellora.progress."+b.id,null)})).filter(x=>x.data&&Number(x.data.total)>0);
  const pages=progress.reduce((sum,x)=>sum+Math.max(0,Number(x.data.maxPage)||Number(x.data.page)||0),0);
  const completed=progress.filter(x=>Math.max(Number(x.data.maxPage)||0,Number(x.data.page)||0)>=Number(x.data.total)).length;
