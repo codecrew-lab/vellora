@@ -1,0 +1,19 @@
+{
+  "id": "/vellora/admin-app/",
+  "name": "VELLORA Admin",
+  "short_name": "VELLORA Admin",
+  "description": "Private publishing and library management for VELLORA.",
+  "start_url": "/vellora/admin-app/",
+  "scope": "/vellora/admin-app/",
+  "display": "standalone",
+  "background_color": "#211a16",
+  "theme_color": "#211a16",
+  "icons": [
+    {
+      "src": "/vellora/icons/vellora-admin.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}
