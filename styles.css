@@ -614,3 +614,78 @@ dialog::backdrop{background:rgba(20,14,10,.68);backdrop-filter:blur(5px)}
 .card-progress>i{display:block;height:3px;overflow:hidden;background:color-mix(in srgb,var(--border) 75%,transparent);border-radius:9px}
 .card-progress>i>span{display:block;height:100%;background:linear-gradient(90deg,#a77d3e,#f3dfa8);border-radius:9px}
 .card-progress small{font-size:.62rem;color:var(--text2)}
+
+
+/* Book details: fit the complete popup inside the visible viewport without an inner scrollbar.
+   This is intentionally scoped to the book-details dialog; the signature opening is untouched. */
+#dlg{
+  width:min(760px,calc(100vw - 32px));
+  max-width:760px;
+  max-height:calc(100dvh - 32px);
+  overflow:hidden;
+  overscroll-behavior:none;
+  grid-template-columns:minmax(108px,170px) minmax(0,1fr);
+  gap:clamp(14px,3vw,28px);
+  align-items:center;
+  padding:clamp(16px,3vw,30px);
+}
+#dlg #dCover{min-width:0;display:flex;align-items:center;justify-content:center}
+#dlg #dCover .cover{
+  width:100%;
+  max-width:170px;
+  min-height:0;
+  max-height:min(42dvh,310px);
+  aspect-ratio:2/3;
+}
+#dlg .dialog-copy{min-width:0;max-width:100%}
+#dlg .dialog-copy h3{
+  font-size:clamp(1.65rem,3.5vw,2.8rem);
+  line-height:1.02;
+  overflow-wrap:anywhere;
+}
+#dlg .dialog-copy p{
+  margin-top:10px;
+  font-size:clamp(.78rem,1.15vw,.94rem);
+  line-height:1.48;
+  overflow-wrap:anywhere;
+}
+#dlg .dialog-actions{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+  margin-top:14px;
+}
+#dlg .dialog-actions .btn{
+  min-height:40px;
+  margin-top:0;
+  padding:.68rem .9rem;
+  font-size:clamp(.62rem,.9vw,.74rem);
+  white-space:normal;
+}
+#dlg .dialog-close{right:9px;top:5px}
+@media(max-width:650px){
+  #dlg{
+    width:calc(100vw - 24px);
+    max-height:calc(100dvh - 24px);
+    grid-template-columns:minmax(82px,112px) minmax(0,1fr);
+    gap:12px;
+    padding:30px 13px 14px;
+  }
+  #dlg #dCover .cover{max-width:112px;max-height:34dvh}
+  #dlg .dialog-copy h3{font-size:clamp(1.35rem,6vw,1.9rem)}
+  #dlg .dialog-copy p{font-size:.76rem;line-height:1.4;margin-top:7px}
+  #dlg .dialog-actions{display:grid;grid-template-columns:1fr;gap:6px;margin-top:10px}
+  #dlg .dialog-actions .btn{width:100%;min-height:34px;padding:.5rem .55rem;font-size:.62rem}
+}
+@media(max-height:620px){
+  #dlg{padding:12px 16px;gap:14px}
+  #dlg #dCover .cover{max-height:32dvh}
+  #dlg .dialog-copy p{
+    display:-webkit-box;
+    -webkit-box-orient:vertical;
+    -webkit-line-clamp:4;
+    overflow:hidden;
+  }
+  #dlg .dialog-actions{gap:6px;margin-top:8px}
+  #dlg .dialog-actions .btn{min-height:34px;padding:.48rem .65rem}
+}
