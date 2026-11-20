@@ -4,10 +4,11 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>VELLORA – A beautiful world where stories come to life</title>
-<meta name="description" content="VELLORA is a manuscript-inspired digital library of stories.">
+<meta name="description" content="VELLORA is a manuscript-inspired digital library of original stories.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Lora:ital,wght@0,400;0,500;1,400&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
 <style>
+
 :root{--display:'Cormorant Garamond',Georgia,serif;--body:'Lora',Georgia,serif;--ui:'DM Sans',system-ui,sans-serif}
 [data-theme=manuscript]{--bg:#EDE3D0;--surface:#F6EEDC;--text:#45372B;--text2:#776653;--accent:#A98A59;--border:#C9B99D}
 [data-theme=vellum]{--bg:#FAF7F2;--surface:#FFFCF7;--text:#453A31;--text2:#827568;--accent:#B49A73;--border:#E6DED2}
@@ -122,15 +123,131 @@ dialog p{margin:8px 0 0;color:var(--text2);font-size:.95rem}
 }
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition-duration:.01ms!important}}
 
-/* VELLORA cross-device layout safeguards */
-html,body{width:100%;max-width:100%;min-width:0;overflow-x:hidden}*,*::before,*::after{box-sizing:border-box}img,svg,canvas,video{max-width:100%;height:auto}button,input,select,textarea{max-width:100%;min-width:0}.wrap{width:100%;min-width:0}.grid{grid-template-columns:repeat(3,minmax(0,1fr))}.card{min-width:0}.cont{max-width:100%;overscroll-behavior-x:contain}.cover{width:100%;min-width:0}#panel{max-width:calc(100vw - 24px);right:12px}#fab{right:12px}dialog{width:min(380px,calc(100vw - 24px));max-width:calc(100vw - 24px);max-height:calc(100dvh - 32px);overflow:auto}
-@media(max-width:1023px){.grid{grid-template-columns:repeat(2,minmax(0,1fr))}.wrap{padding-left:20px;padding-right:20px}}
-@media(max-width:639px){.wrap{padding-left:14px;padding-right:14px}.grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:24px 12px}.card h3{font-size:clamp(1rem,4.2vw,1.25rem);overflow-wrap:anywhere}.card p{font-size:.84rem}.cover{padding:clamp(10px,3vw,18px)}.cover b{font-size:clamp(.85rem,4vw,1.1rem)}.cover em{font-size:clamp(.72rem,3vw,.9rem)}.featured{min-width:0;max-width:100%;overflow:hidden}.cont{gap:12px}.cont .card{width:clamp(112px,36vw,150px)}#open{max-width:calc(100vw - 40px);white-space:nowrap}#fab{top:12px;right:12px;width:44px;height:44px}#panel{top:66px;right:12px;width:min(320px,calc(100vw - 24px))}}
-@media(min-width:1500px){.wrap{max-width:1320px}.grid{grid-template-columns:repeat(4,minmax(0,1fr))}}
+/* ===== PREMIUM LAYER ===== */
+::selection{background:var(--accent);color:#211A16}
+html{scrollbar-color:var(--accent) var(--bg)}
+body::before{background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 .35  0 0 0 0 .27  0 0 0 0 .17  0 0 0 .55 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");opacity:.55;mix-blend-mode:multiply;background-size:160px}
+[data-theme=heritage] body::before,[data-theme=heritage]::before{mix-blend-mode:screen;opacity:.18}
+body::after{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;background:radial-gradient(ellipse at 50% 0%,rgba(255,240,205,.35),transparent 55%),radial-gradient(ellipse at 50% 100%,rgba(0,0,0,.14),transparent 60%)}
+[data-theme=heritage] body::after{background:radial-gradient(ellipse at 50% 0%,rgba(177,138,85,.16),transparent 55%),radial-gradient(ellipse at 50% 100%,rgba(0,0,0,.5),transparent 60%)}
+/* menu: glass */
+#fab{backdrop-filter:blur(14px);background:color-mix(in srgb,var(--surface) 80%,transparent);box-shadow:0 8px 26px rgba(0,0,0,.25),inset 0 0 0 3px transparent}
+#fab:hover{border-color:var(--accent)}
+#panel{backdrop-filter:blur(18px);background:color-mix(in srgb,var(--surface) 88%,transparent);border-radius:16px;box-shadow:0 30px 70px rgba(0,0,0,.35),inset 0 0 0 1px rgba(217,182,115,.12)}
+.mi{transition:background .2s,padding-left .2s}.mi:hover{padding-left:18px}
+/* hero */
+header.hero{padding-top:120px;text-align:center;margin:0 auto}
+.logo{background:linear-gradient(180deg,#f8ebc8 0%,#d9b673 45%,#a77d3e 100%);-webkit-background-clip:text;background-clip:text;color:transparent;font-size:1.3rem;letter-spacing:.42em}
+header.hero h1{font-size:clamp(2.8rem,7vw,5rem);letter-spacing:-.01em}
+header.hero::after{content:"\25C6";display:block;margin:26px auto 0;color:var(--accent);font-size:.7rem;background:linear-gradient(90deg,transparent,var(--accent)) left center/42% 1px no-repeat,linear-gradient(270deg,transparent,var(--accent)) right center/42% 1px no-repeat}
+/* covers: foil + page edges */
+.cover{box-shadow:1px 0 0 #efe3c8,2px 0 0 #cdbf9f,3px 0 0 #efe3c8,4px 0 0 #bfb08e,0 18px 30px rgba(0,0,0,.38),0 2px 0 rgba(255,255,255,.08) inset}
+.cover::before{width:14px;background:linear-gradient(90deg,rgba(0,0,0,.45),rgba(255,255,255,.14) 55%,transparent)}
+.cover{background-blend-mode:soft-light}
+.cover b{background:linear-gradient(180deg,#f8ebc8 0%,#d9b673 45%,#a77d3e 100%);-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 1px 1px rgba(0,0,0,.5))}
+.cover em{color:#d9b673;letter-spacing:.14em;text-transform:uppercase;font-size:.68rem;font-family:var(--ui)}
+.cover::after{border-color:rgba(217,182,115,.6)}
+/* featured: gilded frame */
+.featured{background:linear-gradient(145deg,var(--surface),color-mix(in srgb,var(--surface) 92%,var(--accent)));border:1px solid var(--accent);box-shadow:0 0 0 7px var(--surface),0 0 0 8px var(--border),0 40px 80px -20px rgba(40,25,10,.4);border-radius:4px;margin:0 8px}
+.featured .tag{background:linear-gradient(180deg,#f8ebc8 0%,#d9b673 45%,#a77d3e 100%);letter-spacing:.14em;text-transform:uppercase;font-size:.68rem;padding:5px 18px;top:-13px;border-radius:2px;box-shadow:0 4px 12px rgba(0,0,0,.25)}
+.featured .cover{transition:transform .6s cubic-bezier(.2,.8,.2,1)}.featured:hover .cover{transform:rotate(0) scale(1.03)}
+.featured h2{font-size:clamp(2.2rem,4.6vw,3.3rem)}
+.btn{background:linear-gradient(180deg,#f8ebc8 0%,#d9b673 45%,#a77d3e 100%);border-radius:2px;letter-spacing:.14em;text-transform:uppercase;font-size:.78rem;padding:.95rem 2.2rem;box-shadow:0 8px 22px rgba(120,85,30,.35)}
+/* shelf */
+.bar h2{text-align:center;font-size:2.6rem;margin-bottom:14px}
+#chips{justify-content:center;width:100%}
+.chip{background:transparent;letter-spacing:.04em;padding:8px 20px}
+.chip[aria-pressed=true]{background:linear-gradient(180deg,#f8ebc8 0%,#d9b673 45%,#a77d3e 100%);color:#2a1d0c;box-shadow:0 6px 16px rgba(120,85,30,.3)}
+.card{transition:transform .4s}
+.card h3{font-size:1.55rem}
+.card:hover .cover{transform:translateY(-12px) rotate(-.6deg);box-shadow:1px 0 0 #efe3c8,2px 0 0 #cdbf9f,3px 0 0 #efe3c8,4px 0 0 #bfb08e,0 34px 44px rgba(0,0,0,.45),0 0 40px rgba(217,182,115,.25)}
+.cover{transition:transform .5s cubic-bezier(.2,.8,.2,1),box-shadow .5s}
+.card h3::after{content:"";display:block;width:0;height:1px;background:var(--accent);margin-top:6px;transition:width .4s}
+.card:hover h3::after{width:44px}
+.rv{opacity:0;transform:translateY(28px);transition:opacity .9s,transform .9s cubic-bezier(.2,.8,.2,1)}.rv.in{opacity:1;transform:none}
+footer{border-top:0;background:linear-gradient(var(--border),var(--border)) top center/min(520px,70%) 1px no-repeat}
+footer .logo{font-size:1.1rem;margin-bottom:10px}
+
+/* search + compact books */
+.bar{flex-wrap:wrap;gap:14px;justify-content:center}
+.search{font-family:var(--ui);font-size:.92rem;color:var(--text);background:var(--surface);border:1px solid var(--border);border-radius:999px;padding:10px 18px;min-width:min(260px,100%);flex:0 1 380px;outline:none;transition:border-color .3s,box-shadow .3s}
+.search::placeholder{color:var(--text2)}
+.search:focus{border-color:var(--accent);box-shadow:0 0 0 3px color-mix(in srgb,var(--accent) 25%,transparent)}
+.grid{grid-template-columns:repeat(5,1fr);gap:28px 18px}
+.card h3{font-size:1.05rem;margin:12px 0 3px}
+.card p{font-size:.8rem;-webkit-line-clamp:2}
+.card .meta{font-size:.74rem;margin-top:4px}
+.grid .cover{padding:14px 11px}
+.grid .cover b{font-size:.98rem}
+.grid .cover em{font-size:.55rem}
+.grid .cover::before{width:9px}
+.grid .cover::after{inset:7px 7px 7px 12px}
+.card:hover .cover{transform:translateY(-6px)}
+.cont .card{width:120px}
+@media(max-width:1023px){.grid{grid-template-columns:repeat(4,1fr)}}
+@media(max-width:767px){.grid{grid-template-columns:repeat(3,1fr);gap:22px 12px}}
+@media(max-width:479px){.grid{grid-template-columns:repeat(2,1fr)}.search{flex-basis:100%}}
+
+/* ===== FINAL LAYER: top bar, finder, compact books ===== */
+html{scroll-padding-top:84px}
+.top{position:fixed;top:0;left:0;right:0;z-index:60;height:62px;display:flex;align-items:center;justify-content:space-between;padding:0 clamp(16px,4vw,40px);background:color-mix(in srgb,var(--bg) 78%,transparent);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-bottom:1px solid color-mix(in srgb,var(--border) 70%,transparent)}
+.tlogo{font-family:var(--display);font-weight:700;letter-spacing:.38em;font-size:1.05rem;text-decoration:none;background:linear-gradient(180deg,#f8ebc8 0%,#d9b673 45%,#a77d3e 100%);-webkit-background-clip:text;background-clip:text;color:transparent}
+.top nav{display:flex;align-items:center;gap:4px}
+.tl,.tb{font-family:var(--ui);font-size:.72rem;letter-spacing:.16em;text-transform:uppercase;color:var(--text);padding:10px 14px;border-radius:999px;text-decoration:none;transition:.25s}
+.tl:hover,.tb:hover,.tb[aria-expanded=true]{background:var(--surface);color:var(--accent)}
+.tb.ic{padding:10px;display:grid;place-items:center}
+#panel{top:72px;right:clamp(12px,3vw,32px)}
+#panel .sub{padding:0 12px 6px;color:var(--text2);font-family:var(--ui);font-size:.85rem}
+#panel .themes+.mi{margin-top:6px;border-top:1px solid var(--border);border-radius:0 0 8px 8px}
+header.hero{padding:112px 0 28px;max-width:680px}
+header.hero h1{font-size:clamp(2.4rem,6vw,4rem)}
+.sec{text-align:center;margin:72px 0 28px}
+.sec small{display:block;font-family:var(--ui);font-size:.68rem;letter-spacing:.36em;text-transform:uppercase;color:var(--accent);margin-bottom:8px}
+.sec h2{font-family:var(--display);font-size:clamp(1.9rem,4vw,2.6rem);font-weight:600;line-height:1.1}
+.sec::after{content:"\25C6";display:block;margin:16px auto 0;color:var(--accent);font-size:.55rem;width:160px;background:linear-gradient(90deg,transparent,var(--accent)) left center/42% 1px no-repeat,linear-gradient(270deg,transparent,var(--accent)) right center/42% 1px no-repeat}
+.featured{grid-template-columns:170px 1fr;gap:34px;padding:30px 34px}
+.featured h2{font-size:clamp(1.8rem,3.6vw,2.6rem)}
+.featured p{color:var(--text2)}
+.finder{max-width:760px;margin:0 auto 38px}
+.sbox{display:flex;align-items:center;gap:10px;background:var(--surface);border:1px solid var(--border);border-radius:999px;padding:6px 6px 6px 20px;box-shadow:0 10px 30px rgba(60,40,20,.08);transition:border-color .3s,box-shadow .3s}
+.sbox:focus-within{border-color:var(--accent);box-shadow:0 0 0 3px color-mix(in srgb,var(--accent) 25%,transparent),0 10px 30px rgba(60,40,20,.1)}
+.sbox>svg{flex:none;color:var(--accent)}
+.sbox input{flex:1;min-width:0;border:0;background:none;outline:0;font-family:var(--ui);font-size:.98rem;color:var(--text);padding:10px 0}
+.sbox input::placeholder{color:var(--text2)}
+.sbox input::-webkit-search-cancel-button{display:none}
+#qx{width:30px;height:30px;border-radius:50%;color:var(--text2);flex:none}#qx:hover{background:var(--bg)}#qx[hidden]{display:none}
+#adv{position:relative;flex:none;font-family:var(--ui);font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;padding:11px 20px;border-radius:999px;border:1px solid var(--border);transition:.25s}
+#adv:hover{border-color:var(--accent)}
+#adv[aria-expanded=true]{background:linear-gradient(180deg,#f8ebc8 0%,#d9b673 45%,#a77d3e 100%);color:#2a1d0c;border-color:transparent}
+#adv[data-on]::after{content:"";position:absolute;top:6px;right:8px;width:7px;height:7px;border-radius:50%;background:#c0562f}
+.advp{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:16px;margin-top:14px;padding:18px;background:var(--surface);border:1px solid var(--border);border-radius:16px}
+.advp[hidden]{display:none}
+.advp label{display:flex;flex-direction:column;gap:6px;font-family:var(--ui);font-size:.66rem;letter-spacing:.2em;text-transform:uppercase;color:var(--text2)}
+.advp select{font-family:var(--ui);font-size:.92rem;letter-spacing:0;text-transform:none;color:var(--text);background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:10px 12px}
+.ghost{align-self:end;font-family:var(--ui);font-size:.72rem;letter-spacing:.16em;text-transform:uppercase;padding:12px 16px;border:1px solid var(--border);border-radius:8px;color:var(--text2);transition:.25s}.ghost:hover{border-color:var(--accent);color:var(--accent)}
+#chips{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-top:18px}
+.count{text-align:center;font-family:var(--ui);font-size:.8rem;letter-spacing:.06em;color:var(--text2);margin-top:14px}
+.grid{grid-template-columns:repeat(auto-fill,minmax(130px,148px));justify-content:center;gap:30px 24px}
+.card p{display:none}
+.card h3{font-size:1rem;margin:12px 0 2px}
+.card .meta{font-size:.72rem;margin-top:2px}
+@media(max-width:639px){.featured{grid-template-columns:1fr;padding:28px 22px}.featured .cover{max-width:150px}.grid{gap:26px 16px}}
+
 </style>
-<link rel="stylesheet" href="styles.css"><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.119.1/dist/umd/supabase.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script><script src="config.js"></script>
+<link rel="stylesheet" href="styles.css?v=20261120-new-index">
+<style>
+.top #fab{position:static;inset:auto;width:42px;height:42px;box-shadow:none;background:var(--surface);backdrop-filter:none}
+#panel{z-index:70;top:72px}
+.top{z-index:65}
+#library .bar{align-items:center;justify-content:center}
+#library .bar h2{width:100%;text-align:center}
+#library .bar #chips{width:100%;display:flex;flex-wrap:wrap;justify-content:center;gap:8px}
+#library .bar .search{flex:0 1 420px;min-width:min(260px,100%)}
+@media(max-width:639px){.top{padding:0 14px}.top .tl{font-size:.65rem;padding:8px 10px}}
+</style>
 </head>
 <body>
+
 
 <div id="landing">
   <div class="glow"></div>
@@ -138,32 +255,160 @@ html,body{width:100%;max-width:100%;min-width:0;overflow-x:hidden}*,*::before,*:
   <div class="door l"><div class="door-in"><h1>VELLORA</h1><div class="rule"></div><p>A beautiful world where stories come to life</p></div></div>
   <div class="door r"><div class="door-in" aria-hidden="true"><h1>VELLORA</h1><div class="rule"></div><p>A beautiful world where stories come to life</p></div></div>
   <button id="open">Open the World</button>
-</div>
 
-<button id="fab" aria-label="Menu" aria-expanded="false" aria-controls="panel"><span></span></button>
+
+<div class="top"><a class="tlogo" href="#">VELLORA</a><nav><a class="tl" href="#library">Library</a><button class="tb" id="fab" aria-label="Open menu" aria-expanded="false" aria-controls="panel"><span></span></button></nav></div>
 <nav id="panel" aria-label="Main menu"></nav>
 
 <main class="wrap">
   <header class="hero">
-    <span class="logo">VELLORA</span>
+    <span class="logo">Original Stories</span>
     <h1>A world of stories awaits.</h1>
     <p>Discover original stories, step into imagined worlds, and read each one like a real book.</p>
   </header>
 
   <section id="featured" aria-label="Featured story"></section>
-  <section id="continue" hidden><div class="bar"><h2>Continue reading</h2></div><div class="cont" id="contRow"></div></section>
+  <section id="continue" hidden><div class="sec"><small>Pick up where you left off</small><h2>Continue reading</h2></div><div class="cont" id="contRow"></div></section>
 
   <section id="library">
-    <div class="bar"><h2>The Library</h2><input id="search" type="search" placeholder="Search books or authors…" aria-label="Search books or authors"><div id="chips" role="group" aria-label="Filter by genre" style="display:flex;flex-wrap:wrap;gap:8px"></div></div>
+    <div class="sec"><small>The Collection</small><h2>The Library</h2></div>
+    <div class="bar"><h2>Explore the collection</h2><input id="search" class="search" type="search" placeholder="Search title, author or story…" aria-label="Search the library" autocomplete="off"><div id="chips" role="group" aria-label="Filter by genre"></div></div>
     <div class="grid" id="grid"></div>
   </section>
 </main>
 
 <footer><span class="logo">VELLORA</span>A beautiful world where stories come to life.<br>© 2026 Vellora. A world of stories.</footer>
-
-<dialog id="dlg"><button class="dialog-close" id="dClose" aria-label="Close">×</button><div id="dCover"></div><div class="dialog-copy"><div class="meta" id="dMeta"></div><h3 id="dT"></h3><p id="dDesc"></p><div class="dialog-actions"><button class="btn" id="readBook">Read book</button><button class="btn secondary" id="downloadBook">Download PDF</button></div></div></dialog>
 <div id="reader" class="reader" hidden><div class="reader-top"><button id="closeReader" class="reader-back">← Library</button><strong id="readerTitle">VELLORA Reader</strong><div class="reader-tools"><select id="readerTheme" aria-label="Reading theme"><option value="manuscript">Manuscript</option><option value="vellum">Vellum</option><option value="heritage">Heritage</option></select><button id="soundToggle">Sound on</button><button id="bookmarkPage" class="ribbon">Ribbon</button><button id="readerPdf" class="reader-pdf">PDF</button></div></div><div class="reader-main"><aside class="reader-side"><label for="chapterSelect">Chapters</label><select id="chapterSelect"><option value="">Page navigation</option></select><label for="bookmarkSelect" class="bookmark-label">Your bookmarks</label><select id="bookmarkSelect"><option value="">Saved bookmarks (0)</option></select><div id="readerProgress" role="status"></div></aside><div id="pageStage" class="page-stage"><button id="prevPage" class="page-arrow" aria-label="Previous page">‹</button><div id="pageFrame" class="page-frame"><canvas id="pdfCanvas"></canvas></div><button id="nextPage" class="page-arrow" aria-label="Next page">›</button></div></div><div class="reader-bottom"><span id="pageLabel">Page 0 of 0</span><input id="pageRange" type="range" min="1" max="1" value="1" aria-label="Reading progress"></div></div>
 
-<script src="app.js"></script>
+<dialog id="dlg"><button class="dialog-close" id="dClose" aria-label="Close">×</button><div id="dCover"></div><div class="dialog-copy"><div class="meta" id="dMeta"></div><h3 id="dT"></h3><p id="dDesc"></p><div class="dialog-actions"><button class="btn" id="readBook">Read book</button><button class="btn secondary" id="downloadBook">Download PDF</button></div></div></dialog>
+
+<script>
+/* Sample books – in Phase 6 these come from Supabase via the admin dashboard */
+const BOOKS=[
+ {id:1,t:"The Lantern Keeper of Mistral Bay",g:"Fantasy",d:"A lighthouse keeper discovers the flame she tends is guiding something far older than ships.",m:42,c:9,a:["#3b2a52","#1d1530"],f:1},
+ {id:2,t:"Nine Letters from the Ashgrove",g:"Mystery",d:"Nine unsigned letters arrive at a quiet manor, each revealing one secret too many.",m:35,c:9,a:["#4a2c2a","#251413"]},
+ {id:3,t:"The Fox Who Borrowed the Moon",g:"Fables",d:"A clever fox learns what it costs to keep something that was only ever meant to be shared.",m:12,c:4,a:["#6b4a22","#35240f"]},
+ {id:4,t:"Salt Road",g:"Adventure",d:"Two cousins follow a forgotten trade route across the desert to find their grandfather's last caravan.",m:58,c:12,a:["#7a5a2e","#3d2c15"]},
+ {id:5,t:"A Winter at Hollowell",g:"Drama",d:"A family gathers for one last winter in the house that holds every argument they never finished.",m:47,c:10,a:["#2f4a4a","#16262a"]},
+ {id:6,t:"The Cartographer's Daughter",g:"Historical",d:"In 1790s Lisbon, a mapmaker's daughter redraws the coastline to hide a stranger.",m:63,c:14,a:["#5a2f3c","#2c1520"]},
+ {id:7,t:"Letters Across the Tide",g:"Romance",d:"Two harbour towns, one pen-friendship, and a storm season that changes everything.",m:39,c:8,a:["#6a3a3a","#331c1f"]},
+ {id:8,t:"Orbit of Small Hours",g:"Science Fiction",d:"The night-shift engineer of a silent station hears someone knocking from outside.",m:51,c:11,a:["#1f3a52","#0e1c2b"]}
+];
+const $=s=>document.querySelector(s);
+const store={get(k,d){try{return JSON.parse(localStorage.getItem(k))??d}catch{return d}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch{}}};
+const THEMES=[["manuscript","Enhanced Manuscript","Faded manuscript","#EDE3D0"],["vellum","Classic Vellum","Warm ivory","#FFFCF7"],["heritage","Dark Heritage","Deep antique brown","#2D231C"]];
+
+/* ---- theme ---- */
+function setTheme(t){document.documentElement.dataset.theme=t;store.set("vellora.theme",t)}
+setTheme(store.get("vellora.theme","manuscript"));
+
+/* ---- landing ---- */
+const landing=$("#landing");
+function showLanding(){
+  landing.hidden=false;landing.className="";
+  const dust=$("#dust");dust.innerHTML="";
+  for(let i=0;i<26;i++){const p=document.createElement("i");
+    p.style.cssText=`left:${Math.random()*100}%;top:${50+Math.random()*50}%;animation-duration:${9+Math.random()*10}s;animation-delay:${-Math.random()*12}s;transform:scale(${.6+Math.random()*1.4})`;dust.appendChild(p)}
+  $("#open").focus();
+}
+$("#open").onclick=()=>{
+  landing.classList.add("opening");store.set("vellora.seen",1);
+  setTimeout(()=>{landing.hidden=true},2200);
+};
+showLanding();
+
+/* ---- covers & cards ---- */
+const cover=b=>`<div class="cover" style="background:linear-gradient(160deg,${b.a[0]},${b.a[1]})"><em>${b.g}</em><b>${b.t}</b></div>`;
+const card=b=>`<button class="card" data-id="${b.id}">${cover(b)}<h3>${b.t}</h3><p>${b.d}</p><div class="meta">${b.g}, ${b.m} min read</div></button>`;
+
+/* featured */
+const F=BOOKS.find(b=>b.f);
+$("#featured").innerHTML=`<div class="featured"><span class="tag">Editor's pick</span>${cover(F)}<div><div class="meta">${F.g}, ${F.m} min read, ${F.c} chapters</div><h2>${F.t}</h2><p>${F.d}</p><button class="btn" data-id="${F.id}">Read story</button></div></div>`;
+
+/* filters + grid */
+let genre="All";
+const TIMES={"":[0,999],s:[0,29],m:[30,49],l:[50,999]};
+const score=(b,t)=>t.reduce((n,k)=>n+(b.t.toLowerCase().includes(k)?3:0)+(b.g.toLowerCase().includes(k)?2:0),0);
+function drawGrid(){
+  $("#chips").innerHTML=["All",...new Set(BOOKS.map(b=>b.g))].map(g=>`<button class="chip" aria-pressed="${g===genre}" data-g="${g}">${g}</button>`).join("");
+  const q=$("#q").value.trim().toLowerCase(),toks=q.split(/\s+/).filter(Boolean),ft=$("#ft").value,so=$("#fs").value,[lo,hi]=TIMES[ft];
+  const list=BOOKS.filter(b=>(genre==="All"||b.g===genre)&&b.m>=lo&&b.m<=hi&&toks.every(k=>(b.t+" "+b.g+" "+b.d).toLowerCase().includes(k)));
+  if(so==="az")list.sort((a,b)=>a.t.localeCompare(b.t));
+  else if(so==="short")list.sort((a,b)=>a.m-b.m);
+  else if(so==="long")list.sort((a,b)=>b.m-a.m);
+  else if(toks.length)list.sort((a,b)=>score(b,toks)-score(a,toks));
+  $("#qx").hidden=!q;
+  $("#adv").toggleAttribute("data-on",!!(ft||so));
+  $("#count").textContent=list.length+(list.length===1?" story":" stories")+(q?" for \u201c"+q+"\u201d":"");
+  $("#grid").innerHTML=list.length?list.map(card).join(""):`<p class="empty" style="grid-column:1/-1;text-align:center">No stories match. Try fewer words or reset the filters.</p>`;
+  reveal();
+}
+$("#chips").onclick=e=>{const g=e.target.dataset.g;if(g){genre=g;drawGrid()}};
+$("#q").addEventListener("input",drawGrid);
+$("#ft").onchange=$("#fs").onchange=drawGrid;
+$("#qx").onclick=()=>{$("#q").value="";drawGrid();$("#q").focus()};
+$("#adv").onclick=()=>{const o=$("#advp").hidden;$("#advp").hidden=!o;$("#adv").setAttribute("aria-expanded",o)};
+$("#reset").onclick=()=>{genre="All";$("#q").value="";$("#ft").value="";$("#fs").value="";drawGrid()};
+document.addEventListener("keydown",e=>{if(e.key==="/"&&!/INPUT|SELECT|TEXTAREA/.test(document.activeElement.tagName)){e.preventDefault();$("#q").focus()}});
+drawGrid();
+
+/* ---- recent ---- */
+function drawContinue(){
+  const r=store.get("vellora.recent",[]).map(id=>BOOKS.find(b=>b.id===id)).filter(Boolean);
+  $("#continue").hidden=!r.length;
+  $("#contRow").innerHTML=r.map(card).join("");
+}
+function openBook(id){
+  const b=BOOKS.find(x=>x.id==id);if(!b)return;
+  store.set("vellora.recent",[b.id,...store.get("vellora.recent",[]).filter(x=>x!==b.id)].slice(0,8));
+  location.href="reader.html?id="+b.id;
+}
+document.addEventListener("click",e=>{const el=e.target.closest("[data-id]");if(el)openBook(el.dataset.id)});
+$("#dClose").onclick=()=>$("#dlg").close();
+drawContinue();
+
+/* ---- top bar + panel ---- */
+const panel=$("#panel"),gear=$("#gear"),rbtn=$("#recentBtn");
+function menu(view){
+  panel.dataset.v=view;let h="";
+  if(view==="settings"){
+    const cur=document.documentElement.dataset.theme;
+    h=`<h2>Appearance</h2><p class="sub">Choose how Vellora looks.</p><div class="themes">`+THEMES.map(([k,n,s,c])=>`<button class="th" data-theme-pick="${k}" aria-pressed="${k===cur}"><span class="sw" style="background:${c}"></span><span><b>${n}</b><small>${s}</small></span></button>`).join("")+`</div><button class="mi" data-v="intro">Replay opening</button>`;
+  }else{
+    const r=store.get("vellora.recent",[]).map(id=>BOOKS.find(b=>b.id===id)).filter(Boolean);
+    h=`<h2>Recently read</h2>`+(r.length?r.map(b=>`<button class="recent-row" data-id="${b.id}"><span class="mini" style="background:linear-gradient(160deg,${b.a[0]},${b.a[1]})"></span><span>${b.t}<br><small class="meta">${b.g}</small></span></button>`).join(""):`<p class="empty">Books you open will appear here.</p>`);
+  }
+  panel.innerHTML=h;
+}
+function toggle(open,view){
+  panel.classList.toggle("show",open);
+  gear.setAttribute("aria-expanded",!!open&&view==="settings");rbtn.setAttribute("aria-expanded",!!open&&view==="recent");
+  if(open)menu(view);
+}
+const isOpen=v=>panel.classList.contains("show")&&panel.dataset.v===v;
+gear.onclick=()=>toggle(!isOpen("settings"),"settings");
+rbtn.onclick=()=>toggle(!isOpen("recent"),"recent");
+panel.onclick=e=>{
+  const t=e.target.closest("button");if(!t)return;
+  if(t.dataset.v==="intro"){toggle(false);showLanding();return}
+  if(t.dataset.themePick){setTheme(t.dataset.themePick);menu("settings");return}
+  if(t.dataset.id)toggle(false);
+};
+document.addEventListener("keydown",e=>{if(e.key==="Escape")toggle(false)});
+document.addEventListener("click",e=>{const p=e.composedPath();if(!p.includes(panel)&&!p.includes(gear)&&!p.includes(rbtn))toggle(false)});
+function reveal(){
+  const els=document.querySelectorAll(".card:not(.rv)");
+  els.forEach((c,i)=>{c.classList.add("rv");c.style.transitionDelay=(i%3)*90+"ms"});
+  if(!("IntersectionObserver" in window)){document.querySelectorAll(".rv").forEach(c=>c.classList.add("in"));return}
+  const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add("in");io.unobserve(e.target)}}),{threshold:.08});
+  els.forEach(c=>io.observe(c));
+}
+reveal();
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.119.1/dist/umd/supabase.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+<script src="config.js"></script>
+<script src="app.js?v=20261120-new-index"></script>
 </body>
 </html>
