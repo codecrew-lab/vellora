@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="manuscript">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="theme-color" content="#211a16">
+<title>Submit a Book · VELLORA</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Lora:wght@400;500&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--display:'Cormorant Garamond',Georgia,serif;--body:'Lora',Georgia,serif;--ui:'DM Sans',system-ui,sans-serif;--bg:#211a16;--surface:#2d231c;--text:#e9ddca;--muted:#b6a28a;--gold:#c5a16b;--border:#594633}
+*{box-sizing:border-box}body{margin:0;min-height:100vh;background:radial-gradient(ellipse at 50% -10%,rgba(197,161,107,.18),transparent 48%),linear-gradient(135deg,#1b1511,#2b211a 58%,#1b1511);color:var(--text);font-family:var(--body);padding:28px 16px 60px}
+.wrap{width:min(760px,100%);margin:0 auto}.top{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:34px}.brand{font:700 1.2rem var(--display);letter-spacing:.35em;color:#e8cc92;text-decoration:none}.back{font:600 .7rem var(--ui);letter-spacing:.12em;text-transform:uppercase;color:var(--gold);text-decoration:none}
+header{text-align:center;margin:20px 0 30px}header small{font:600 .68rem var(--ui);letter-spacing:.22em;text-transform:uppercase;color:var(--gold)}h1{font:600 clamp(2.3rem,7vw,4rem)/1 var(--display);margin:12px 0}header p{max-width:540px;margin:0 auto;color:var(--muted);line-height:1.7}
+form{padding:clamp(20px,5vw,42px);background:linear-gradient(145deg,rgba(54,42,32,.98),rgba(38,29,23,.98));border:1px solid rgba(197,161,107,.34);box-shadow:0 25px 70px rgba(0,0,0,.28);display:grid;gap:18px}
+label{display:grid;gap:7px;font:500 .78rem var(--ui);color:var(--gold);letter-spacing:.04em}input,select,textarea{width:100%;min-width:0;padding:12px 13px;border:1px solid var(--border);border-radius:2px;background:#211a16;color:var(--text);font:400 .9rem var(--body)}textarea{min-height:90px;resize:vertical;line-height:1.65}textarea[name=manuscript_content]{min-height:300px}input:focus,select:focus,textarea:focus{outline:2px solid var(--gold);outline-offset:2px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}.covers{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px}.covers label{gap:7px;text-align:center;font-size:.68rem}.covers input{position:absolute;opacity:0;width:1px;height:1px}.art{display:grid;place-items:center;aspect-ratio:3/4;border:1px solid var(--gold);font:600 .55rem var(--ui);letter-spacing:.08em;color:#f2dba9;padding:5px}.nocturne{background:#27201a}.botanical{background:#23382b}.gilded{background:#5b4128}.midnight{background:#181f31}.terracotta{background:#8b4c3a}.covers input:checked+.art{outline:3px solid var(--gold);outline-offset:3px}
+.note{color:var(--muted);font:.74rem/1.6 var(--ui)}.submit{border:1px solid transparent;background:linear-gradient(180deg,#f8ebc8,#d9b673 48%,#a77d3e);color:#2a1d0c;padding:14px 20px;font:600 .72rem var(--ui);letter-spacing:.15em;text-transform:uppercase;cursor:pointer}.submit:disabled{opacity:.6;cursor:wait}#status{min-height:24px;color:var(--muted);font:.82rem var(--ui)}#status.success{color:#b9d7a9}#status.error{color:#e7a39a}.honeypot{position:absolute;left:-10000px;width:1px;height:1px;overflow:hidden}
+footer{text-align:center;color:var(--muted);font:.72rem var(--ui);margin-top:28px}
+@media(max-width:560px){.grid{grid-template-columns:1fr}.covers{gap:6px}.covers label{font-size:.58rem}.art{font-size:.45rem}.top{margin-bottom:22px}}
+</style></head><body><div class="wrap">
+<div class="top"><a class="brand" href="index.html">VELLORA</a><a class="back" href="index.html">← Return to Library</a></div>
+<header><small>VELLORA · Reader Submissions</small><h1>Share your story.</h1><p>Have a book you'd love to see in VELLORA? Send us your manuscript. Every submission is reviewed privately by our editorial admin before anything can appear in the public Library.</p></header>
+<form id="submissionForm">
+<div class="grid"><label>Book title<input name="title" required maxlength="180" autocomplete="off"></label><label>Author name<input name="author" required maxlength="160" autocomplete="name"></label></div>
+<div class="grid"><label>Genre<select name="genre" required><option value="" selected disabled>Choose a genre</option><option>Fantasy</option><option>Romance</option><option>Mystery</option><option>Thriller</option><option>Horror</option><option>Science Fiction</option><option>Adventure</option><option>Drama</option><option>Historical Fiction</option><option>Poetry</option><option>Children’s Fiction</option><option>Young Adult</option><option>Non-fiction</option></select></label><label>Language<input name="language" value="English" required maxlength="80"></label></div>
+<label>Short description<textarea name="description" maxlength="3000" placeholder="Tell readers what your story is about…"></textarea></label>
+<label>Complete manuscript<textarea name="manuscript_content" required minlength="20" maxlength="1500000" placeholder="Paste your complete manuscript here.&#10;&#10;Use # Chapter title for chapter headings and ## Section title for subheadings. Separate paragraphs with a blank line."></textarea><span class="note">Your text is kept private while pending. VELLORA creates the designed book and PDF only after an admin approves it.</span></label>
+<div><label>Choose a preferred VELLORA cover</label><div class="covers">
+<label><input type="radio" name="cover_style" value="nocturne" checked><span class="art nocturne">NOCTURNE</span>Nocturne</label><label><input type="radio" name="cover_style" value="botanical"><span class="art botanical">BOTANICA</span>Botanical</label><label><input type="radio" name="cover_style" value="gilded"><span class="art gilded">GILDED AGE</span>Gilded</label><label><input type="radio" name="cover_style" value="midnight"><span class="art midnight">MIDNIGHT</span>Midnight</label><label><input type="radio" name="cover_style" value="terracotta"><span class="art terracotta">ARCADIA</span>Terracotta</label>
+</div></div>
+<label class="honeypot">Leave this field empty<input name="website" tabindex="-1" autocomplete="off"></label>
+<button class="submit" id="send" type="submit">Send for admin review</button>
+<p id="status" role="status" aria-live="polite">Submissions are private until approved. Please submit only work you own or have permission to share.</p>
+</form><footer>© 2026 VELLORA · A world of stories.</footer></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.119.1/dist/umd/supabase.min.js"></script><script src="config.js"></script>
+<script>
+const form=document.querySelector("#submissionForm"),status=document.querySelector("#status"),send=document.querySelector("#send");
+form.addEventListener("submit",async e=>{
+ e.preventDefault();if(form.elements.website.value)return;
+ const f=new FormData(form),manuscript=String(f.get("manuscript_content")||"").trim();
+ if(manuscript.length<20){status.textContent="Please include your complete manuscript.";status.className="error";return}
+ const cfg=window.VELLORA_CONFIG||{};
+ if(!window.supabase||!cfg.url||!cfg.publishableKey){status.textContent="The submission service is unavailable. Please try again later.";status.className="error";return}
+ send.disabled=true;send.textContent="Sending for review…";status.textContent="Submitting your manuscript securely…";status.className="";
+ try{
+  const client=window.supabase.createClient(cfg.url,cfg.publishableKey);
+  const {error}=await client.from("book_submissions").insert({title:String(f.get("title")||"").trim(),author:String(f.get("author")||"").trim(),genre:String(f.get("genre")||""),language:String(f.get("language")||"English").trim(),description:String(f.get("description")||"").trim(),manuscript_content:manuscript,cover_style:String(f.get("cover_style")||"nocturne")});
+  if(error)throw error;
+  form.reset();form.querySelector('input[name="cover_style"][value="nocturne"]').checked=true;
+  status.textContent="Your story has been received. It is now pending private admin review and will not appear in VELLORA until approved.";status.className="success";
+ }catch(err){status.textContent=err.message||"We couldn't send your submission. Please try again.";status.className="error"}
+ finally{send.disabled=false;send.textContent="Send for admin review"}
+});
+</script></body></html>
