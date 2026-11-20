@@ -153,6 +153,8 @@ body::after{content:"";position:fixed;inset:0;pointer-events:none;background:rad
 <div class="stage"><div class="book" id="book"></div></div>
 <div id="nav" class="ui"><button id="pv">Previous</button><span id="pl" aria-live="polite"></span><button id="nx">Next</button></div>
 <div id="print"></div>
+<!-- CC0 page-turn sound: SFXMint, Single Slow Page Turning 33. -->
+<audio id="pageTurnAudio" src="https://sfxmint.com/dl/paper-fabric-page-turn-33.mp3" preload="auto"></audio>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.119.1/dist/umd/supabase.min.js"></script>
 <script src="config.js"></script>
@@ -277,7 +279,10 @@ function clickSound(){
   }catch{}
 }
 function rustle(){
-  if(!sound)return;try{
+  if(!sound)return;
+  const clip=$("#pageTurnAudio");
+  if(clip){const playback=clip.cloneNode();playback.volume=.78;playback.play().catch(()=>{});return}
+  try{
     const ctx=audioContext(),duration=.62,len=Math.floor(ctx.sampleRate*duration),buffer=ctx.createBuffer(1,len,ctx.sampleRate),data=buffer.getChannelData(0);
     for(let i=0;i<len;i++){const t=i/len,attack=Math.min(1,t/.09),decay=Math.pow(1-t,1.9),flutter=.62+.38*Math.sin(i/37)*Math.sin(i/113);data[i]=(Math.random()*2-1)*attack*decay*flutter}
     const source=ctx.createBufferSource();source.buffer=buffer;
