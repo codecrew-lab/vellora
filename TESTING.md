@@ -104,3 +104,13 @@ The checklist is a manual acceptance plan, not a claim that every end-to-end che
 - [ ] Existing progress from before this upgrade remains readable.
 - [ ] Insights render correctly with no reading history and on narrow mobile screens.
 - [ ] Reading insights remain device-local; no Supabase schema or policy changes.
+
+## Phase 7 — weekly reading goals
+- [ ] Weekly reading goal defaults to 50 pages and can be changed to a positive page target.
+- [ ] Progress increases only when a reader reaches pages beyond a book's previous highest saved page.
+- [ ] Revisiting pages or re-rendering the same page does not inflate the weekly total.
+- [ ] Weekly totals reset automatically at the local Monday boundary; previous weeks do not carry over.
+- [ ] Goal progress, target and weekly page count survive refresh on the same browser/device.
+- [ ] Goal interface is keyboard accessible and usable on narrow mobile screens.
+- [ ] Existing reading insights, favourites, bookmarks, themes and reader controls continue working.
+- [ ] Weekly goals remain device-local; no Supabase schema or policy changes.
