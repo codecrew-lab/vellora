@@ -147,3 +147,60 @@ html,body{min-width:320px;max-width:100%;overflow-x:clip}
  .admin-card,.admin-card:after,.admin-status{animation:none!important}
  .admin-form input:not([type=checkbox]),.admin-form textarea,.btn,.overview-grid article,.book-row,.cover-options label,.management-head button,.book-row-actions button,.management-tools button,.admin-top button{transition:none!important}
 }
+
+
+/* VELLORA Admin — perfectly aligned library rows and status labels. */
+.book-list{display:grid;gap:10px}
+.book-row{
+ display:grid;
+ grid-template-columns:minmax(0,1fr) auto;
+ align-items:center;
+ gap:18px;
+ min-height:82px;
+ padding:14px 16px;
+}
+.book-row-copy{
+ display:grid;
+ grid-template-columns:minmax(150px,1.1fr) minmax(130px,1fr) 112px;
+ align-items:center;
+ gap:14px;
+ min-width:0;
+}
+.book-row-copy strong{grid-column:1;grid-row:1;min-width:0;line-height:1.25}
+.book-row-copy span{grid-column:2;grid-row:1;min-width:0;overflow-wrap:anywhere;line-height:1.4}
+.book-row-copy small{
+ grid-column:3;grid-row:1;
+ display:inline-flex;align-items:center;justify-content:center;
+ width:100%;min-height:30px;padding:5px 9px;
+ border:1px solid currentColor;border-radius:2px;
+ font:600 .66rem var(--ui);letter-spacing:.09em;text-transform:uppercase;
+ white-space:nowrap;text-align:center;
+}
+.book-row-copy .published{color:#c0d8b8;background:rgba(104,143,91,.12);border-color:rgba(142,183,125,.42)}
+.book-row-copy .draft{color:#e5c18b;background:rgba(180,132,65,.12);border-color:rgba(197,161,107,.42)}
+.book-row-actions{
+ display:grid;grid-template-columns:repeat(3,minmax(88px,98px));
+ align-items:center;justify-content:end;gap:8px;width:auto;
+}
+.book-row-actions button{
+ display:inline-flex;align-items:center;justify-content:center;
+ width:100%;min-width:0;min-height:38px;padding:8px 9px;
+ line-height:1.15;text-align:center;white-space:normal;
+}
+@media(max-width:820px){
+ .book-row{grid-template-columns:minmax(0,1fr);gap:12px}
+ .book-row-copy{grid-template-columns:minmax(0,1fr) 104px;gap:5px 12px}
+ .book-row-copy strong{grid-column:1;grid-row:1}
+ .book-row-copy span{grid-column:1;grid-row:2}
+ .book-row-copy small{grid-column:2;grid-row:1 / span 2}
+ .book-row-actions{grid-template-columns:repeat(3,minmax(0,1fr));width:100%}
+}
+@media(max-width:380px){
+ .book-row{padding:12px}
+ .book-row-copy{grid-template-columns:minmax(0,1fr) 90px;gap:5px 8px}
+ .book-row-actions{gap:6px}
+ .book-row-actions button{padding:8px 5px;font-size:.66rem}
+}
+@media(prefers-reduced-motion:reduce){
+ .book-row,.book-row-actions button{transition:none!important}
+}
