@@ -120,3 +120,25 @@ html,body{min-width:320px;max-width:100%;overflow-x:clip}
  .book-row-actions button{min-width:0;overflow-wrap:anywhere}
 }
 @media(min-width:1200px){.admin-wrap{width:min(1100px,calc(100% - 48px))}}
+
+
+/* VELLORA Admin Hub — matching premium editorial system */
+:root{--admin-ink:#30231b;--admin-paper:#f5efe4;--admin-gold:#b18c58;--admin-line:rgba(205,177,132,.22)}
+body{background:radial-gradient(ellipse at 50% -12%,rgba(177,140,88,.2),transparent 48%),linear-gradient(145deg,#1c1511,#30231b 55%,#1b1511);font-family:var(--ui);letter-spacing:.005em}
+.admin-wrap{width:min(1120px,calc(100% - 36px));margin:clamp(18px,4vh,48px) auto}
+.admin-card{padding:clamp(22px,4vw,48px);border-radius:5px;background:linear-gradient(145deg,rgba(54,42,32,.99),rgba(34,26,20,.99));box-shadow:0 28px 90px rgba(0,0,0,.38)}
+.admin-card:before{inset:9px;border-color:rgba(197,161,107,.2)}
+.admin-top{margin-bottom:30px;padding-bottom:18px}
+.admin-card h1{font-size:clamp(2.3rem,5vw,3.6rem)}
+.admin-card h2,.book-management h2{font-size:clamp(1.7rem,3vw,2.25rem)}
+.admin-form{gap:14px}
+.admin-form label{font-size:.7rem;letter-spacing:.09em}
+.admin-form input:not([type=checkbox]),.admin-form textarea,.management-tools input,.management-tools select{border-radius:3px;background:rgba(15,11,9,.5);border-color:rgba(197,161,107,.28)}
+.btn{border-radius:3px;min-height:46px;letter-spacing:.1em}
+.admin-status{border-radius:3px}
+.admin-overview{border-radius:4px;background:linear-gradient(135deg,rgba(197,161,107,.12),rgba(20,15,12,.24))}
+.overview-grid article{border-radius:3px}
+.book-management{margin-top:34px}
+.book-row{border-radius:3px;background:rgba(15,11,9,.24);border-color:rgba(197,161,107,.2)}
+.cover-picker{border-radius:4px}
+@media(max-width:620px){.admin-wrap{width:calc(100% - 20px);margin:12px auto}.admin-card{padding:22px 17px}.admin-card:before{inset:6px}}
