@@ -3,7 +3,7 @@
 const cfg=window.VELLORA_CONFIG||{},db=window.supabase&&cfg.url?window.supabase.createClient(cfg.url,cfg.publishableKey):null,$=s=>document.querySelector(s);
 const store={get(k,d){try{return JSON.parse(localStorage.getItem(k))??d}catch(_){return d}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(_){}}};
 const themes=[["manuscript","Enhanced Manuscript","Faded manuscript","#EDE3D0"],["vellum","Classic Vellum","Warm ivory","#FFFCF7"],["heritage","Dark Heritage","Deep antique brown","#2D231C"]];
-let books=[],genre="All",sortMode="newest",active=null,pdf=null,page=1,sound=store.get("vellora.sound",false),outline=[],drawVersion=0,renderTask=null;
+let books=[],genre="All",sortMode="newest",active=null,pdf=null,page=1,sound=store.get("vellora.sound",false),outline=[],drawVersion=0,renderTask=null,readerResizeTimer=null;
 const esc=v=>String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const slug=v=>String(v||"book").toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"");
 function theme(t){if(!themes.some(x=>x[0]===t))t="manuscript";document.documentElement.dataset.theme=t;store.set("vellora.theme",t)}
@@ -66,48 +66,123 @@ async function signed(){if(!active||!active.pdf_path)throw Error("This book has 
 async function download(){try{const a=document.createElement("a");a.href=await signed();a.download=slug(active.title)+".pdf";a.rel="noopener";document.body.append(a);a.click();a.remove()}catch(e){alert("Download unavailable: "+e.message)}}
 function save(){if(!pdf)return;const percent=Math.round(page/pdf.numPages*100);store.set("vellora.progress."+active.id,{page:page,total:pdf.numPages,updatedAt:Date.now()});$("#readerProgress").innerHTML='<div class="progress-copy"><span>Reading progress</span><b>'+percent+'%</b></div><div class="progress-track"><i style="width:'+percent+'%"></i></div><small>Page '+page+' of '+pdf.numPages+'</small>';const prev=store.get("vellora.progress."+active.id,{});$("#readerProgress").setAttribute("aria-label","Reading progress "+percent+" percent");}
 async function draw(n,dir){
- if(!pdf||!active)return;
+ if(!pdf||!active)return false;
  const version=++drawVersion;
  if(renderTask){try{renderTask.cancel()}catch(_){}renderTask=null}
  page=Math.max(1,Math.min(pdf.numPages,n));
- const frame=$("#pageFrame"),currentPdf=pdf,currentBook=active;
+ const frame=$("#pageFrame"),currentPdf=pdf,currentBook=active,requestedPage=page;
+ const status=$("#readerStatus"),animate=dir==="next"||dir==="prev";
  frame.classList.remove("turn-next","turn-prev");
- frame.classList.add(dir==="prev"?"turn-prev":"turn-next");
- await new Promise(r=>setTimeout(r,100));
- if(version!==drawVersion||pdf!==currentPdf)return;
- const p=await currentPdf.getPage(page);
- if(version!==drawVersion||pdf!==currentPdf)return;
- const v=p.getViewport({scale:1});
- const stage=$("#pageStage");
- const compact=window.matchMedia("(max-width:650px)").matches;
- const availableWidth=Math.max(1,Math.min(stage.clientWidth-(compact?24:112),compact?560:760));
- const availableHeight=Math.max(1,stage.clientHeight-(compact?22:24));
- const scale=Math.max(.1,Math.min(availableWidth/v.width,availableHeight/v.height,2));
- const dpr=Math.max(1,Math.min(window.devicePixelRatio||1,3));
- const vp=p.getViewport({scale:scale*dpr}),c=$("#pdfCanvas");
- const displayWidth=vp.width/dpr,displayHeight=vp.height/dpr;
- frame.style.width=displayWidth+"px";frame.style.height=displayHeight+"px";
- c.width=Math.ceil(vp.width);c.height=Math.ceil(vp.height);
- c.style.width=displayWidth+"px";c.style.height=displayHeight+"px";
- const task=p.render({canvasContext:c.getContext("2d"),viewport:vp});
- renderTask=task;
- try{await task.promise}catch(err){if(err&&err.name==="RenderingCancelledException")return;throw err}
- if(version!==drawVersion||pdf!==currentPdf)return;
- renderTask=null;
- $("#pageLabel").textContent="Page "+page+" of "+currentPdf.numPages;
- $("#pageRange").max=currentPdf.numPages;$("#pageRange").value=page;
- const marks=store.get("vellora.bookmarks."+currentBook.id,[]);
- $("#bookmarkPage").setAttribute("aria-pressed",String(marks.includes(page)));
- $("#bookmarkPage").textContent=marks.includes(page)?"◆ Saved":"Bookmark";
- const bm=$("#bookmarkSelect");
- if(bm){bm.innerHTML='<option value="">Saved bookmarks ('+marks.length+')</option>'+marks.map(n=>'<option value="'+n+'">Page '+n+'</option>').join("");bm.value=""}
- $("#prevPage").disabled=page<=1;$("#nextPage").disabled=page>=currentPdf.numPages;
- frame.classList.remove("turn-next","turn-prev");save();
- if(sound){try{const AC=window.AudioContext||window.webkitAudioContext;if(AC){const ac=new AC(),o=ac.createOscillator(),g=ac.createGain();o.connect(g);g.connect(ac.destination);g.gain.value=.02;o.frequency.value=500;o.start();o.stop(ac.currentTime+.07);o.onended=()=>ac.close()}}catch(_){}}
+ frame.classList.toggle("turn-next",animate&&dir==="next");
+ frame.classList.toggle("turn-prev",animate&&dir==="prev");
+ frame.setAttribute("aria-busy","true");
+ if(status)status.textContent="Loading page "+requestedPage+" of "+currentPdf.numPages;
+ if(animate)await new Promise(r=>setTimeout(r,100));
+ if(version!==drawVersion||pdf!==currentPdf)return false;
+ let task=null;
+ try{
+  const p=await currentPdf.getPage(requestedPage);
+  if(version!==drawVersion||pdf!==currentPdf)return false;
+  const v=p.getViewport({scale:1}),stage=$("#pageStage");
+  const compact=window.matchMedia("(max-width:650px)").matches;
+  const availableWidth=Math.max(1,Math.min(stage.clientWidth-(compact?24:112),compact?560:760));
+  const availableHeight=Math.max(1,stage.clientHeight-(compact?22:24));
+  const scale=Math.max(.1,Math.min(availableWidth/v.width,availableHeight/v.height,2));
+  const dpr=Math.max(1,Math.min(window.devicePixelRatio||1,3));
+  const vp=p.getViewport({scale:scale*dpr}),c=$("#pdfCanvas");
+  const displayWidth=vp.width/dpr,displayHeight=vp.height/dpr;
+  frame.style.width=displayWidth+"px";frame.style.height=displayHeight+"px";
+  c.width=Math.ceil(vp.width);c.height=Math.ceil(vp.height);
+  c.style.width=displayWidth+"px";c.style.height=displayHeight+"px";
+  c.setAttribute("aria-label","Book page "+requestedPage+" of "+currentPdf.numPages);
+  task=p.render({canvasContext:c.getContext("2d",{alpha:false}),viewport:vp});
+  renderTask=task;
+  await task.promise;
+  if(version!==drawVersion||pdf!==currentPdf)return false;
+  if(renderTask===task)renderTask=null;
+  $("#pageLabel").textContent="Page "+requestedPage+" of "+currentPdf.numPages;
+  $("#pageRange").max=currentPdf.numPages;$("#pageRange").value=requestedPage;
+  const marks=store.get("vellora.bookmarks."+currentBook.id,[]);
+  $("#bookmarkPage").setAttribute("aria-pressed",String(marks.includes(requestedPage)));
+  $("#bookmarkPage").textContent=marks.includes(requestedPage)?"◆ Saved":"Bookmark";
+  const bm=$("#bookmarkSelect");
+  if(bm){bm.innerHTML='<option value="">Saved bookmarks ('+marks.length+')</option>'+marks.map(v=>'<option value="'+v+'">Page '+v+'</option>').join("");bm.value=""}
+  $("#prevPage").disabled=requestedPage<=1;$("#nextPage").disabled=requestedPage>=currentPdf.numPages;
+  frame.classList.remove("turn-next","turn-prev");
+  frame.setAttribute("aria-busy","false");
+  if(status)status.textContent="Page "+requestedPage+" of "+currentPdf.numPages+" loaded";
+  save();
+  if(sound&&animate){try{const AC=window.AudioContext||window.webkitAudioContext;if(AC){const ac=new AC(),o=ac.createOscillator(),g=ac.createGain();o.connect(g);g.connect(ac.destination);g.gain.value=.02;o.frequency.value=500;o.start();o.stop(ac.currentTime+.07);o.onended=()=>ac.close()}}catch(_){}}
+  return true;
+ }catch(err){
+  if(err&&err.name==="RenderingCancelledException")return false;
+  if(version===drawVersion&&pdf===currentPdf){
+   if(renderTask===task)renderTask=null;
+   frame.classList.remove("turn-next","turn-prev");
+   frame.setAttribute("aria-busy","false");
+   if(status)status.textContent="Could not render page "+requestedPage+". Try another page or reopen the book.";
+  }
+  console.error("VELLORA reader render failed",err);
+  return false;
+ }
 }
-async function start(){try{const url=await signed();$("#dlg").close();$("#reader").hidden=false;$("#readerTitle").textContent=active.title;$("#soundToggle").textContent="Page sound: "+(sound?"On":"Off");pdfjsLib.GlobalWorkerOptions.workerSrc="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";pdf=await pdfjsLib.getDocument({url}).promise;const saved=store.get("vellora.progress."+active.id,null);page=saved?Math.max(1,Math.min(pdf.numPages,Number(saved.page)||1)):1;outline=await pdf.getOutline()||[];const sel=$("#chapterSelect");sel.innerHTML='<option value="">Page navigation</option>';async function add(items){for(const x of items){let d=x.dest;if(typeof d==="string")d=await pdf.getDestination(d);if(d){const i=await pdf.getPageIndex(d[0]),o=document.createElement("option");o.value=i+1;o.textContent=x.title;sel.append(o)}if(x.items?.length)await add(x.items)}}await add(outline);await draw(page)}catch(e){$("#reader").hidden=true;alert("Could not open this book: "+e.message)}}
+async function start(){
+ const trigger=$("#readBook"),reader=$("#reader"),status=$("#readerStatus");
+ trigger.disabled=true;
+ try{
+  if(status)status.textContent="Preparing your book…";
+  const url=await signed();
+  $("#dlg").close();reader.hidden=false;reader.setAttribute("aria-busy","true");
+  $("#readerTitle").textContent=active.title;
+  $("#soundToggle").textContent="Page sound: "+(sound?"On":"Off");
+  pdfjsLib.GlobalWorkerOptions.workerSrc="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
+  pdf=await pdfjsLib.getDocument({url}).promise;
+  const saved=store.get("vellora.progress."+active.id,null);
+  page=saved?Math.max(1,Math.min(pdf.numPages,Number(saved.page)||1)):1;
+  outline=await pdf.getOutline()||[];
+  const sel=$("#chapterSelect");sel.innerHTML='<option value="">Page navigation</option>';
+  async function add(items){for(const x of items){let d=x.dest;if(typeof d==="string")d=await pdf.getDestination(d);if(d){const i=await pdf.getPageIndex(d[0]),o=document.createElement("option");o.value=i+1;o.textContent=x.title;sel.append(o)}if(x.items?.length)await add(x.items)}}
+  await add(outline);
+  const rendered=await draw(page);
+  if(!rendered)throw new Error("The first page could not be displayed. Please try again.");
+  reader.setAttribute("aria-busy","false");
+  $("#closeReader").focus();
+ }catch(e){
+  reader.hidden=true;reader.setAttribute("aria-busy","false");
+  if(status)status.textContent="Could not open this book.";
+  alert("Could not open this book: "+e.message);
+ }finally{trigger.disabled=false}
+}
 function menu(view){let h="";if(view==="menu")h='<button class="mi" data-go="library">Library</button><button class="mi" data-v="settings">Settings</button><button class="mi" data-v="recent">Recently Read</button>';else{h='<button class="back" data-v="menu">Back</button>';if(view==="settings")h+='<h2>Reading theme</h2><div class="themes">'+themes.map(t=>'<button class="th" data-theme-pick="'+t[0]+'" aria-pressed="'+(document.documentElement.dataset.theme===t[0])+'"><span class="sw" style="background:'+t[3]+'"></span><span><b>'+t[1]+'</b><small>'+t[2]+'</small></span></button>').join("")+'</div><h2 class="settings-subhead">Reading preferences</h2><button class="setting-row" data-sound-setting aria-pressed="'+sound+'"><span><b>Page-turn sound</b><small>Play a subtle sound when turning pages</small></span><strong>'+(sound?"On":"Off")+'</strong></button><h2 class="settings-subhead">Manage your reading data</h2><button class="setting-row" data-clear-recent><span><b>Clear recently read</b><small>Remove your reading history from this device</small></span><strong>Clear</strong></button><button class="setting-row" data-clear-bookmarks><span><b>Clear all bookmarks</b><small>Remove saved page bookmarks from this device</small></span><strong>Clear</strong></button>';if(view==="recent"){const r=recent();h+='<h2>Recently read</h2>'+(r.length?r.map(b=>'<button class="recent-row" data-id="'+esc(b.id)+'">'+esc(b.title)+'</button>').join(""):'<p class="empty">Books you open will appear here.</p>')}}$("#panel").innerHTML=h}
 function toggle(v){$("#panel").classList.toggle("show",v);$("#fab").setAttribute("aria-expanded",String(v));if(v)menu("menu")}
-$("#dClose").onclick=()=>$("#dlg").close();$("#readBook").onclick=start;$("#downloadBook").onclick=download;function closeReader(){$("#reader").hidden=true;drawVersion++;if(renderTask){try{renderTask.cancel()}catch(_){}renderTask=null}pdf=null}
-$("#closeReader").onclick=closeReader;$("#prevPage").onclick=()=>draw(page-1,"prev");$("#nextPage").onclick=()=>draw(page+1,"next");$("#pageRange").oninput=e=>draw(+e.target.value,+e.target.value>page?"next":"prev");$("#chapterSelect").onchange=e=>e.target.value&&draw(+e.target.value,"next");$("#bookmarkSelect").onchange=e=>e.target.value&&draw(+e.target.value,+e.target.value>page?"next":"prev");$("#bookmarkPage").onclick=()=>{let marks=store.get("vellora.bookmarks."+active.id,[]);marks=marks.includes(page)?marks.filter(x=>x!==page):[...marks,page].sort((x,y)=>x-y);store.set("vellora.bookmarks."+active.id,marks);$("#bookmarkPage").setAttribute("aria-pressed",String(marks.includes(page)));$("#bookmarkPage").textContent=marks.includes(page)?"◆ Saved":"Bookmark";const bm=$("#bookmarkSelect");if(bm){bm.innerHTML='<option value="">Saved bookmarks (' +marks.length+')</option>'+marks.map(n=>'<option value="'+n+'">Page '+n+'</option>').join("");bm.value=""}};$("#soundToggle").onclick=()=>{sound=!sound;store.set("vellora.sound",sound);$("#soundToggle").textContent="Page sound: "+(sound?"On":"Off")};$("#search").oninput=drawGrid;$("#chips").onclick=e=>{if(e.target.dataset.g){genre=e.target.dataset.g;drawGrid()}};document.addEventListener("click",e=>{const b=e.target.closest("[data-genre-tile]");if(b){genre=b.dataset.genreTile;$("#library").scrollIntoView({behavior:"smooth"});drawGrid()}});document.addEventListener("click",e=>{const b=e.target.closest("[data-id]");if(b)openBook(b.dataset.id)});$("#fab").onclick=()=>toggle(!$("#panel").classList.contains("show"));$("#panel").onclick=e=>{const b=e.target.closest("button");if(!b)return;if(b.dataset.v){menu(b.dataset.v);return}if(b.dataset.go){toggle(false);$("#library").scrollIntoView({behavior:"smooth"});return}if(b.dataset.themePick){theme(b.dataset.themePick);menu("settings");return}if(b.hasAttribute("data-sound-setting")){sound=!sound;store.set("vellora.sound",sound);menu("settings");return}if(b.hasAttribute("data-clear-recent")){if(confirm("Clear your recently read list on this device?")){store.set("vellora.recent",[]);drawRecent();menu("settings")}return}if(b.hasAttribute("data-clear-bookmarks")){if(confirm("Clear all saved bookmarks on this device?")){for(let i=localStorage.length-1;i>=0;i--){const k=localStorage.key(i);if(k&&k.startsWith("vellora.bookmarks."))localStorage.removeItem(k)}if(active&&pdf)draw(page);menu("settings")}return}if(b.dataset.id)toggle(false)};document.addEventListener("click",e=>{if(!e.target.closest("#panel,#fab"))toggle(false)});document.addEventListener("keydown",e=>{if(!$("#reader").hidden){if(e.key==="ArrowRight")draw(page+1,"next");if(e.key==="ArrowLeft")draw(page-1,"prev");if(e.key==="Escape")closeReader()}else if(e.key==="Escape")toggle(false)});let x=0,y=0;$("#pageStage").addEventListener("touchstart",e=>{x=e.changedTouches[0].screenX;y=e.changedTouches[0].screenY},{passive:true});$("#pageStage").addEventListener("touchend",e=>{const dx=e.changedTouches[0].screenX-x,dy=e.changedTouches[0].screenY-y;if(Math.abs(dx)>48&&Math.abs(dx)>Math.abs(dy)*1.2)draw(page+(dx<0?1:-1),dx<0?"next":"prev")},{passive:true});load();
+$("#dClose").onclick=()=>$("#dlg").close();$("#readBook").onclick=start;$("#downloadBook").onclick=download;function closeReader(){$("#reader").hidden=true;$("#reader").setAttribute("aria-busy","false");if(readerResizeTimer){clearTimeout(readerResizeTimer);readerResizeTimer=null}drawVersion++;if(renderTask){try{renderTask.cancel()}catch(_){}renderTask=null}pdf=null}
+$("#closeReader").onclick=closeReader;$("#prevPage").onclick=()=>draw(page-1,"prev");$("#nextPage").onclick=()=>draw(page+1,"next");$("#pageRange").oninput=e=>draw(+e.target.value,+e.target.value>page?"next":"prev");$("#chapterSelect").onchange=e=>e.target.value&&draw(+e.target.value,"next");$("#bookmarkSelect").onchange=e=>e.target.value&&draw(+e.target.value,+e.target.value>page?"next":"prev");$("#bookmarkPage").onclick=()=>{let marks=store.get("vellora.bookmarks."+active.id,[]);marks=marks.includes(page)?marks.filter(x=>x!==page):[...marks,page].sort((x,y)=>x-y);store.set("vellora.bookmarks."+active.id,marks);$("#bookmarkPage").setAttribute("aria-pressed",String(marks.includes(page)));$("#bookmarkPage").textContent=marks.includes(page)?"◆ Saved":"Bookmark";const bm=$("#bookmarkSelect");if(bm){bm.innerHTML='<option value="">Saved bookmarks (' +marks.length+')</option>'+marks.map(n=>'<option value="'+n+'">Page '+n+'</option>').join("");bm.value=""}};$("#soundToggle").onclick=()=>{sound=!sound;store.set("vellora.sound",sound);$("#soundToggle").textContent="Page sound: "+(sound?"On":"Off")};$("#search").oninput=drawGrid;$("#chips").onclick=e=>{if(e.target.dataset.g){genre=e.target.dataset.g;drawGrid()}};document.addEventListener("click",e=>{const b=e.target.closest("[data-genre-tile]");if(b){genre=b.dataset.genreTile;$("#library").scrollIntoView({behavior:"smooth"});drawGrid()}});document.addEventListener("click",e=>{const b=e.target.closest("[data-id]");if(b)openBook(b.dataset.id)});$("#fab").onclick=()=>toggle(!$("#panel").classList.contains("show"));$("#panel").onclick=e=>{const b=e.target.closest("button");if(!b)return;if(b.dataset.v){menu(b.dataset.v);return}if(b.dataset.go){toggle(false);$("#library").scrollIntoView({behavior:"smooth"});return}if(b.dataset.themePick){theme(b.dataset.themePick);menu("settings");return}if(b.hasAttribute("data-sound-setting")){sound=!sound;store.set("vellora.sound",sound);menu("settings");return}if(b.hasAttribute("data-clear-recent")){if(confirm("Clear your recently read list on this device?")){store.set("vellora.recent",[]);drawRecent();menu("settings")}return}if(b.hasAttribute("data-clear-bookmarks")){if(confirm("Clear all saved bookmarks on this device?")){for(let i=localStorage.length-1;i>=0;i--){const k=localStorage.key(i);if(k&&k.startsWith("vellora.bookmarks."))localStorage.removeItem(k)}if(active&&pdf)draw(page);menu("settings")}return}if(b.dataset.id)toggle(false)};document.addEventListener("click",e=>{if(!e.target.closest("#panel,#fab"))toggle(false)});document.addEventListener("keydown",e=>{
+ if(!$("#reader").hidden){
+  if(e.key==="Escape"){closeReader();return}
+  if(e.target.closest("input,select,textarea,[contenteditable=true]"))return;
+  if(e.key==="ArrowRight"){e.preventDefault();draw(page+1,"next")}
+  if(e.key==="ArrowLeft"){e.preventDefault();draw(page-1,"prev")}
+  if(e.key==="Home"){e.preventDefault();draw(1,"prev")}
+  if(e.key==="End"){e.preventDefault();draw(pdf?pdf.numPages:page,"next")}
+ }else if(e.key==="Escape")toggle(false)
+});
+let swipeStart=null;
+const pageStage=$("#pageStage");
+pageStage.addEventListener("pointerdown",e=>{
+ if(!e.target.closest("#pageFrame,#pdfCanvas"))return;
+ if(e.pointerType==="mouse"&&e.button!==0)return;
+ swipeStart={x:e.clientX,y:e.clientY};
+},{passive:true});
+pageStage.addEventListener("pointerup",e=>{
+ if(!swipeStart)return;
+ const dx=e.clientX-swipeStart.x,dy=e.clientY-swipeStart.y;swipeStart=null;
+ if(Math.abs(dx)>48&&Math.abs(dx)>Math.abs(dy)*1.2)draw(page+(dx<0?1:-1),dx<0?"next":"prev");
+},{passive:true});
+pageStage.addEventListener("pointercancel",()=>{swipeStart=null},{passive:true});
+window.addEventListener("resize",()=>{
+ if($("#reader").hidden||!pdf)return;
+ if(readerResizeTimer)clearTimeout(readerResizeTimer);
+ readerResizeTimer=setTimeout(()=>{readerResizeTimer=null;if(!$("#reader").hidden&&pdf)draw(page)},160);
+},{passive:true});
+load();
 })();
