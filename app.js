@@ -87,7 +87,7 @@ const genres=document.createElement("section");genres.id="genreShelf";genres.cla
 function drawDiscovery(){
 const rec=books.filter(b=>b.is_recommended);
 const shelf=$("#recommendedShelf");
-if(shelf){shelf.hidden=!rec.length;shelf.innerHTML=rec.length?'<div class="discovery-heading"><span class="eyebrow">Handpicked for your journey</span><h2>Recommended reads</h2></div><div class="cont">'+rec.slice(0,10).map(card).join("")+'</div>':""}
+if(shelf){shelf.hidden=!rec.length;shelf.innerHTML=rec.length?'<div class="discovery-heading"><span class="eyebrow">Handpicked for your journey</span><h2>Recommended Books</h2></div><div class="cont">'+rec.slice(0,10).map(card).join("")+'</div>':""}
 const counts=[...new Set(books.map(b=>String(b.genre||"").trim()).filter(Boolean))].sort((x,y)=>x.localeCompare(y));
 const tiles=$("#genreTiles");
 if(tiles){const visible=counts.slice(0,visibleGenres);tiles.innerHTML=counts.length?visible.map(g=>'<button class="genre-tile" data-genre-tile="'+esc(g)+'"><span>'+esc(g)+'</span></button>').join(""):'<p class="empty">Genres will appear as books are published.</p>';const remaining=Math.max(0,counts.length-visibleGenres);let more=$("#genreMore");if(!more){more=document.createElement("button");more.id="genreMore";more.className="genre-more";more.type="button";tiles.after(more)}more.hidden=counts.length<=2;more.textContent=visibleGenres>=counts.length?"Show fewer genres":"Show 4 more genres ("+remaining+" left)";more.dataset.expanded=String(visibleGenres>2);more.setAttribute("aria-label",more.textContent);}
