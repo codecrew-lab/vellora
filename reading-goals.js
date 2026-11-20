@@ -19,7 +19,7 @@ function render(){
  const form=panel.querySelector("form");form.addEventListener("submit",event=>{event.preventDefault();const input=form.elements.target,value=Number(input.value);if(!Number.isInteger(value)||value<1||value>10000){input.setCustomValidity("Choose a target from 1 to 10,000 pages.");input.reportValidity();return}input.setCustomValidity("");set(KEY,value);render()});
 }
 window.addEventListener("vellora:pages-read",event=>{const amount=Math.max(0,Number(event.detail?.pages)||0);if(amount){const key="vellora.weeklyPages."+weekStart();set(key,pages()+amount)}render()});
-const observer=new MutationObserver(()=>{if(document.querySelector("#readingInsights"))render()});
+const observer=new MutationObserver(()=>{const section=document.querySelector("#readingInsights");if(section&&!section.querySelector("#weeklyReadingGoal"))render()});
 observer.observe(document.documentElement,{childList:true,subtree:true});
 if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",render,{once:true});else render();
 })();
