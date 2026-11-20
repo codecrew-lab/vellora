@@ -1,0 +1,19 @@
+{
+  "id": "/vellora/",
+  "name": "VELLORA Reader",
+  "short_name": "VELLORA",
+  "description": "A beautiful world where stories come to life.",
+  "start_url": "/vellora/",
+  "scope": "/vellora/",
+  "display": "standalone",
+  "background_color": "#1a130f",
+  "theme_color": "#211a16",
+  "icons": [
+    {
+      "src": "/vellora/icons/vellora-reader.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}
