@@ -82,8 +82,7 @@ const languages=[...new Set(books.map(b=>String(b.language||"English").trim()).f
 const fill=(id,label,values)=>{const el=$("#"+id);if(!el)return;const previous=el.value;el.innerHTML='<option value="">All '+label+'</option>'+values.map(v=>'<option value="'+esc(v)+'">'+esc(v)+'</option>').join("");el.value=values.includes(previous)?previous:""};
 fill("fa","authors",authors);fill("fl","languages",languages);
 const count=$("#count")||document.createElement("p");if(!count.id){count.id="libraryResults";count.className="library-results";bar.after(count)}
-const rec=document.createElement("section");rec.id="recommendedShelf";rec.className="discovery-section";rec.hidden=true;bar.after(rec);
-const genres=document.createElement("section");genres.id="genreShelf";genres.className="discovery-section";genres.innerHTML='<div class="discovery-heading"><span class="eyebrow">Find your next world</span><h2>Explore by genre</h2></div><div class="genre-tiles" id="genreTiles"></div>';rec.after(genres);
+const genres=document.createElement("section");genres.id="genreShelf";genres.className="discovery-section";genres.innerHTML='<div class="discovery-heading"><span class="eyebrow">Find your next world</span><h2>Explore by genre</h2></div><div class="genre-tiles" id="genreTiles"></div>';bar.after(genres);
 }
 function drawDiscovery(){
 const rec=books.filter(b=>b.is_recommended);
