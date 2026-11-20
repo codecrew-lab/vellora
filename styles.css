@@ -252,3 +252,112 @@ dialog{inset:0;margin:auto;max-height:min(90dvh,900px);overscroll-behavior:conta
 .featured .cover{width:100%;height:auto;aspect-ratio:2/3;}
 .card .cover{width:100%;height:auto;aspect-ratio:2/3;}
 @media(max-width:639px){.featured .cover{width:min(58%,190px);max-width:190px;height:auto;aspect-ratio:2/3}.card .cover{width:100%;height:auto;aspect-ratio:2/3}}
+
+
+/* Compact editorial reader — calmer page, lighter controls, clear hierarchy. */
+.reader{
+  background:radial-gradient(ellipse at 50% 42%,#f4ead8 0%,#e9ddc8 72%);
+}
+.reader-top,.reader-bottom{
+  background:rgba(248,241,226,.96);
+  border-color:rgba(111,84,52,.22);
+  backdrop-filter:blur(12px);
+}
+.reader-top{
+  min-height:54px;
+  padding:7px clamp(10px,2.4vw,24px);
+  gap:10px;
+}
+.reader-top strong{
+  font-size:clamp(.96rem,2vw,1.2rem);
+  font-weight:500;
+  text-align:center;
+}
+.reader-back,.ribbon{
+  min-height:36px;
+  padding:7px 11px;
+  font-size:.68rem;
+  letter-spacing:.045em;
+}
+#bookmarkPage{min-width:82px;box-shadow:0 2px 5px rgba(50,32,15,.12)}
+.page-stage{
+  padding:clamp(10px,2.5vw,24px);
+}
+.page-frame{
+  background:#fffdf8;
+  border:1px solid rgba(112,86,56,.2);
+  border-radius:3px;
+  box-shadow:0 12px 32px rgba(48,34,19,.14),0 2px 6px rgba(48,34,19,.08);
+}
+.reader-bottom{
+  min-height:0;
+  display:flex;
+  align-items:center;
+  gap:12px;
+  padding:9px clamp(12px,3vw,28px);
+  font-size:.78rem;
+}
+.reader-bottom #pageLabel{
+  min-width:max-content;
+  color:var(--text2);
+  font-variant-numeric:tabular-nums;
+}
+.reader-bottom input{min-width:70px}
+.reader-bottom button{
+  min-height:34px;
+  padding:6px 10px;
+  font-size:.66rem;
+}
+@media(max-width:650px){
+  .reader-top{
+    min-height:48px;
+    padding:5px 8px;
+    gap:6px;
+  }
+  .reader-top strong{
+    max-width:none;
+    flex:1 1 auto;
+    font-size:.94rem;
+    letter-spacing:0;
+  }
+  .reader-back,.ribbon{
+    min-height:34px;
+    padding:6px 8px;
+    font-size:.62rem;
+  }
+  #bookmarkPage{min-width:76px}
+  #bookmarkPage:after{bottom:-5px;width:9px;height:9px;left:calc(50% - 4.5px)}
+  .reader-main{min-height:0}
+  .page-stage{
+    padding:10px 8px;
+    justify-content:center;
+    align-items:center;
+  }
+  #pageFrame{
+    border-radius:3px;
+    box-shadow:0 10px 26px rgba(48,34,19,.13),0 1px 4px rgba(48,34,19,.08);
+  }
+  .reader-bottom{
+    display:grid;
+    grid-template-columns:minmax(0,1fr) auto;
+    gap:6px 12px;
+    padding:8px 12px max(9px,env(safe-area-inset-bottom));
+  }
+  .reader-bottom #pageLabel{grid-column:1/-1;font-size:.76rem}
+  .reader-bottom input{
+    grid-column:1/-1;
+    grid-row:2;
+    width:100%;
+    max-width:none;
+    order:0;
+    min-height:18px;
+  }
+  .reader-bottom #soundToggle{
+    grid-column:2;
+    grid-row:3;
+    justify-self:end;
+    font-size:.62rem;
+    padding:5px 8px;
+    min-height:30px;
+  }
+}
