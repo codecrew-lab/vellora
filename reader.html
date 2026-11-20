@@ -344,7 +344,14 @@ $("#pdf").onclick=()=>{
 };
 
 if(previewMode){
-  const back=$(".back");back.href="admin.html";back.textContent="‹ Admin Hub";
+  const back=$(".back");back.href="admin.html";back.textContent="‹ Return to Admin Hub";
+  back.addEventListener("click",event=>{
+    if(window.opener&&!window.opener.closed){
+      event.preventDefault();
+      try{window.opener.focus()}catch{}
+      try{window.close()}catch{back.textContent="Close this preview tab to return to your draft"}
+    }
+  });
   const flag=document.createElement("span");flag.className="preview-flag";flag.textContent="DRAFT PREVIEW";flag.setAttribute("aria-label","Unpublished draft preview");$("#top").appendChild(flag);
   document.title="Reader preview – VELLORA";
   $("#ttl").textContent="Waiting for draft…";
