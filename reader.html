@@ -348,8 +348,8 @@ if(previewMode){
   back.addEventListener("click",event=>{
     if(window.opener&&!window.opener.closed){
       event.preventDefault();
-      try{window.opener.focus();window.close()}catch{return}
-      if(!window.closed)window.location.href="admin.html";
+      try{window.opener.focus()}catch{}
+      try{window.close()}catch{back.textContent="Close this preview tab to return to your draft"}
     }
   });
   const flag=document.createElement("span");flag.className="preview-flag";flag.textContent="DRAFT PREVIEW";flag.setAttribute("aria-label","Unpublished draft preview");$("#top").appendChild(flag);
