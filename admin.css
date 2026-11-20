@@ -120,3 +120,30 @@ html,body{min-width:320px;max-width:100%;overflow-x:clip}
  .book-row-actions button{min-width:0;overflow-wrap:anywhere}
 }
 @media(min-width:1200px){.admin-wrap{width:min(1100px,calc(100% - 48px))}}
+
+
+/* Admin portal — matching manuscript motion and interaction polish. */
+.admin-card{animation:vellora-admin-enter .65s cubic-bezier(.2,.8,.2,1) both}
+.admin-card:after{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(115deg,transparent 0%,rgba(231,204,153,.045) 45%,transparent 60%);transform:translateX(-120%);animation:vellora-admin-sheen 1.6s ease .45s both}
+.admin-top .logo{background:linear-gradient(180deg,#f8ebc8 0%,#d9b673 48%,#a77d3e 100%);-webkit-background-clip:text;background-clip:text;color:transparent}
+.admin-card h1{letter-spacing:-.025em}
+.admin-form label{transition:color .2s ease}
+.admin-form label:focus-within{color:#f0d7a8}
+.admin-form input:not([type=checkbox]),.admin-form textarea{transition:border-color .22s,box-shadow .22s,background .22s,transform .22s}
+.admin-form input:not([type=checkbox]):focus,.admin-form textarea:focus{background:rgba(20,15,12,.58);transform:translateY(-1px)}
+.btn{position:relative;overflow:hidden}
+.btn:after{content:"";position:absolute;inset:0 auto 0 -60%;width:38%;background:linear-gradient(100deg,transparent,rgba(255,255,255,.4),transparent);transform:skewX(-16deg);transition:left .6s ease}
+.btn:hover:after{left:130%}
+.admin-status{animation:vellora-admin-enter .35s ease both}
+.overview-grid article,.book-row,.cover-options label{transition:transform .25s cubic-bezier(.2,.8,.2,1),border-color .25s,box-shadow .25s}
+.overview-grid article:hover{transform:translateY(-3px);border-color:rgba(197,161,107,.5);box-shadow:0 10px 24px rgba(0,0,0,.18)}
+.book-row:hover{border-color:rgba(197,161,107,.48);transform:translateY(-1px)}
+.cover-options label:hover{transform:translateY(-3px)}
+.management-head button,.book-row-actions button,.management-tools button,.admin-top button{transition:background .2s,border-color .2s,transform .2s,color .2s}
+.management-head button:hover,.book-row-actions button:hover,.management-tools button:hover,.admin-top button:hover{border-color:var(--accent);background:rgba(197,161,107,.1);transform:translateY(-1px)}
+@keyframes vellora-admin-enter{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+@keyframes vellora-admin-sheen{0%{transform:translateX(-120%)}100%{transform:translateX(120%)}}
+@media(prefers-reduced-motion:reduce){
+ .admin-card,.admin-card:after,.admin-status{animation:none!important}
+ .admin-form input:not([type=checkbox]),.admin-form textarea,.btn,.overview-grid article,.book-row,.cover-options label,.management-head button,.book-row-actions button,.management-tools button,.admin-top button{transition:none!important}
+}
