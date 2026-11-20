@@ -204,3 +204,5 @@ html,body{min-width:320px;max-width:100%;overflow-x:clip}
 @media(prefers-reduced-motion:reduce){
  .book-row,.book-row-actions button{transition:none!important}
 }
+
+.sample-note{display:block;margin-top:5px;color:#d9b673;font-size:.76rem;line-height:1.45}
