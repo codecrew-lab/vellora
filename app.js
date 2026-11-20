@@ -25,17 +25,34 @@ function showLanding(){
 $("#open").onclick=()=>{
   landing.classList.add("opening");
   store.set("vellora.seen",1);
-  setTimeout(()=>{landing.hidden=true},1800);
+  setTimeout(()=>{landing.hidden=true},window.matchMedia("(prefers-reduced-motion: reduce)").matches?40:2250);
 };
 /* Always show the signature opening on a fresh page load, even if a
    previous preview already set the old one-time seen flag. */
 showLanding();
 
 function cover(b){const styles={nocturne:"cover-nocturne",botanical:"cover-botanical",gilded:"cover-gilded",midnight:"cover-midnight",terracotta:"cover-terracotta"};const key=String(b.cover_url||"").replace("vellora-cover://","");const cls=styles[key]||"cover-nocturne";const titleLength=String(b.title||"").trim().length;const titleScale=titleLength>42?0.66:titleLength>30?0.76:titleLength>22?0.86:titleLength>14?0.94:1;return '<div class="cover '+cls+'" style="--title-scale:'+titleScale+'"><em>'+esc(b.genre||"VELLORA EDITIONS")+'</em><b>'+esc(b.title||"Untitled") +'</b><small>'+esc(b.author||"VELLORA")+'</small></div>'}
-function card(b){return '<button class="card" data-id="'+esc(b.id)+'">'+cover(b)+'<h3>'+esc(b.title)+'</h3><p>'+esc(b.description||"")+'</p><div class="meta">'+esc(b.author||"VELLORA")+' · '+esc(b.genre||"")+'</div></button>'}
+function card(b){return '<button class="card rv" data-id="'+esc(b.id)+'">'+cover(b)+'<h3>'+esc(b.title)+'</h3><p>'+esc(b.description||"")+'</p><div class="meta">'+esc(b.author||"VELLORA")+' · '+esc(b.genre||"")+'</div></button>'}
 function empty(el,title,msg){el.innerHTML='<div class="empty-state"><h3>'+title+'</h3><p>'+msg+'</p></div>'}
 function recent(){return store.get("vellora.recent",[]).map(id=>books.find(b=>b.id===id)).filter(Boolean)}
-function drawRecent(){const r=recent();$("#continue").hidden=!r.length;$("#contRow").innerHTML=r.map(card).join("")}
+// Full-site reveal observer; also handles cards rendered after Supabase loads.
+let velloraRevealObserver=null;
+function revealVellora(root=document){
+  const selectors=".hero,#featured,#continue,#library .bar,footer,.discovery-section";
+  if(root.matches&&root.matches(selectors))root.classList.add("rv");
+  root.querySelectorAll?.(selectors).forEach(el=>el.classList.add("rv"));
+  const items=[];
+  if(root.matches&&root.matches(".rv:not(.in)"))items.push(root);
+  root.querySelectorAll?.(".rv:not(.in)").forEach(el=>items.push(el));
+  if(!("IntersectionObserver" in window)){items.forEach(el=>el.classList.add("in"));return}
+  if(!velloraRevealObserver){
+    velloraRevealObserver=new IntersectionObserver(entries=>{
+      entries.forEach(entry=>{if(entry.isIntersecting){entry.target.classList.add("in");velloraRevealObserver.unobserve(entry.target)}});
+    },{threshold:.08,rootMargin:"0px 0px -35px 0px"});
+  }
+  items.forEach((el,i)=>{el.style.setProperty("--rv-delay",((i%4)*75)+"ms");velloraRevealObserver.observe(el)});
+}
+function drawRecent(){const r=recent();$("#continue").hidden=!r.length;$("#contRow").innerHTML=r.map(card).join("");revealVellora(document)}
 function buildLibraryTools(){
 const bar=$("#library .bar");if(!bar||$("#sortBooks"))return;
 const select=document.createElement("select");select.id="sortBooks";select.setAttribute("aria-label","Sort books");select.innerHTML='<option value="newest">Newest first</option><option value="title">Title A–Z</option><option value="author">Author A–Z</option><option value="genre">Genre A–Z</option>';select.value=sortMode;select.className="sort-select";bar.append(select);
@@ -51,6 +68,7 @@ if(shelf){shelf.hidden=!rec.length;shelf.innerHTML=rec.length?'<div class="disco
 const counts=[...new Set(books.map(b=>String(b.genre||"").trim()).filter(Boolean))].sort((x,y)=>x.localeCompare(y));
 const tiles=$("#genreTiles");
 if(tiles)tiles.innerHTML=counts.length?counts.map(g=>'<button class="genre-tile" data-genre-tile="'+esc(g)+'"><span>'+esc(g)+'</span><small>'+books.filter(b=>String(b.genre||"").trim()===g).length+' '+(books.filter(b=>String(b.genre||"").trim()===g).length===1?'edition':'editions')+'</small></button>').join(""):'<p class="empty">Genres will appear as books are published.</p>';
+revealVellora(document);
 }
 function drawGrid(){
 const q=($("#search").value||"").toLowerCase().trim(),gs=["All"].concat([...new Set(books.map(b=>String(b.genre||"").trim()).filter(Boolean))].sort((x,y)=>x.localeCompare(y)));
@@ -59,8 +77,9 @@ let found=books.filter(b=>(genre==="All"||String(b.genre||"").trim()===genre)&&(
 found.sort((x,y)=>sortMode==="title"?String(x.title||"").localeCompare(String(y.title||"")):sortMode==="author"?String(x.author||"").localeCompare(String(y.author||"")):sortMode==="genre"?String(x.genre||"").localeCompare(String(y.genre||"")):new Date(y.created_at||0)-new Date(x.created_at||0));
 const result=$("#libraryResults");if(result)result.textContent=found.length+" "+(found.length===1?"book":"books")+(q||genre!=="All"?" found":" in the library");
 if(found.length)$("#grid").innerHTML=found.map(card).join("");else empty($("#grid"),books.length?"No matching stories":"The library is waiting for its first story",books.length?'Try another search or clear your filters.':'New books published by the VELLORA admin will appear here.');
+revealVellora($("#library"));
 }
-async function load(){if(!db){empty($("#grid"),"Library connection unavailable","Check the public Supabase configuration.");return}const {data,error}=await db.from("books").select("id,title,author,slug,description,genre,cover_url,pdf_path,language,reading_time_minutes,is_featured,is_recommended,is_published,created_at").eq("is_published",true).order("created_at",{ascending:false});if(error){empty($("#grid"),"Could not load the library","Please refresh or check the Supabase books SELECT policy.");console.error(error);return}books=data||[];buildLibraryTools();drawDiscovery();const f=books.find(b=>b.is_featured)||books[0];if(f){$("#featured").hidden=false;$("#featured").innerHTML='<div class="featured"><span class="tag">Featured story</span>'+cover(f)+'<div><div class="meta">'+esc(f.author||"")+' · '+esc(f.genre||"")+'</div><h2>'+esc(f.title)+'</h2><p>'+esc(f.description||"")+'</p><button class="btn" data-id="'+esc(f.id)+'">Discover story</button></div></div>'}else $("#featured").hidden=true;drawGrid();drawRecent()}
+async function load(){if(!db){empty($("#grid"),"Library connection unavailable","Check the public Supabase configuration.");return}const {data,error}=await db.from("books").select("id,title,author,slug,description,genre,cover_url,pdf_path,language,reading_time_minutes,is_featured,is_recommended,is_published,created_at").eq("is_published",true).order("created_at",{ascending:false});if(error){empty($("#grid"),"Could not load the library","Please refresh or check the Supabase books SELECT policy.");console.error(error);return}books=data||[];buildLibraryTools();drawDiscovery();const f=books.find(b=>b.is_featured)||books[0];if(f){$("#featured").hidden=false;$("#featured").innerHTML='<div class="featured rv"><span class="tag">Featured story</span>'+cover(f)+'<div><div class="meta">'+esc(f.author||"")+' · '+esc(f.genre||"")+'</div><h2>'+esc(f.title)+'</h2><p>'+esc(f.description||"")+'</p><button class="btn" data-id="'+esc(f.id)+'">Discover story</button></div></div>'}else $("#featured").hidden=true;drawGrid();drawRecent();revealVellora(document)}
 function openBook(id){active=books.find(b=>String(b.id)===String(id));if(!active)return;store.set("vellora.recent",[active.id,...store.get("vellora.recent",[]).filter(x=>x!==active.id)].slice(0,12));$("#dT").textContent=active.title;$("#dMeta").textContent=(active.author||"VELLORA")+" · "+(active.genre||"")+" · "+(active.language||"English");$("#dDesc").textContent=active.description||"";$("#dCover").innerHTML=cover(active);$("#readBook").hidden=!active.pdf_path;$("#downloadBook").hidden=!active.pdf_path;$("#dlg").showModal();drawRecent()}
 async function signed(){if(!active||!active.pdf_path)throw Error("This book has no PDF file yet.");const {data,error}=await db.storage.from("book-files").createSignedUrl(active.pdf_path,600);if(error)throw error;return data.signedUrl}
 async function download(){try{const a=document.createElement("a");a.href=await signed();a.download=slug(active.title)+".pdf";a.rel="noopener";document.body.append(a);a.click();a.remove()}catch(e){alert("Download unavailable: "+e.message)}}
