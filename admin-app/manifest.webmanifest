@@ -10,10 +10,10 @@
   "theme_color": "#211a16",
   "icons": [
     {
-      "src": "/vellora/icons/vellora-v.svg",
+      "src": "/vellora/icons/vellora-admin.svg",
       "sizes": "any",
       "type": "image/svg+xml",
-      "purpose": "any maskable"
+      "purpose": "any"
     }
   ]
 }
