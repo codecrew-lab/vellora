@@ -81,3 +81,15 @@ The checklist is a manual acceptance plan, not a claim that every end-to-end che
 - [ ] Download and reader actions remain unavailable when no PDF path exists.
 - [ ] Detail dialog remains scrollable, keyboard accessible and usable on narrow phones, tablets and desktop.
 - [ ] Verify no database or Supabase policy changes are required.
+
+
+## Phase 5 — personal library and favourites
+- [ ] Opening a book shows whether it is saved to favourites.
+- [ ] Save to favourites adds the book to the personal shelf and updates the menu count.
+- [ ] Removing a favourite removes it from the shelf and menu list immediately.
+- [ ] Favourite books remain saved after refresh on the same browser/device.
+- [ ] Favourites shelf and menu remain usable when the list is empty.
+- [ ] A favourite can be opened from the shelf and from the menu.
+- [ ] Favourite controls are keyboard accessible and announce their pressed state.
+- [ ] Existing recently-read, progress, bookmarks, PDF, sharing and theme features still work.
+- [ ] Confirm no Supabase schema, policy or Edge Function changes were introduced.
