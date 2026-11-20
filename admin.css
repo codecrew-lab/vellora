@@ -206,3 +206,13 @@ html,body{min-width:320px;max-width:100%;overflow-x:clip}
 }
 
 .sample-note{display:block;margin-top:5px;color:#d9b673;font-size:.76rem;line-height:1.45}
+
+/* Reader-submission review queue. */
+.submission-management{margin:28px 0;padding:22px;border:1px solid rgba(197,161,107,.3);background:rgba(18,13,10,.18)}
+.submission-count{margin:10px 0 14px;color:var(--accent);font:600 .72rem var(--ui);letter-spacing:.12em;text-transform:uppercase}
+.submission-list{display:grid;gap:12px}
+.submission-row{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:18px;padding:18px;border:1px solid var(--border);background:rgba(0,0,0,.12)}
+.submission-copy{min-width:0}.submission-meta{display:grid;gap:4px}.submission-meta strong{font:600 1.35rem var(--display)}.submission-meta span,.submission-meta small{color:var(--text2);font:.75rem var(--ui)}.submission-copy>p{margin:10px 0;color:var(--text2);font-size:.9rem}
+.submission-copy details{margin-top:8px;color:var(--accent);font:.78rem var(--ui)}.submission-copy summary{cursor:pointer}.submission-preview{max-height:220px;overflow:auto;margin-top:8px;padding:12px;border:1px solid var(--border);white-space:pre-wrap;overflow-wrap:anywhere;color:var(--text2);font:.82rem/1.6 var(--body)}
+.submission-actions{display:flex;flex-direction:column;gap:8px;min-width:150px}.submission-actions button{min-height:38px;padding:8px 12px}
+@media(max-width:700px){.submission-row{grid-template-columns:1fr}.submission-actions{display:grid;grid-template-columns:1fr 1fr;min-width:0}}
