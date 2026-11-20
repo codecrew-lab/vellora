@@ -3,7 +3,7 @@
 const cfg=window.VELLORA_CONFIG||{},db=window.supabase&&cfg.url?window.supabase.createClient(cfg.url,cfg.publishableKey):null,$=s=>document.querySelector(s);
 const store={get(k,d){try{return JSON.parse(localStorage.getItem(k))??d}catch(_){return d}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(_){}}};
 const themes=[["manuscript","Enhanced Manuscript","Faded manuscript","#EDE3D0"],["vellum","Classic Vellum","Warm ivory","#FFFCF7"],["heritage","Dark Heritage","Deep antique brown","#2D231C"]];
-let books=[],genre="All",sortMode="newest",showFavorites=false,active=null,pdf=null,page=1,sound=store.get("vellora.sound",true),outline=[],drawVersion=0,renderTask=null,genreVisibleCount=4;
+let books=[],genre="All",sortMode="newest",showFavorites=false,active=null,pdf=null,page=1,sound=store.get("vellora.sound",true),outline=[],drawVersion=0,renderTask=null,genreVisibleCount=2;
 const esc=v=>String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const slug=v=>String(v||"book").toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"");
 let libraryAudio;
@@ -88,7 +88,7 @@ const genres=document.createElement("section");genres.id="genreShelf";genres.cla
 function drawDiscovery(){
 const rec=books.filter(b=>b.is_recommended);
 const shelf=$("#recommendedShelf");
-if(shelf){shelf.hidden=!rec.length;shelf.innerHTML=rec.length?'<div class="discovery-heading"><span class="eyebrow">Handpicked for your journey</span><h2>Recommended reads</h2></div><div class="cont">'+rec.slice(0,10).map(card).join("")+'</div>':""}
+if(shelf){shelf.hidden=!rec.length;shelf.innerHTML=rec.length?'<div class="discovery-heading"><span class="eyebrow">Handpicked for your journey</span><h2>Recommended Books</h2></div><div class="cont">'+rec.slice(0,10).map(card).join("")+'</div>':""}
 const counts=[...new Set(books.map(b=>String(b.genre||"").trim()).filter(Boolean))].sort((x,y)=>x.localeCompare(y));
 const tiles=$("#genreTiles");
 if(tiles){
