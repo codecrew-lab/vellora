@@ -1,6 +1,6 @@
 "use strict";
-const CACHE="vellora-admin-shell-v2";
-const SHELL=["/vellora/admin-app/","/vellora/admin-app/index.html","/vellora/admin-app/manifest.webmanifest","/vellora/admin-app/admin.css","/vellora/admin-app/admin.js","/vellora/icons/vellora-v.svg"];
+const CACHE="vellora-admin-shell-v3";
+const SHELL=["/vellora/admin-app/","/vellora/admin-app/index.html","/vellora/admin-app/manifest.webmanifest","/vellora/admin-app/admin.css","/vellora/admin-app/admin.js","/vellora/icons/vellora-v.svg","/vellora/1795184280354.png"];
 self.addEventListener("install",event=>event.waitUntil(caches.open(CACHE).then(c=>c.addAll(SHELL)).then(()=>self.skipWaiting())));
 self.addEventListener("activate",event=>event.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(k=>k.startsWith("vellora-admin-")&&k!==CACHE).map(k=>caches.delete(k)))).then(()=>self.clients.claim())));
 self.addEventListener("fetch",event=>{
