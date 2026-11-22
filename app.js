@@ -138,7 +138,7 @@ async function load(){
  const {data,error}=await db.from("books").select("id,title,author,slug,description,genre,cover_url,pdf_path,language,reading_time_minutes,is_featured,is_recommended,is_published,created_at,manuscript_content").eq("is_published",true).order("created_at",{ascending:false});
  if(error){console.error(error);await renderCachedLibrary();if(!books.length)empty($("#grid"),"Could not load the library","Reconnect to the internet and try again.");return}
  books=data||[];
- try{await Promise.all(books.map(b=>offlinePut({...b,manuscript_content:"",_catalogue:true})))}catch(e){console.warn("VELLORA catalogue cache:",e)}
+ try{await Promise.all(books.map(async b=>{const previous=await offlineGet(b.id);await offlinePut({...b,manuscript_content:previous&&previous._offline?previous.manuscript_content:"",_catalogue:true,...(previous&&previous._offline?{_offline:true,offlineSavedAt:previous.offlineSavedAt}:{})})}))}catch(e){console.warn("VELLORA catalogue cache:",e)}
  buildLibraryTools();drawDiscovery();const f=books.find(b=>b.is_featured)||books[0];
  if(f){$("#featured").hidden=false;$("#featured").innerHTML='<div class="featured"><span class="tag">Featured story</span>'+cover(f)+'<div><div class="meta">'+esc(f.author||"")+' · '+esc(f.genre||"")+'</div><h2>'+esc(f.title)+'</h2><p>'+esc(f.description||"")+'</p><button class="btn" data-id="'+esc(f.id)+'">Discover story</button></div></div>'}else $("#featured").hidden=true;
  drawGrid();drawRecent();revealVellora(document)
