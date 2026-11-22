@@ -6,6 +6,8 @@
 <title>VELLORA – A beautiful world where stories come to life</title>
 <meta name="description" content="VELLORA is a manuscript-inspired digital library of original stories.">
 <link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" type="image/png" href="/vellora/1795184280354.png">
+<link rel="apple-touch-icon" href="/vellora/1795184280354.png">
 <meta name="theme-color" content="#211a16">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Lora:ital,wght@0,400;0,500;1,400&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
@@ -248,6 +250,10 @@ header.hero h1{font-size:clamp(2.4rem,6vw,4rem)}
 .card .meta{font-size:.72rem;margin-top:2px}
 @media(max-width:639px){.featured{grid-template-columns:1fr;padding:28px 22px}.featured .cover{max-width:150px}.grid{gap:26px 16px}}
 
+
+#installApp[hidden]{display:none!important}
+#installApp{margin-left:10px}
+@media(max-width:639px){#installApp{margin:12px 0 0}}
 </style>
 </head>
 <body>
@@ -268,6 +274,7 @@ header.hero h1{font-size:clamp(2.4rem,6vw,4rem)}
     <h1>A world of stories awaits.</h1>
     <p>Discover original stories, step into imagined worlds, and read each one like a real book.</p>
     <a class="btn secondary" href="submit.html">Submit your book</a>
+    <button class="btn secondary" id="installApp" type="button" hidden>Install VELLORA</button>
   </header>
 
   <div class="visit-library"><a class="btn" href="#library">Visit Library</a></div>
@@ -303,6 +310,34 @@ header.hero h1{font-size:clamp(2.4rem,6vw,4rem)}
 <script src="app.js?v=20261120-progress-submissions-sounds"></script>
 
 
+<script>
+(()=> {
+ const button=document.getElementById("installApp");
+ if(!button)return;
+ let installPrompt=null;
+ const ios=/iphone|ipad|ipod/i.test(navigator.userAgent);
+ const standalone=window.matchMedia("(display-mode: standalone)").matches||navigator.standalone===true;
+ if(ios&&!standalone){button.hidden=false;button.textContent="Add to Home Screen";}
+ window.addEventListener("beforeinstallprompt",event=>{
+  event.preventDefault();installPrompt=event;button.hidden=false;button.textContent="Install VELLORA";
+ });
+ button.addEventListener("click",async()=>{
+  if(installPrompt){
+   installPrompt.prompt();
+   const choice=await installPrompt.userChoice;
+   installPrompt=null;
+   if(choice&&choice.outcome==="accepted")button.hidden=true;
+   return;
+  }
+  if(ios){
+   alert("To install VELLORA: tap the Share button in Safari, then choose “Add to Home Screen”.");
+  }else{
+   alert("To install VELLORA: open your browser menu and choose “Install app” or “Add to Home screen”.");
+  }
+ });
+ window.addEventListener("appinstalled",()=>{button.hidden=true;installPrompt=null;});
+})();
+</script>
 <script>if("serviceWorker" in navigator){window.addEventListener("load",()=>navigator.serviceWorker.register("./sw.js",{scope:"./"}).catch(()=>{}));}</script>
 </body>
 </html>
