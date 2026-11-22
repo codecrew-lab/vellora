@@ -1,6 +1,6 @@
 "use strict";
-const CACHE="vellora-reader-shell-v2";
-const SHELL=["/vellora/","/vellora/index.html","/vellora/manifest.webmanifest","/vellora/1795184280354.png","/vellora/icons/vellora-v.svg","/vellora/styles.css","/vellora/config.js","/vellora/app.js"];
+const CACHE="vellora-reader-shell-v3";
+const SHELL=["/vellora/","/vellora/index.html","/vellora/manifest.webmanifest","/vellora/1795184280354.png?v=20261122-logo","/vellora/styles.css","/vellora/config.js","/vellora/app.js"];
 self.addEventListener("install",event=>event.waitUntil(caches.open(CACHE).then(c=>c.addAll(SHELL)).then(()=>self.skipWaiting())));
 self.addEventListener("activate",event=>event.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(k=>k.startsWith("vellora-reader-")&&k!==CACHE).map(k=>caches.delete(k)))).then(()=>self.clients.claim())));
 self.addEventListener("fetch",event=>{
