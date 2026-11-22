@@ -40,6 +40,15 @@ This is a manual acceptance checklist. Repository inspection and static checks d
 - [ ] Oversized or invalid manuscript/PDF operations fail with a clear message.
 - [ ] Admin session persists for its configured lifetime and logout/expiry returns to sign-in.
 
+## PWA installation
+- [ ] Public VELLORA manifest loads from `/vellora/manifest.webmanifest` and opens at the library route.
+- [ ] The uploaded VELLORA artwork is used as the public and Admin PWA icon.
+- [ ] On supported Android/desktop browsers, the Install VELLORA button opens the native install prompt.
+- [ ] On iPhone/iPad Safari, Add to Home Screen displays the correct Share-menu instructions.
+- [ ] Installed VELLORA launches in standalone display mode.
+- [ ] Updating the service worker refreshes the app shell and icon without changing reader data or Supabase content.
+- [ ] Private PDF and Supabase API responses are not added to the public service-worker cache.
+
 ## Supabase and deployment
 - [ ] RLS remains enabled on the books table.
 - [ ] Anonymous readers can read published book records only.
