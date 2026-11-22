@@ -10,10 +10,16 @@
   "theme_color": "#211a16",
   "icons": [
     {
-      "src": "/vellora/1795184280354.png?v=20261122-logo",
+      "src": "/vellora/1795184280354.png?v=20261122-maskable",
       "sizes": "716x719",
       "type": "image/png",
       "purpose": "any"
+    },
+    {
+      "src": "/vellora/1795184280354.png?v=20261122-maskable",
+      "sizes": "716x719",
+      "type": "image/png",
+      "purpose": "maskable"
     }
   ]
 }
