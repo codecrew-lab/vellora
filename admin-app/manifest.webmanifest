@@ -10,21 +10,9 @@
   "theme_color": "#211a16",
   "icons": [
     {
-      "src": "/vellora/1795184280354.png",
-      "sizes": "192x192",
+      "src": "/vellora/1795184280354.png?v=20261122-logo",
+      "sizes": "716x719",
       "type": "image/png",
-      "purpose": "any"
-    },
-    {
-      "src": "/vellora/1795184280354.png",
-      "sizes": "512x512",
-      "type": "image/png",
-      "purpose": "any"
-    },
-    {
-      "src": "/vellora/icons/vellora-v.svg",
-      "sizes": "any",
-      "type": "image/svg+xml",
       "purpose": "any"
     }
   ]
