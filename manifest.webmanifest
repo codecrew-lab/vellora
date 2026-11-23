@@ -16,10 +16,10 @@
       "purpose": "any"
     },
     {
-      "src": "/vellora/1795184280354.png?v=20261122-maskable",
-      "sizes": "716x719",
-      "type": "image/png",
-      "purpose": "maskable"
+      "src": "/vellora/icons/vellora-reader.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
     }
   ]
 }
