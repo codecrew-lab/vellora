@@ -1,0 +1,9 @@
+"use strict";
+const CACHE="vellora-app-shell-v7",BASE="/vellora/";
+const SHELL=[BASE,BASE+"index.html",BASE+"reader.html",BASE+"submit.html",BASE+"manifest.webmanifest",BASE+"styles.css",BASE+"config.js",BASE+"app.js",BASE+"1795184280354.png"];
+const STATIC_ORIGINS=new Set(["https://cdn.jsdelivr.net","https://cdnjs.cloudflare.com","https://fonts.googleapis.com","https://fonts.gstatic.com","https://sfxmint.com"]);
+self.addEventListener("install",e=>e.waitUntil((async()=>{const c=await caches.open(CACHE);await Promise.allSettled(SHELL.map(u=>c.add(u)));await self.skipWaiting()})()));
+self.addEventListener("activate",e=>e.waitUntil((async()=>{const k=await caches.keys();await Promise.all(k.filter(x=>x.startsWith("vellora-app-shell-")&&x!==CACHE).map(x=>caches.delete(x)));await self.clients.claim()})()));
+async function netFirst(req,fb){const c=await caches.open(CACHE);try{const r=await fetch(req);if(r&&r.ok)c.put(req,r.clone());return r}catch(_){return(await c.match(req,{ignoreSearch:true}))||(fb?await c.match(fb):null)||Response.error()}}
+async function cacheFirst(req){const c=await caches.open(CACHE),h=await c.match(req);if(h)return h;const r=await fetch(req);if(r&&r.ok)c.put(req,r.clone());return r}
+self.addEventListener("fetch",e=>{const q=e.request;if(q.method!=="GET")return;const u=new URL(q.url);if(u.origin!==self.location.origin){if(STATIC_ORIGINS.has(u.origin))e.respondWith(cacheFirst(q).catch(()=>Response.error()));return}if(!u.pathname.startsWith(BASE)||u.pathname.startsWith(BASE+"admin-app/"))return;if(q.mode==="navigate"){const fb=u.pathname.endsWith("/reader.html")?BASE+"reader.html":u.pathname.endsWith("/submit.html")?BASE+"submit.html":BASE+"index.html";e.respondWith(netFirst(q,fb));return}if(/\.(css|js|svg|png|webp|jpe?g|woff2?|webmanifest)$/i.test(u.pathname))e.respondWith(cacheFirst(q).catch(()=>Response.error()))});
