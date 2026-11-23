@@ -4,7 +4,7 @@ const API="https://egyrlxgpgkflcejtgvvc.supabase.co/functions/v1/vellora-admin-"
 let sessionToken="",editingId=null,editingSubmissionId=null,bookCache=[],submissionCache=[];
 function makeBookPdf(title,author,genre,coverStyle,manuscript){
 const colors={nocturne:[39,31,26],botanical:[35,56,43],gilded:[91,65,40],midnight:[24,31,49],terracotta:[139,76,58]},bg=colors[coverStyle]||colors.nocturne;
-const clean=s=>String(s).normalize("NFKD").replace(/[\u0300-\u036f]/g,"").replace(/[^\x20-\x7E]/g,"?").replaceAll("—","-").replaceAll("’","'");
+const clean=s=>String(s).normalize("NFKD").replace(/[\u0300-\u036f]/g,"").replaceAll("—","-").replaceAll("–","-").replaceAll("½"," 1/2").replaceAll("¼"," 1/4").replaceAll("¾"," 3/4").replaceAll("’","'").replaceAll("‘","'").replaceAll("“",'"').replaceAll("”",'"').replaceAll("…","...").replace(/[^\x20-\x7E]/g,"?");
 const esc=s=>clean(s).replaceAll("\\","\\\\").replaceAll("(","\\(").replaceAll(")","\\)");
 const wrap=(s,n)=>{let out=[],line="";for(const token of clean(s).split(/\s+/)){let word=token;if(!word)continue;while(word.length>n){if(line){out.push(line);line=""}out.push(word.slice(0,n));word=word.slice(n)}const t=line?line+" "+word:word;if(t.length>n&&line){out.push(line);line=word}else line=t}if(line)out.push(line);return out};
 let pages=[],cover="q\n"+bg.map(v=>(v/255).toFixed(3)).join(" ")+" rg\n0 0 595 842 re f\n0.82 0.69 0.48 RG 1 w 32 32 531 778 re S 42 42 511 758 re S\nBT /F2 13 Tf 0.82 0.69 0.48 rg 1 0 0 1 190 700 Tm (V E L L O R A   E D I T I O N S) Tj ET\n";
