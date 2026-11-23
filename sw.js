@@ -5,7 +5,7 @@
  * Keep this worker scoped to the public VELLORA app; Supabase data/auth
  * mutations remain network-only and are never cached.
  */
-const CACHE = "vellora-app-shell-v7";
+const CACHE = "vellora-app-shell-v6";
 const BASE = "/vellora/";
 const SHELL = [
   BASE,
