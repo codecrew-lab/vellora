@@ -160,13 +160,15 @@ body::after{content:"";position:fixed;inset:0;pointer-events:none;background:rad
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.119.1/dist/umd/supabase.min.js"></script>
 <script src="config.js"></script>
-<script>if("serviceWorker" in navigator){window.addEventListener("load",async()=>{try{const regs=await navigator.serviceWorker.getRegistrations();await Promise.all(regs.filter(r=>new URL(r.scope).pathname==="/vellora/").map(r=>r.unregister()));const keys=await caches.keys();await Promise.all(keys.filter(k=>k.startsWith("vellora-reader-")||k.startsWith("vellora-app-shell-")).map(k=>caches.delete(k)));}catch(e){console.warn("VELLORA service-worker cleanup:",e)}});}</script>
+<script>if("serviceWorker" in navigator){window.addEventListener("load",()=>navigator.serviceWorker.register("./sw.js",{scope:"./"}).catch(e=>console.warn("VELLORA offline shell:",e)));}</script>
 <script>
 /* Live VELLORA stories are loaded from the published Supabase catalogue. */
 const $=s=>document.querySelector(s);
 const previewMode=new URLSearchParams(location.search).get("preview")==="1";
 const previewMemory=Object.create(null);
 const st={get(k,d){if(previewMode)return Object.prototype.hasOwnProperty.call(previewMemory,k)?previewMemory[k]:d;try{return JSON.parse(localStorage.getItem(k))??d}catch{return d}},set(k,v){if(previewMode){previewMemory[k]=v;return}try{localStorage.setItem(k,JSON.stringify(v))}catch{}}};
+const OFFLINE_DB="vellora-offline-library";
+function offlineStory(storyId){return new Promise((resolve,reject)=>{if(!("indexedDB" in window)){resolve(null);return}const q=indexedDB.open(OFFLINE_DB,1);q.onupgradeneeded=()=>{if(!q.result.objectStoreNames.contains("books"))q.result.createObjectStore("books",{keyPath:"id"})};q.onsuccess=()=>{const d=q.result;try{const t=d.transaction("books","readonly"),g=t.objectStore("books").get(String(storyId));g.onsuccess=()=>{const v=g.result||null;d.close();resolve(v&&v._offline?v:null)};g.onerror=()=>{const e=g.error;d.close();reject(e)}}catch(e){d.close();reject(e)}};q.onerror=()=>reject(q.error)})}
 let id=new URLSearchParams(location.search).get("id")||"";
 let title="Loading story…",genre="VELLORA EDITIONS",author="VELLORA Editions",chapters=[];
 $("#ttl").textContent=title;document.title="Loading story – VELLORA";
@@ -196,6 +198,7 @@ function markRecent(){st.set("vellora.recent",[id,...st.get("vellora.recent",[])
 function applyStoryData(data){title=data.title||"Untitled story";genre=data.genre||"VELLORA EDITIONS";author=data.author||"VELLORA Editions";chapters=parseManuscript(data.manuscript_content);$("#ttl").textContent=title+" · "+author;document.title=title+" – VELLORA";markRecent();pos=st.get("vellora.pos."+id,0);bm=st.get("vellora.bm."+id,null);return (document.fonts?document.fonts.ready:Promise.resolve()).then(()=>setup())}
 async function loadStory(){
  try{
+  if(!navigator.onLine){const cached=await offlineStory(id);if(cached&&String(cached.manuscript_content||"").trim()){await applyStoryData(cached);return}}
   const cfg=window.VELLORA_CONFIG||{};
   if(!id)throw new Error("No story was selected. Return to the Library and choose a story.");
   if(!window.supabase||!cfg.url||!cfg.publishableKey)throw new Error("The VELLORA library connection is unavailable.");
@@ -206,6 +209,7 @@ async function loadStory(){
   if(!String(data.manuscript_content||"").trim())throw new Error("This story does not have manuscript text yet.");
   await applyStoryData(data);
  }catch(error){
+  try{const cached=await offlineStory(id);if(cached&&String(cached.manuscript_content||"").trim()){await applyStoryData(cached);return}}catch(cacheError){console.warn("VELLORA offline story:",cacheError)}
   $("#ttl").textContent="Story unavailable";document.title="Story unavailable – VELLORA";$("#book").className="book";$("#book").innerHTML='<div class="pg" style="display:flex;flex-direction:column;justify-content:center;text-align:center"><h2>Unable to open this story</h2><p>'+safeText(error.message||"Please return to the Library and try again.")+'</p><p><a href="index.html">Return to VELLORA Library</a></p></div>';$("#pl").textContent="";$("#pv").disabled=true;$("#nx").disabled=true;console.error("VELLORA reader:",error);
  }
 }
