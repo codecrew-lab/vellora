@@ -7,7 +7,7 @@ A manuscript-inspired static reading website built with HTML, CSS and JavaScript
 - Search, genre filters, featured story, Recently Read, and exactly three themes: Enhanced Manuscript, Classic Vellum, Dark Heritage.
 - PDF.js reader with page navigation, chapter outline, keyboard/touch navigation, local progress, bookmarks and optional page-turn sound.
 - Private PDF access through short-lived signed URLs from `book-files`.
-- Add-only admin dashboard at `admin.html`, using Supabase email/password Auth and trusted `app_metadata.role === "admin"`.
+- Private admin dashboard at `admin.html`, using a server-verified access code and signed admin sessions. Books can be saved privately as drafts or explicitly published.
 - No public signup, font controls, sample catalogue, or admin edit/delete controls.
 
 ## Supabase
