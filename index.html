@@ -316,11 +316,19 @@ header.hero h1{font-size:clamp(2.4rem,6vw,4rem)}
  const button=document.getElementById("installApp");
  if(!button)return;
  let installPrompt=null;
- const ios=/iphone|ipad|ipod/i.test(navigator.userAgent);
+ const ua=navigator.userAgent;
+ const ios=/iphone|ipad|ipod/i.test(ua);
+ const safari=/safari/i.test(ua)&&!/chrome|crios|android/i.test(ua);
  const standalone=window.matchMedia("(display-mode: standalone)").matches||navigator.standalone===true;
- if(ios&&!standalone){button.hidden=false;button.textContent="Add to Home Screen";}
+ if(standalone){button.hidden=true;return;}
+ // Keep the install action visible on every browser. Some browsers do not
+ // expose beforeinstallprompt, but can still install from their own menu.
+ button.hidden=false;
+ button.textContent=ios?"Add to Home Screen":"Install VELLORA";
  window.addEventListener("beforeinstallprompt",event=>{
-  event.preventDefault();installPrompt=event;button.hidden=false;button.textContent="Install VELLORA";
+  event.preventDefault();
+  installPrompt=event;
+  button.textContent="Install VELLORA";
  });
  button.addEventListener("click",async()=>{
   if(installPrompt){
@@ -331,9 +339,11 @@ header.hero h1{font-size:clamp(2.4rem,6vw,4rem)}
    return;
   }
   if(ios){
-   alert("To install VELLORA: tap the Share button in Safari, then choose “Add to Home Screen”.");
+   alert("To install VELLORA on iPhone or iPad: open this page in Safari, tap Share, then choose “Add to Home Screen”.");
+  }else if(safari){
+   alert("To install VELLORA on Mac: in Safari, choose File > Add to Dock (on supported macOS versions).");
   }else{
-   alert("To install VELLORA: open your browser menu and choose “Install app” or “Add to Home screen”.");
+   alert("To install VELLORA: open your browser menu (⋮ or ☰) and choose “Install VELLORA”, “Install app”, or “Add to Home screen”. If no install option appears, update your browser and open VELLORA over HTTPS.");
   }
  });
  window.addEventListener("appinstalled",()=>{button.hidden=true;installPrompt=null;});
