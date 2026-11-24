@@ -43,10 +43,10 @@ $("#studioParts").querySelectorAll("[data-chapter-content]").forEach(el=>{const 
 }
 function serializeStudio(){
 captureStudio();
-return studioParts.flatMap((part,pi)=>part.chapters.map((ch,ci)=>{
-const heading=[part.title.trim(),ch.title.trim()||("Chapter "+(ci+1))].filter(Boolean).join(" — ");
-return "# "+heading+"\n\n"+ch.content.trim();
-})).filter(s=>s.trim().length>0).join("\n\n");
+return studioParts.flatMap((part,pi)=>[
+"## "+(part.title.trim()||("Part "+(pi+1))),
+...part.chapters.map((ch,ci)=>"# "+(ch.title.trim()||("Chapter "+(ci+1)))+"\n\n"+ch.content.trim())
+]).filter(s=>s.trim().length>0).join("\n\n");
 }
 function syncStudioToManuscript(){const value=serializeStudio();$("#manuscriptContentStore").value=value;return value}
 function resetBookStudio(){studioParts=defaultStudio();renderStudio();$("#manuscriptContentStore").value=""}
@@ -55,16 +55,18 @@ const text=String(source||"").replace(/\r\n?/g,"\n").trim();
 if(!text){resetBookStudio();return}
 const parts=[];let currentPart=null,currentChapter=null;
 const flushChapter=()=>{if(currentChapter&&currentPart)currentPart.chapters.push(currentChapter);currentChapter=null};
+const ensurePart=title=>{if(!currentPart||currentPart.title!==title){currentPart={title,chapters:[]};parts.push(currentPart)}};
 for(const line of text.split("\n")){
-const match=line.match(/^#\s+(.+)$/);
-if(match){
+const partMatch=line.match(/^##\s+(Part\s+.+)$/i);
+const chapterMatch=line.match(/^#\s+(.+)$/);
+if(partMatch){flushChapter();ensurePart(partMatch[1].trim());continue}
+if(chapterMatch){
 flushChapter();
-const heading=match[1].trim(),structured=heading.match(/^(Part\s+[^—]+)\s+—\s+(.+)$/i);
-const partTitle=structured?structured[1]:"";
-if(!currentPart||currentPart.title!==partTitle){currentPart={title:partTitle,chapters:[]};parts.push(currentPart)}
-currentChapter={title:structured?structured[2]:heading,lines:[]};
+const heading=chapterMatch[1].trim(),combined=heading.match(/^(Part\s+.+?)\s+[—-]\s+(.+)$/i);
+if(combined){ensurePart(combined[1].trim());currentChapter={title:combined[2].trim(),lines:[]}}
+else{if(!currentPart)ensurePart("Part I");currentChapter={title:heading,lines:[]}}
 }else if(currentChapter)currentChapter.lines.push(line);
-else if(line.trim()){if(!currentPart){currentPart={title:"",chapters:[]};parts.push(currentPart)}currentChapter={title:"Chapter 1",lines:[line]}}
+else if(line.trim()){if(!currentPart)ensurePart("Part I");currentChapter={title:"Chapter 1",lines:[line]}}
 }
 flushChapter();
 studioParts=parts.length?parts:defaultStudio();
