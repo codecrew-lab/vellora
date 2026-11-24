@@ -35,7 +35,32 @@ footer{text-align:center;color:var(--muted);font:.72rem var(--ui);margin-top:28p
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.119.1/dist/umd/supabase.min.js"></script><script src="config.js"></script>
 <script>
 const form=document.querySelector("#submissionForm"),status=document.querySelector("#status"),send=document.querySelector("#send");
+
 const manuscriptFile=document.querySelector("#manuscriptFile"),uploadState=document.querySelector("#uploadState"),manuscriptField=form.elements.manuscript_content;
+const chapterList=document.querySelector("#chapterList"),addChapterButton=document.querySelector("#addChapter");
+let chapters=[];
+function renderChapters(){
+ chapterList.innerHTML="";
+ chapters.forEach((chapter,index)=>{
+  const card=document.createElement("section");card.className="chapter-card";
+  const top=document.createElement("div");top.className="chapter-card-top";
+  const number=document.createElement("span");number.className="chapter-number";number.textContent="CHAPTER "+(index+1);
+  const actions=document.createElement("div");actions.className="chapter-actions";
+  const controls=[["↑ Move up",()=>moveChapter(index,-1),index===0],["↓ Move down",()=>moveChapter(index,1),index===chapters.length-1],["Remove",()=>removeChapter(index),chapters.length===1]];
+  controls.forEach(([label,fn,disabled])=>{const b=document.createElement("button");b.type="button";b.textContent=label;b.disabled=disabled;b.addEventListener("click",fn);actions.appendChild(b)});
+  top.append(number,actions);
+  const title=document.createElement("input");title.type="text";title.maxLength=180;title.placeholder="Chapter title";title.value=chapter.title;title.addEventListener("input",()=>chapters[index].title=title.value);
+  const body=document.createElement("textarea");body.placeholder="Write the chapter here…";body.value=chapter.content;body.addEventListener("input",()=>chapters[index].content=body.value);
+  card.append(top,title,body);chapterList.appendChild(card);
+ });
+}
+function addChapter(title="",content=""){chapters.push({title:title||"Chapter "+(chapters.length+1),content});renderChapters()}
+function moveChapter(index,delta){const target=index+delta;if(target<0||target>=chapters.length)return;[chapters[index],chapters[target]]=[chapters[target],chapters[index]];renderChapters()}
+function removeChapter(index){if(chapters.length<=1)return;if(!confirm("Remove this chapter?"))return;chapters.splice(index,1);renderChapters()}
+function compileChapters(){return chapters.map((chapter,index)=>"# "+(chapter.title.trim()||"Chapter "+(index+1))+"\n\n"+chapter.content.trim()).join("\n\n---\n\n")}
+addChapterButton.addEventListener("click",()=>{addChapter();chapterList.lastElementChild.scrollIntoView({behavior:"smooth",block:"center"})});
+addChapter();
+
 manuscriptFile.addEventListener("change",async()=>{
  const file=manuscriptFile.files&&manuscriptFile.files[0];if(!file)return;
  const ext=file.name.split(".").pop().toLowerCase();
@@ -58,15 +83,17 @@ manuscriptFile.addEventListener("change",async()=>{
   text=text.replace(/\r\n?/g,"\n").trim();
   if(text.length<20)throw new Error("No readable text was found. Scanned/image-only PDFs are not supported yet; please use a text-based PDF or paste the text.");
   if(text.length>1500000)throw new Error("The extracted manuscript is over the 1,500,000-character limit. Please split it into smaller parts.");
-  manuscriptField.value=text;manuscriptField.dispatchEvent(new Event("input",{bubbles:true}));
+  const chunks=text.split(/(?=^\\s{0,3}#{1,2}\\s*(?:chapter\\b|prologue\\b|epilogue\\b)|^\\s*(?:chapter\\s+\\d+|prologue|epilogue)\\b)/im).map(s=>s.trim()).filter(Boolean);
+  if(chunks.length>1){chapters=chunks.map((chunk,i)=>{const lines=chunk.split("\\n"),first=lines[0].trim(),title=first.replace(/^#{1,2}\\s*/,"").trim(),hasHeading=/^(?:chapter\\s+\\d+|prologue|epilogue)\\b/i.test(title);return {title:hasHeading?title:"Chapter "+(i+1),content:hasHeading?lines.slice(1).join("\\n").trim():chunk}})}else{chapters=[{title:"Chapter 1",content:text}]}
+  renderChapters();
   uploadState.textContent="✓ Imported "+file.name+". Please review the text below before submitting.";
   manuscriptField.scrollIntoView({behavior:"smooth",block:"center"});
  }catch(err){uploadState.textContent=err.message||"Could not read this file. Please paste the manuscript instead.";manuscriptFile.value=""}
 });
 form.addEventListener("submit",async e=>{
  e.preventDefault();if(form.elements.website.value)return;
- const f=new FormData(form),manuscript=String(f.get("manuscript_content")||"").trim();
- if(manuscript.length<20){status.textContent="Please include your complete manuscript.";status.className="error";return}
+ const manuscript=compileChapters();manuscriptField.value=manuscript;const f=new FormData(form);
+ if(manuscript.length<20||chapters.some(ch=>!ch.content.trim())){status.textContent="Please add at least 20 characters of writing and make sure every chapter has content.";status.className="error";return}
  const cfg=window.VELLORA_CONFIG||{};
  if(!window.supabase||!cfg.url||!cfg.publishableKey){status.textContent="The submission service is unavailable. Please try again later.";status.className="error";return}
  send.disabled=true;send.textContent="Sending for review…";status.textContent="Submitting your manuscript securely…";status.className="";
@@ -74,7 +101,7 @@ form.addEventListener("submit",async e=>{
   const client=window.supabase.createClient(cfg.url,cfg.publishableKey);
   const {error}=await client.from("book_submissions").insert({title:String(f.get("title")||"").trim(),author:String(f.get("author")||"").trim(),genre:String(f.get("genre")||""),language:String(f.get("language")||"English").trim(),description:String(f.get("description")||"").trim(),manuscript_content:manuscript,cover_style:String(f.get("cover_style")||"nocturne")});
   if(error)throw error;
-  form.reset();form.querySelector('input[name="cover_style"][value="nocturne"]').checked=true;
+  form.reset();chapters=[{title:"Chapter 1",content:""}];renderChapters();manuscriptFile.value="";uploadState.textContent="";form.querySelector('input[name="cover_style"][value="nocturne"]').checked=true;
   status.textContent="Your story has been received. It is now pending private admin review and will not appear in VELLORA until approved.";status.className="success";
  }catch(err){status.textContent=err.message||"We couldn't send your submission. Please try again.";status.className="error"}
  finally{send.disabled=false;send.textContent="Send for admin review"}
