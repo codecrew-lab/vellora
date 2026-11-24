@@ -38,6 +38,7 @@ background-image:radial-gradient(rgba(120,95,60,.1) 1px,transparent 1px);backgro
 .pg h2{font-family:var(--display);font-weight:600;font-size:1.7em;line-height:1.15;text-align:center;margin:.4em 0 .15em;color:var(--text)}
 .pg .sub{font-family:var(--display);font-style:italic;text-align:center;color:var(--text2);margin-bottom:.4em}
 .pg .orn{text-align:center;color:var(--accent);margin:.2em 0 1.1em;letter-spacing:.5em}
+.pg .part-chapter-index{position:relative;z-index:2;margin:.25em auto 0;max-width:100%;font-family:var(--ui);font-size:.52em;line-height:1.35}.pg .part-chapter-index h3{text-align:center;font-size:1em;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);font-weight:500;margin:0 0 .55em}.pg .part-chapter-index ol{list-style:none;padding:0;margin:0;display:grid;gap:.28em}.pg .part-chapter-index li{display:flex;align-items:baseline;gap:.45em;border-bottom:1px dotted color-mix(in srgb,var(--border) 75%,transparent);padding:.12em 0}.pg .part-chapter-index li span:first-child{min-width:0;overflow-wrap:anywhere}.pg .part-chapter-index li span:last-child{flex:none;margin-left:auto;color:var(--accent);font-variant-numeric:tabular-nums;white-space:nowrap}
 .pg p.first::first-letter{font-family:var(--display);font-weight:700;float:left;font-size:3.3em;line-height:.8;padding:.08em .1em 0 0;color:var(--accent)}
 .pg .wm{position:absolute;left:38px;bottom:16px;font-family:var(--display);letter-spacing:.3em;font-size:.62rem;color:var(--text2);opacity:.35}
 .pg .pn{position:absolute;right:38px;bottom:15px;font-family:var(--ui);font-size:.72rem;color:var(--text2)}
@@ -247,24 +248,44 @@ let pages=[],idx=0,two=false,bm=null,pos=0;
 const probe=document.createElement("div");probe.className="pg probe";document.body.appendChild(probe);
 const fits=h=>{probe.innerHTML=h;return probe.scrollHeight<=probe.clientHeight+1};
 function paginate(){
-  pages=[];let cur="",curW=0,w=0,curChapterIndex=0;
-  const flush=()=>{if(cur)pages.push({h:cur,w:curW,chapterIndex:curChapterIndex});cur="";};
-  chapters.forEach((c,chapterIndex)=>{
-    flush();curChapterIndex=chapterIndex;curW=w;cur=`<h2>${c.h}</h2><div class="sub">${c.s||""}</div><div class="orn">&#10086;</div>`;
-    c.p.forEach((para,pi)=>{
-      const words=para.split(" ");let i=0,cont=false;
-      while(i<words.length){
-        const cls=()=>(pi===0&&!cont&&i===0?"first":cont?"cont":"");
-        const mk=k=>`<p class="${cls()}">${words.slice(i,i+k).join(" ")}</p>`;
-        let lo=0,hi=words.length-i;
-        while(lo<hi){const m=Math.ceil((lo+hi)/2);fits(cur+mk(m))?lo=m:hi=m-1}
-        if(lo===0){if(cur.includes("<p")){flush();curW=w;continue}lo=1}
-        cur+=mk(lo);i+=lo;w+=lo;
-        if(i<words.length){flush();curW=w;cont=true}
-      }
+  const buildPages=includeIndexes=>{
+    const built=[];let cur="",curW=0,w=0,curChapterIndex=0;
+    const flush=()=>{if(cur)built.push({h:cur,w:curW,chapterIndex:curChapterIndex});cur="";};
+    chapters.forEach((c,chapterIndex)=>{
+      flush();curChapterIndex=chapterIndex;curW=w;
+      const indexMarkup=includeIndexes&&c.s==="Part"&&c.indexMarkup?c.indexMarkup:"";
+      cur=`<h2>${c.h}</h2><div class="sub">${c.s||""}</div><div class="orn">&#10086;</div>${indexMarkup}`;
+      c.p.forEach((para,pi)=>{
+        const words=para.split(" ");let i=0,cont=false;
+        while(i<words.length){
+          const cls=()=>(pi===0&&!cont&&i===0?"first":cont?"cont":"");
+          const mk=k=>`<p class="${cls()}">${words.slice(i,i+k).join(" ")}</p>`;
+          let lo=0,hi=words.length-i;
+          while(lo<hi){const m=Math.ceil((lo+hi)/2);fits(cur+mk(m))?lo=m:hi=m-1}
+          if(lo===0){if(cur.includes("<p")){flush();curW=w;continue}lo=1}
+          cur+=mk(lo);i+=lo;w+=lo;
+          if(i<words.length){flush();curW=w;cont=true}
+        }
+      });
     });
+    flush();return built;
+  };
+  chapters.forEach(c=>{if(c.s==="Part")delete c.indexMarkup});
+  let built=buildPages(false);
+  chapters.forEach((part,partIndex)=>{
+    if(part.s!=="Part")return;
+    const following=[];
+    for(let j=partIndex+1;j<chapters.length&&chapters[j].s!=="Part";j++){
+      if(chapters[j].s==="Chapter"){
+        const pageIndex=built.findIndex(page=>page.chapterIndex===j);
+        if(pageIndex>=0)following.push({name:chapters[j].h,page:pageIndex+1});
+      }
+    }
+    if(following.length){
+      part.indexMarkup='<section class="part-chapter-index"><h3>Chapters in this part</h3><ol>'+following.map(item=>'<li><span>'+item.name+'</span><span>'+item.page+'</span></li>').join("")+'</ol></section>';
+    }
   });
-  flush();
+  pages=buildPages(true);
 }
 const pageIndexForWord=wd=>{let r=0;pages.forEach((p,i)=>{if(p.w<=wd)r=i});return r};
 
