@@ -636,3 +636,81 @@ dialog::backdrop{background:rgba(20,14,10,.68);backdrop-filter:blur(5px)}
 #continue{margin:0 0 clamp(44px,6vw,72px)}
 #recommendedShelf{margin:0 0 clamp(52px,7vw,84px)}
 #library{scroll-margin-top:24px}
+
+
+/* Mobile and desktop book shelves: keep every book on one clean baseline. */
+.cont{
+  display:flex;
+  align-items:flex-start;
+  gap:clamp(14px,2.4vw,22px);
+  overflow-x:auto;
+  overflow-y:visible;
+  padding:8px 3px 22px;
+}
+.cont>.book-card{
+  align-self:flex-start;
+  flex:0 0 clamp(150px,18vw,184px);
+  width:clamp(150px,18vw,184px);
+  min-width:0;
+  margin:0;
+  transform:none;
+}
+.cont>.book-card>.card{
+  display:flex;
+  flex-direction:column;
+  align-items:stretch;
+  width:100%;
+  height:auto;
+  min-height:0;
+  margin:0;
+  padding:0 0 12px;
+  transform:none;
+  vertical-align:top;
+}
+.cont>.book-card .cover{
+  display:flex;
+  flex:0 0 auto;
+  width:100%;
+  aspect-ratio:2/3;
+  margin:0;
+}
+.cont>.book-card h3{
+  min-height:2.45em;
+  margin:15px 0 5px;
+  line-height:1.22;
+}
+.cont>.book-card p{
+  min-height:2.8em;
+  margin:0;
+}
+.cont>.book-card .meta{
+  min-height:2.5em;
+  margin:8px 0 0;
+}
+.cont>.book-card .fav-toggle{top:8px;right:8px}
+#continue .cont,
+#recommendedShelf .cont{
+  align-items:flex-start;
+}
+@media(max-width:639px){
+  .cont{
+    align-items:flex-start;
+    gap:14px;
+    padding:8px 2px 20px;
+    scroll-padding-inline:14px;
+    scroll-snap-type:x mandatory;
+  }
+  .cont>.book-card{
+    flex:0 0 clamp(124px,36vw,146px);
+    width:clamp(124px,36vw,146px);
+  }
+  .cont>.book-card>.card{height:auto;min-height:0}
+  .cont>.book-card h3{font-size:1.08rem;min-height:2.45em}
+  .cont>.book-card p{min-height:2.8em}
+  .cont>.book-card .meta{font-size:.68rem;min-height:2.5em}
+  .cont>.book-card .fav-toggle{top:7px;right:7px}
+}
+@media(hover:none){
+  .cont>.book-card>.card:hover{transform:none}
+  .cont>.book-card .cover{transform:none}
+}
