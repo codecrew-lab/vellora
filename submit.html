@@ -82,7 +82,7 @@ function movePart(i,d){const t=i+d;if(t<0||t>=parts.length)return;[parts[i],part
 function removePart(i){if(parts.length<2||!confirm("Remove this part and all its chapters?"))return;parts.splice(i,1);renderParts()}
 function moveChapter(pi,ci,d){const t=ci+d;if(t<0||t>=parts[pi].chapters.length)return;[parts[pi].chapters[ci],parts[pi].chapters[t]]=[parts[pi].chapters[t],parts[pi].chapters[ci]];renderParts()}
 function removeChapter(pi,ci){if(parts[pi].chapters.length<2||!confirm("Remove this chapter?"))return;parts[pi].chapters.splice(ci,1);renderParts()}
-function compileChapters(){return parts.flatMap((part,pi)=>part.chapters.map((ch,ci)=>"# "+(part.title.trim()||("Part "+(pi+1)))+" — "+(ch.title.trim()||("Chapter "+(ci+1)))+"\n\n"+ch.content.trim())).join("\n\n")}
+function compileChapters(){return parts.flatMap((part,pi)=>["## "+(part.title.trim()||("Part "+(pi+1))),...part.chapters.map((ch,ci)=>"# "+(ch.title.trim()||("Chapter "+(ci+1)))+"\n\n"+ch.content.trim())]).join("\n\n")}
 function importManuscript(text){
  const lines=text.replace(/\r\n?/g,"\n").split("\n"),parsed=[];let part={title:"Part I",chapters:[]},chapter=null,body=[];
  const flush=()=>{if(chapter){chapter.content=body.join("\n").trim();part.chapters.push(chapter);chapter=null;body=[]}};
