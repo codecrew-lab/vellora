@@ -213,6 +213,7 @@ function parseManuscript(source){
     paragraph.push(line);
   }
   flushChapter();
+  if(result.length&&!result.some(entry=>entry.s==="Part"))result.unshift({h:"Part I",s:"Part",p:[]});
   return result.length?result:[{h:"The Story",s:"",p:[formatParagraph("This story has no manuscript text yet. Please contact the VELLORA editor.")] }];
 }
 function markRecent(){st.set("vellora.recent",[id,...st.get("vellora.recent",[]).filter(x=>String(x)!==String(id))].slice(0,12))}
