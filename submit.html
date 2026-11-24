@@ -88,7 +88,7 @@ function importManuscript(text){
  const flush=()=>{if(chapter){chapter.content=body.join("\n").trim();part.chapters.push(chapter);chapter=null;body=[]}};
  for(const line of lines){
   const partMatch=line.trim().match(/^#{0,2}\s*(Part\s+[^:—-]+)(?:\s*[:—-]\s*(.*))?$/i);
-  const chMatch=line.trim().match(/^#{1,2}\s*(Chapter\s+\d+|Prologue|Epilogue)(?:\s*[:—-]\s*(.*))?$/i);
+  const chMatch=line.trim().match(/^#{1,2}\s*(?!Part\s)(.+)$/i);
   if(partMatch){flush();if(part.chapters.length)parsed.push(part);part={title:(partMatch[1]+(partMatch[2]?" — "+partMatch[2]:"")).trim(),chapters:[]};continue}
   if(chMatch){flush();chapter={title:(chMatch[1]+(chMatch[2]?" — "+chMatch[2]:"")).trim()};continue}
   if(!chapter&&line.trim()&&!part.chapters.length)chapter={title:"Chapter 1"};
