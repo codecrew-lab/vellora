@@ -12,7 +12,7 @@ header{text-align:center;margin:20px 0 30px}header small{font:600 .68rem var(--u
 form{padding:clamp(20px,5vw,42px);background:linear-gradient(145deg,rgba(54,42,32,.98),rgba(38,29,23,.98));border:1px solid rgba(197,161,107,.34);box-shadow:0 25px 70px rgba(0,0,0,.28);display:grid;gap:18px}
 label{display:grid;gap:7px;font:500 .78rem var(--ui);color:var(--gold);letter-spacing:.04em}input,select,textarea{width:100%;min-width:0;padding:12px 13px;border:1px solid var(--border);border-radius:2px;background:#211a16;color:var(--text);font:400 .9rem var(--body)}textarea{min-height:90px;resize:vertical;line-height:1.65}textarea[name=manuscript_content]{min-height:300px}input:focus,select:focus,textarea:focus{outline:2px solid var(--gold);outline-offset:2px}
 .grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}.covers{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px}.covers label{gap:7px;text-align:center;font-size:.68rem}.covers input{position:absolute;opacity:0;width:1px;height:1px}.art{display:grid;place-items:center;aspect-ratio:3/4;border:1px solid var(--gold);font:600 .55rem var(--ui);letter-spacing:.08em;color:#f2dba9;padding:5px}.nocturne{background:#27201a}.botanical{background:#23382b}.gilded{background:#5b4128}.midnight{background:#181f31}.terracotta{background:#8b4c3a}.covers input:checked+.art{outline:3px solid var(--gold);outline-offset:3px}
-.note{color:var(--muted);font:.74rem/1.6 var(--ui)}.submit{border:1px solid transparent;background:linear-gradient(180deg,#f8ebc8,#d9b673 48%,#a77d3e);color:#2a1d0c;padding:14px 20px;font:600 .72rem var(--ui);letter-spacing:.15em;text-transform:uppercase;cursor:pointer}.submit:disabled{opacity:.6;cursor:wait}#status{min-height:24px;color:var(--muted);font:.82rem var(--ui)}#status.success{color:#b9d7a9}#status.error{color:#e7a39a}.honeypot{position:absolute;left:-10000px;width:1px;height:1px;overflow:hidden}
+.upload-box{display:grid;gap:8px;padding:16px;border:1px dashed rgba(197,161,107,.65);background:rgba(197,161,107,.06)}.upload-box strong{font:600 .82rem var(--ui);color:var(--gold)}.upload-box input{padding:10px;background:#211a16}.upload-help{font:.72rem/1.6 var(--ui);color:var(--muted)}.upload-state{font:.76rem var(--ui);color:#b9d7a9;min-height:18px}.note{color:var(--muted);font:.74rem/1.6 var(--ui)}.submit{border:1px solid transparent;background:linear-gradient(180deg,#f8ebc8,#d9b673 48%,#a77d3e);color:#2a1d0c;padding:14px 20px;font:600 .72rem var(--ui);letter-spacing:.15em;text-transform:uppercase;cursor:pointer}.submit:disabled{opacity:.6;cursor:wait}#status{min-height:24px;color:var(--muted);font:.82rem var(--ui)}#status.success{color:#b9d7a9}#status.error{color:#e7a39a}.honeypot{position:absolute;left:-10000px;width:1px;height:1px;overflow:hidden}
 footer{text-align:center;color:var(--muted);font:.72rem var(--ui);margin-top:28px}
 @media(max-width:560px){.grid{grid-template-columns:1fr}.covers{gap:6px}.covers label{font-size:.58rem}.art{font-size:.45rem}.top{margin-bottom:22px}}
 </style></head><body><div class="wrap">
@@ -22,6 +22,7 @@ footer{text-align:center;color:var(--muted);font:.72rem var(--ui);margin-top:28p
 <div class="grid"><label>Book title<input name="title" required maxlength="180" autocomplete="off"></label><label>Author name<input name="author" required maxlength="160" autocomplete="name"></label></div>
 <div class="grid"><label>Genre<select name="genre" required><option value="" selected disabled>Choose a genre</option><option>Fantasy</option><option>Romance</option><option>Mystery</option><option>Thriller</option><option>Horror</option><option>Science Fiction</option><option>Adventure</option><option>Drama</option><option>Historical Fiction</option><option>Poetry</option><option>Children’s Fiction</option><option>Young Adult</option><option>Non-fiction</option></select></label><label>Language<input name="language" value="English" required maxlength="80"></label></div>
 <label>Short description<textarea name="description" maxlength="3000" placeholder="Tell readers what your story is about…"></textarea></label>
+<div class="upload-box"><strong>Upload your manuscript file</strong><input id="manuscriptFile" type="file" accept=".docx,.pdf,.txt,.md,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/pdf,text/plain,text/markdown"><span class="upload-help">Accepted formats: Word (.docx), PDF, plain text (.txt) and Markdown (.md). Maximum file size: 15 MB. Your file is read in your browser; only the extracted manuscript text is sent to VELLORA.</span><span id="uploadState" class="upload-state" role="status" aria-live="polite"></span></div>
 <label>Complete manuscript<textarea name="manuscript_content" required minlength="20" maxlength="1500000" placeholder="Paste your complete manuscript here.&#10;&#10;Use # Chapter title for chapter headings and ## Section title for subheadings. Separate paragraphs with a blank line."></textarea><span class="note">Your text is kept private while pending. VELLORA creates the designed book and PDF only after an admin approves it.</span></label>
 <div><label>Choose a preferred VELLORA cover</label><div class="covers">
 <label><input type="radio" name="cover_style" value="nocturne" checked><span class="art nocturne">NOCTURNE</span>Nocturne</label><label><input type="radio" name="cover_style" value="botanical"><span class="art botanical">BOTANICA</span>Botanical</label><label><input type="radio" name="cover_style" value="gilded"><span class="art gilded">GILDED AGE</span>Gilded</label><label><input type="radio" name="cover_style" value="midnight"><span class="art midnight">MIDNIGHT</span>Midnight</label><label><input type="radio" name="cover_style" value="terracotta"><span class="art terracotta">ARCADIA</span>Terracotta</label>
@@ -30,9 +31,38 @@ footer{text-align:center;color:var(--muted);font:.72rem var(--ui);margin-top:28p
 <button class="submit" id="send" type="submit">Send for admin review</button>
 <p id="status" role="status" aria-live="polite">Submissions are private until approved. Please submit only work you own or have permission to share.</p>
 </form><footer>© 2026 VELLORA · A world of stories.</footer></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.9.0/mammoth.browser.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.119.1/dist/umd/supabase.min.js"></script><script src="config.js"></script>
 <script>
 const form=document.querySelector("#submissionForm"),status=document.querySelector("#status"),send=document.querySelector("#send");
+const manuscriptFile=document.querySelector("#manuscriptFile"),uploadState=document.querySelector("#uploadState"),manuscriptField=form.elements.manuscript_content;
+manuscriptFile.addEventListener("change",async()=>{
+ const file=manuscriptFile.files&&manuscriptFile.files[0];if(!file)return;
+ const ext=file.name.split(".").pop().toLowerCase();
+ if(!["docx","pdf","txt","md"].includes(ext)){uploadState.textContent="Please choose a .docx, .pdf, .txt or .md file.";manuscriptFile.value="";return}
+ if(file.size>15*1024*1024){uploadState.textContent="This file is larger than 15 MB. Please choose a smaller file.";manuscriptFile.value="";return}
+ uploadState.textContent="Reading "+file.name+"…";
+ try{
+  let text="";
+  if(ext==="txt"||ext==="md"){text=await file.text()}
+  else if(ext==="docx"){
+   if(!window.mammoth)throw new Error("The Word document reader could not load. Please try again or paste your manuscript.");
+   const result=await window.mammoth.extractRawText({arrayBuffer:await file.arrayBuffer()});text=result.value||"";
+  }else{
+   if(!window.pdfjsLib)throw new Error("The PDF reader could not load. Please try again or paste your manuscript.");
+   window.pdfjsLib.GlobalWorkerOptions.workerSrc="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
+   const pdf=await window.pdfjsLib.getDocument({data:new Uint8Array(await file.arrayBuffer())}).promise,parts=[];
+   for(let page=1;page<=pdf.numPages;page++){const p=await pdf.getPage(page),items=await p.getTextContent();parts.push(items.items.map(item=>item.str).join(" "))}
+   text=parts.join("\n\n");
+  }
+  text=text.replace(/\\r\\n?/g,"\\n").trim();
+  if(text.length<20)throw new Error("No readable text was found. Scanned/image-only PDFs are not supported yet; please use a text-based PDF or paste the text.");
+  if(text.length>1500000)throw new Error("The extracted manuscript is over the 1,500,000-character limit. Please split it into smaller parts.");
+  manuscriptField.value=text;manuscriptField.dispatchEvent(new Event("input",{bubbles:true}));
+  uploadState.textContent="✓ Imported "+file.name+". Please review the text below before submitting.";
+  manuscriptField.scrollIntoView({behavior:"smooth",block:"center"});
+ }catch(err){uploadState.textContent=err.message||"Could not read this file. Please paste the manuscript instead.";manuscriptFile.value=""}
+});
 form.addEventListener("submit",async e=>{
  e.preventDefault();if(form.elements.website.value)return;
  const f=new FormData(form),manuscript=String(f.get("manuscript_content")||"").trim();
