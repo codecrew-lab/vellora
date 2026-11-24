@@ -786,3 +786,9 @@ dialog::backdrop{background:rgba(20,14,10,.68);backdrop-filter:blur(5px)}
   .shelf-heading .sec{padding-inline:48px}
   .shelf-remove{top:43px;right:6px;width:29px;height:29px}
 }
+
+/* Keep the collapsed genre row compact even when homepage inline styles are present. */
+#chips{flex-wrap:nowrap!important;justify-content:flex-start!important;overflow-x:auto!important;overflow-y:hidden!important}
+#chips.expanded{flex-wrap:wrap!important;overflow:visible!important}
+#chips .chip{min-height:36px!important}
+@media(max-width:639px){#chips .chip{min-height:34px!important}}
