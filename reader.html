@@ -69,7 +69,7 @@ background-image:radial-gradient(rgba(120,95,60,.1) 1px,transparent 1px);backgro
  #print .wmf{position:fixed;bottom:-12mm;left:0;font-family:var(--display);letter-spacing:.3em;font-size:7pt;color:var(--text2);opacity:.5}
 }
 .page-search{padding:10px 12px;border-top:1px solid var(--border);display:grid;gap:8px}.page-search label{font-size:.78rem;color:var(--text2)}.page-search>div{display:flex;gap:8px}.page-search input{min-width:0;width:100%;padding:9px 10px;border:1px solid var(--border);border-radius:8px;background:var(--bg);color:var(--text);font:inherit}.page-search button{border:1px solid var(--border);border-radius:8px;padding:8px 14px;background:var(--surface);white-space:nowrap}.page-search small{min-height:1em;color:var(--text2);font-size:.72rem}
-#contentsPanel{position:fixed;inset:0;z-index:80;background:rgba(12,8,5,.55);display:none;align-items:stretch;justify-content:flex-end;font-family:var(--ui)}#contentsPanel.show{display:flex}#contentsPanel .contents-card{width:min(430px,100%);height:100%;overflow:auto;background:var(--surface);color:var(--text);border-left:1px solid var(--border);box-shadow:-20px 0 60px rgba(0,0,0,.3);padding:24px clamp(16px,4vw,30px)}.contents-head{display:flex;align-items:center;justify-content:space-between;gap:12px;border-bottom:1px solid var(--border);padding-bottom:16px;margin-bottom:16px}.contents-head h2{font:600 1.8rem var(--display)}.contents-head button{border:1px solid var(--border);border-radius:999px;padding:8px 12px}.contents-subtitle{font-size:.72rem;color:var(--text2);line-height:1.6;margin-bottom:16px}.contents-list{display:grid;gap:5px}.contents-part{padding:12px 8px 5px;color:var(--accent);font-size:.72rem;letter-spacing:.1em;text-transform:uppercase}.contents-entry{width:100%;display:flex;align-items:center;justify-content:space-between;gap:12px;text-align:left;padding:10px 9px;border-radius:8px;font:500 .86rem var(--ui);color:var(--text)}.contents-entry:hover{background:var(--bg)}.contents-entry span:first-child{min-width:0;overflow-wrap:anywhere}.contents-page{flex:none;color:var(--accent);font-variant-numeric:tabular-nums}.contents-empty{color:var(--text2);font-size:.85rem;padding:12px}
+#contentsPanel{position:fixed;inset:0;z-index:80;background:rgba(12,8,5,.55);display:none;align-items:stretch;justify-content:flex-end;font-family:var(--ui)}#contentsPanel.show{display:flex}#contentsPanel .contents-card{width:min(430px,100%);height:100%;overflow:auto;background:var(--surface);color:var(--text);border-left:1px solid var(--border);box-shadow:-20px 0 60px rgba(0,0,0,.3);padding:24px clamp(16px,4vw,30px)}.contents-head{display:flex;align-items:center;justify-content:space-between;gap:12px;border-bottom:1px solid var(--border);padding-bottom:16px;margin-bottom:16px}.contents-head h2{font:600 1.8rem var(--display)}.contents-head button{border:1px solid var(--border);border-radius:999px;padding:8px 12px}.contents-subtitle{font-size:.72rem;color:var(--text2);line-height:1.6;margin-bottom:16px}.contents-list{display:grid;gap:5px}.contents-part{padding:12px 8px 5px;color:var(--accent);font-size:.72rem;letter-spacing:.1em;text-transform:uppercase}.contents-part-entry{font-weight:700;color:var(--accent);border-top:1px solid var(--border);margin-top:8px;padding-top:14px}.contents-entry{width:100%;display:flex;align-items:center;justify-content:space-between;gap:12px;text-align:left;padding:10px 9px;border-radius:8px;font:500 .86rem var(--ui);color:var(--text)}.contents-entry:hover{background:var(--bg)}.contents-entry span:first-child{min-width:0;overflow-wrap:anywhere}.contents-page{flex:none;color:var(--accent);font-variant-numeric:tabular-nums}.contents-empty{color:var(--text2);font-size:.85rem;padding:12px}
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 
 /* ===== PREMIUM LAYER ===== */
@@ -190,11 +190,12 @@ function parseManuscript(source){
   for(const raw of lines){
     const line=raw.trim();
     if(!line){flushParagraph();continue}
+    const part=line.match(/^#\s+(Part\s+.+)$/i);
     const chapter=line.match(/^#\s+(.+)$/);
     const section=line.match(/^##\s+(.+)$/);
-    if(chapter||section){
+    if(part||chapter||section){
       flushChapter();
-      current={h:safeText((chapter||section)[1].trim()),s:section?"Section":"",p:[]};
+      current={h:safeText((part||chapter||section)[1].trim()),s:part?"Part":section?"Section":"",p:[]};
       hasHeading=true;continue;
     }
     paragraph.push(line);
@@ -282,21 +283,14 @@ function setup(){
 }
 
 /* Dynamic contents index and page-number navigation use the exact current pagination. */
-function chapterHeadingInfo(label){
- const match=String(label||"").match(/^(Part\s+.+?)\s+[—-]\s+(.+)$/i);
- return match?{part:match[1].trim(),chapter:match[2].trim()}:{part:"",chapter:String(label||"Untitled chapter")};
-}
 function renderContentsIndex(){
  const host=$("#contentsList");if(!host)return;host.innerHTML="";
- let lastPart="";
  chapters.forEach((chapter,chapterIndex)=>{
   if(chapter.s==="Section")return;
   const pageIndex=pages.findIndex(page=>page.chapterIndex===chapterIndex);
   if(pageIndex<0)return;
-  const info=chapterHeadingInfo(chapter.h);
-  if(info.part&&info.part!==lastPart){const heading=document.createElement("div");heading.className="contents-part";heading.textContent=info.part;host.appendChild(heading);lastPart=info.part}
-  const button=document.createElement("button");button.type="button";button.className="contents-entry";
-  const name=document.createElement("span");name.textContent=info.chapter;
+  const button=document.createElement("button");button.type="button";button.className=chapter.s==="Part"?"contents-entry contents-part-entry":"contents-entry";
+  const name=document.createElement("span");name.textContent=chapter.h;
   const page=document.createElement("span");page.className="contents-page";page.textContent="Page "+(pageIndex+1);
   button.append(name,page);button.addEventListener("click",()=>{jumpToPage(pageIndex+1);closeContentsIndex()});host.appendChild(button);
  });
