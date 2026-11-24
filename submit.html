@@ -124,7 +124,7 @@ manuscriptFile.addEventListener("change",async()=>{
   if(text.length>1500000)throw new Error("The extracted manuscript is over the 1,500,000-character limit. Please split it into smaller parts.");
   importManuscript(text);
   uploadState.textContent="✓ Imported "+file.name+". Please review the text below before submitting.";
-  chapterList.scrollIntoView({behavior:"smooth",block:"center"});
+  partList.scrollIntoView({behavior:"smooth",block:"center"});
  }catch(err){uploadState.textContent=err.message||"Could not read this file. Please paste the manuscript instead.";manuscriptFile.value=""}
 });
 form.addEventListener("submit",async e=>{
