@@ -11,7 +11,7 @@
 <meta name="theme-color" content="#211a16">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Lora:ital,wght@0,400;0,500;1,400&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="styles.css?v=20261124-shelf-alignment-v2">
+<link rel="stylesheet" href="styles.css?v=20261124-compact-filters-v1">
 <style>
 
 :root{--display:'Cormorant Garamond',Georgia,serif;--body:'Lora',Georgia,serif;--ui:'DM Sans',system-ui,sans-serif}
@@ -322,8 +322,8 @@ header.hero h1{font-size:clamp(2.4rem,6vw,4rem)}
 
   <div class="visit-library"><a class="btn" href="#library">Visit Library</a></div>
   <section id="featured" aria-label="Featured Book"></section>
-  <section id="offlineShelf" aria-label="Offline saved books"><div class="sec"><small>Available without internet</small><h2>Offline Books</h2><p class="count" id="offlineShelfCount"></p></div><div class="cont" id="offlineShelfRow"></div></section>
-  <section id="continue" hidden><div class="sec"><small>Pick up where you left off</small><h2>Continue Reading</h2></div><div class="cont" id="contRow"></div></section>
+  <section id="offlineShelf" aria-label="Offline saved books"><div class="shelf-heading"><div class="sec"><small>Available without internet</small><h2>Offline Books</h2><p class="count" id="offlineShelfCount"></p></div><button type="button" class="shelf-manage" id="manageOffline" aria-pressed="false">Manage</button></div><div class="cont" id="offlineShelfRow"></div></section>
+  <section id="continue" hidden><div class="shelf-heading"><div class="sec"><small>Pick up where you left off</small><h2>Continue Reading</h2></div><button type="button" class="shelf-manage" id="manageContinue" aria-pressed="false">Manage</button></div><div class="cont" id="contRow"></div></section>
   <section id="recommendedShelf" class="discovery-section" hidden aria-label="Recommended Books"></section>
 
   <section id="library">
@@ -351,7 +351,7 @@ header.hero h1{font-size:clamp(2.4rem,6vw,4rem)}
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.119.1/dist/umd/supabase.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
 <script src="config.js"></script>
-<script src="app.js?v=20261123-reading-order-v1"></script>
+<script src="app.js?v=20261124-shelf-management-v1"></script>
 
 
 <script>

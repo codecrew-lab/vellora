@@ -714,3 +714,81 @@ dialog::backdrop{background:rgba(20,14,10,.68);backdrop-filter:blur(5px)}
   .cont>.book-card>.card:hover{transform:none}
   .cont>.book-card .cover{transform:none}
 }
+
+
+/* Compact genre filters with an explicit expand/collapse control. */
+#chips{
+  display:flex;
+  align-items:center;
+  justify-content:flex-start;
+  flex-wrap:nowrap;
+  gap:7px;
+  width:100%;
+  max-width:100%;
+  margin:14px 0 8px;
+  padding:2px 1px 7px;
+  overflow-x:auto;
+  overflow-y:hidden;
+  scrollbar-width:none;
+  -webkit-overflow-scrolling:touch;
+}
+#chips::-webkit-scrollbar{display:none}
+#chips .chip{
+  flex:0 0 auto;
+  min-height:36px;
+  padding:7px 14px;
+  border-radius:999px;
+  font-size:.72rem;
+  line-height:1;
+  letter-spacing:.08em;
+  white-space:nowrap;
+}
+#chips .more-chip{
+  border-color:var(--accent);
+  color:var(--accent);
+  font-weight:600;
+}
+#chips.expanded{
+  flex-wrap:wrap;
+  overflow:visible;
+}
+#chips.expanded .chip{flex:0 1 auto}
+@media(max-width:639px){
+  #chips{gap:6px;margin-top:10px;padding-bottom:5px}
+  #chips .chip{min-height:34px;padding:7px 12px;font-size:.68rem}
+}
+
+/* Reader-controlled Continue Reading and Offline Books shelves. */
+.shelf-heading{position:relative;display:flex;align-items:center;justify-content:center;min-width:0}
+.shelf-heading .sec{flex:1;min-width:0}
+.shelf-manage{
+  position:absolute;
+  right:0;
+  top:50%;
+  transform:translateY(-50%);
+  min-height:34px;
+  padding:6px 13px;
+  border:1px solid var(--border);
+  border-radius:999px;
+  background:color-mix(in srgb,var(--surface) 86%,transparent);
+  color:var(--text2);
+  font:600 .68rem var(--ui);
+  letter-spacing:.1em;
+  text-transform:uppercase;
+}
+.shelf-manage[aria-pressed=true]{border-color:var(--accent);color:var(--accent)}
+.shelf-remove{display:none;position:absolute;z-index:8;top:49px;right:7px;width:31px;height:31px;place-items:center;border:1px solid rgba(217,182,115,.6);border-radius:50%;background:rgba(40,25,18,.94);color:#fff0d0;font:22px/1 var(--ui);box-shadow:0 3px 12px rgba(0,0,0,.24)}
+.cont.managing .shelf-remove{display:grid}
+.cont.managing .fav-toggle{display:none}
+.cont.managing .book-card{outline:1px dashed color-mix(in srgb,var(--accent) 65%,transparent);outline-offset:3px;border-radius:4px}
+@media(max-width:639px){
+  .shelf-manage{right:0;padding:5px 10px;font-size:.62rem}
+  .shelf-heading .sec{padding-inline:48px}
+  .shelf-remove{top:43px;right:6px;width:29px;height:29px}
+}
+
+/* Keep the collapsed genre row compact even when homepage inline styles are present. */
+#chips{flex-wrap:nowrap!important;justify-content:flex-start!important;overflow-x:auto!important;overflow-y:hidden!important}
+#chips.expanded{flex-wrap:wrap!important;overflow:visible!important}
+#chips .chip{min-height:36px!important}
+@media(max-width:639px){#chips .chip{min-height:34px!important}}
