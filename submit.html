@@ -55,7 +55,7 @@ manuscriptFile.addEventListener("change",async()=>{
    for(let page=1;page<=pdf.numPages;page++){const p=await pdf.getPage(page),items=await p.getTextContent();parts.push(items.items.map(item=>item.str).join(" "))}
    text=parts.join("\n\n");
   }
-  text=text.replace(/\\r\\n?/g,"\\n").trim();
+  text=text.replace(/\r\n?/g,"\n").trim();
   if(text.length<20)throw new Error("No readable text was found. Scanned/image-only PDFs are not supported yet; please use a text-based PDF or paste the text.");
   if(text.length>1500000)throw new Error("The extracted manuscript is over the 1,500,000-character limit. Please split it into smaller parts.");
   manuscriptField.value=text;manuscriptField.dispatchEvent(new Event("input",{bubbles:true}));
