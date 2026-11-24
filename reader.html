@@ -204,7 +204,7 @@ function parseManuscript(source){
     if(heading){
       const value=heading[1].trim();
       const combined=value.match(/^(Part\s+.+?)\s+[—-]\s+(.+)$/i);
-      if(combined){addPart(combined[1]);flushChapter();current={h:safeText(combined[2].trim()),s:"Chapter",p:[]};hasHeading=true;continue}
+      if(combined){addPart(combined[1]);current={h:safeText(combined[2].trim()),s:"Chapter",p:[]};hasHeading=true;continue}
       flushChapter();current={h:safeText(value),s:"Chapter",p:[]};hasHeading=true;continue;
     }
     if(section){flushChapter();current={h:safeText(section[1].trim()),s:"Section",p:[]};hasHeading=true;continue}
