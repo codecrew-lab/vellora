@@ -12,7 +12,7 @@ header{text-align:center;margin:20px 0 30px}header small{font:600 .68rem var(--u
 form{padding:clamp(20px,5vw,42px);background:linear-gradient(145deg,rgba(54,42,32,.98),rgba(38,29,23,.98));border:1px solid rgba(197,161,107,.34);box-shadow:0 25px 70px rgba(0,0,0,.28);display:grid;gap:18px}
 label{display:grid;gap:7px;font:500 .78rem var(--ui);color:var(--gold);letter-spacing:.04em}input,select,textarea{width:100%;min-width:0;padding:12px 13px;border:1px solid var(--border);border-radius:2px;background:#211a16;color:var(--text);font:400 .9rem var(--body)}textarea{min-height:90px;resize:vertical;line-height:1.65}textarea[name=manuscript_content]{min-height:300px}input:focus,select:focus,textarea:focus{outline:2px solid var(--gold);outline-offset:2px}
 .grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}.covers{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px}.covers label{gap:7px;text-align:center;font-size:.68rem}.covers input{position:absolute;opacity:0;width:1px;height:1px}.art{display:grid;place-items:center;aspect-ratio:3/4;border:1px solid var(--gold);font:600 .55rem var(--ui);letter-spacing:.08em;color:#f2dba9;padding:5px}.nocturne{background:#27201a}.botanical{background:#23382b}.gilded{background:#5b4128}.midnight{background:#181f31}.terracotta{background:#8b4c3a}.covers input:checked+.art{outline:3px solid var(--gold);outline-offset:3px}
-.chapter-editor{display:grid;gap:12px}.chapter-heading{display:flex;align-items:center;justify-content:space-between;gap:12px}.chapter-heading strong{font:600 .95rem var(--ui);color:var(--gold)}.chapter-list{display:grid;gap:12px}.chapter-card{border:1px solid var(--border);background:rgba(20,15,12,.38);padding:14px;display:grid;gap:10px}.chapter-card-top{display:flex;align-items:center;justify-content:space-between;gap:10px}.chapter-number{font:600 .72rem var(--ui);color:var(--gold)}.chapter-actions{display:flex;gap:6px;flex-wrap:wrap}.chapter-actions button,.add-chapter{border:1px solid var(--border);background:#211a16;color:var(--gold);padding:8px 10px;font:500 .7rem var(--ui);cursor:pointer}.chapter-card textarea{min-height:220px}.chapter-actions button:disabled{opacity:.35;cursor:not-allowed}.upload-box{display:grid;gap:8px;padding:16px;border:1px dashed rgba(197,161,107,.65);background:rgba(197,161,107,.06)}.upload-box strong{font:600 .82rem var(--ui);color:var(--gold)}.upload-box input{padding:10px;background:#211a16}.upload-help{font:.72rem/1.6 var(--ui);color:var(--muted)}.upload-state{font:.76rem var(--ui);color:#b9d7a9;min-height:18px}.note{color:var(--muted);font:.74rem/1.6 var(--ui)}.submit{border:1px solid transparent;background:linear-gradient(180deg,#f8ebc8,#d9b673 48%,#a77d3e);color:#2a1d0c;padding:14px 20px;font:600 .72rem var(--ui);letter-spacing:.15em;text-transform:uppercase;cursor:pointer}.submit:disabled{opacity:.6;cursor:wait}#status{min-height:24px;color:var(--muted);font:.82rem var(--ui)}#status.success{color:#b9d7a9}#status.error{color:#e7a39a}.honeypot{position:absolute;left:-10000px;width:1px;height:1px;overflow:hidden}
+.chapter-editor{display:grid;gap:12px}.index-preview{border:1px solid var(--border);padding:14px;background:rgba(20,15,12,.3);display:grid;gap:8px}.index-preview strong{font:600 .8rem var(--ui);color:var(--gold)}.index-preview ol{margin:0;padding-left:22px}.index-preview li{padding:3px 0;color:var(--muted);font:.76rem/1.5 var(--ui)}.part-card{border:1px solid var(--border);padding:14px;display:grid;gap:12px;background:rgba(20,15,12,.3)}.part-card-head{display:flex;align-items:center;justify-content:space-between;gap:8px}.part-label{font:600 .72rem var(--ui);letter-spacing:.1em;color:var(--gold)}.part-chapters{display:grid;gap:10px;padding-left:10px;border-left:1px solid var(--border)}.chapter-card{margin:0}.chapter-card textarea{min-height:190px}.part-actions{display:flex;gap:6px;flex-wrap:wrap}.part-actions button,.part-add{border:1px solid var(--border);background:#211a16;color:var(--gold);padding:7px 9px;font:500 .68rem var(--ui);cursor:pointer}.chapter-heading{display:flex;align-items:center;justify-content:space-between;gap:12px}.chapter-heading strong{font:600 .95rem var(--ui);color:var(--gold)}.chapter-list{display:grid;gap:12px}.chapter-card{border:1px solid var(--border);background:rgba(20,15,12,.38);padding:14px;display:grid;gap:10px}.chapter-card-top{display:flex;align-items:center;justify-content:space-between;gap:10px}.chapter-number{font:600 .72rem var(--ui);color:var(--gold)}.chapter-actions{display:flex;gap:6px;flex-wrap:wrap}.chapter-actions button,.add-chapter{border:1px solid var(--border);background:#211a16;color:var(--gold);padding:8px 10px;font:500 .7rem var(--ui);cursor:pointer}.chapter-card textarea{min-height:220px}.chapter-actions button:disabled{opacity:.35;cursor:not-allowed}.upload-box{display:grid;gap:8px;padding:16px;border:1px dashed rgba(197,161,107,.65);background:rgba(197,161,107,.06)}.upload-box strong{font:600 .82rem var(--ui);color:var(--gold)}.upload-box input{padding:10px;background:#211a16}.upload-help{font:.72rem/1.6 var(--ui);color:var(--muted)}.upload-state{font:.76rem var(--ui);color:#b9d7a9;min-height:18px}.note{color:var(--muted);font:.74rem/1.6 var(--ui)}.submit{border:1px solid transparent;background:linear-gradient(180deg,#f8ebc8,#d9b673 48%,#a77d3e);color:#2a1d0c;padding:14px 20px;font:600 .72rem var(--ui);letter-spacing:.15em;text-transform:uppercase;cursor:pointer}.submit:disabled{opacity:.6;cursor:wait}#status{min-height:24px;color:var(--muted);font:.82rem var(--ui)}#status.success{color:#b9d7a9}#status.error{color:#e7a39a}.honeypot{position:absolute;left:-10000px;width:1px;height:1px;overflow:hidden}
 footer{text-align:center;color:var(--muted);font:.72rem var(--ui);margin-top:28px}
 @media(max-width:560px){.grid{grid-template-columns:1fr}.covers{gap:6px}.covers label{font-size:.58rem}.art{font-size:.45rem}.top{margin-bottom:22px}}
 </style></head><body><div class="wrap">
@@ -24,9 +24,9 @@ footer{text-align:center;color:var(--muted);font:.72rem var(--ui);margin-top:28p
 <label>Short description<textarea name="description" maxlength="3000" placeholder="Tell readers what your story is about…"></textarea></label>
 <div class="upload-box"><strong>Upload your manuscript file</strong><input id="manuscriptFile" type="file" accept=".docx,.pdf,.txt,.md,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/pdf,text/plain,text/markdown"><span class="upload-help">Accepted formats: Word (.docx), PDF, plain text (.txt) and Markdown (.md). Maximum file size: 15 MB. Your file is read in your browser; only the extracted manuscript text is sent to VELLORA.</span><span id="uploadState" class="upload-state" role="status" aria-live="polite"></span></div>
 <section class="chapter-editor">
-<div class="chapter-heading"><div><strong>Your book chapters</strong><p class="note">Write or upload your book one chapter at a time.</p></div><button type="button" class="add-chapter" id="addChapter">＋ Add chapter</button></div>
-<div id="chapterList" class="chapter-list"></div>
-<p class="note">Move chapters up or down, rename them, or remove them. Chapters are combined in order for admin review.</p>
+<div class="chapter-heading"><div><strong>Organise your book</strong><p class="note">Create parts, then add chapters inside each part. This structure becomes your book's contents index.</p></div><button type="button" class="add-chapter" id="addPart">＋ Add part</button></div>
+<div id="partList" class="chapter-list"></div>
+<div class="index-preview"><strong>Contents index preview</strong><div id="indexPreview" class="note">Your parts and chapters will appear here with page numbers calculated in the VELLORA reader.</div></div>
 <input type="hidden" name="manuscript_content" id="manuscriptContent">
 </section>
 <div><label>Choose a preferred VELLORA cover</label><div class="covers">
@@ -42,30 +42,64 @@ footer{text-align:center;color:var(--muted);font:.72rem var(--ui);margin-top:28p
 const form=document.querySelector("#submissionForm"),status=document.querySelector("#status"),send=document.querySelector("#send");
 
 const manuscriptFile=document.querySelector("#manuscriptFile"),uploadState=document.querySelector("#uploadState"),manuscriptField=form.elements.manuscript_content;
-const chapterList=document.querySelector("#chapterList"),addChapterButton=document.querySelector("#addChapter");
-let chapters=[];
-function renderChapters(){
- chapterList.innerHTML="";
- chapters.forEach((chapter,index)=>{
-  const card=document.createElement("section");card.className="chapter-card";
-  const top=document.createElement("div");top.className="chapter-card-top";
-  const number=document.createElement("span");number.className="chapter-number";number.textContent="CHAPTER "+(index+1);
-  const actions=document.createElement("div");actions.className="chapter-actions";
-  const controls=[["↑ Move up",()=>moveChapter(index,-1),index===0],["↓ Move down",()=>moveChapter(index,1),index===chapters.length-1],["Remove",()=>removeChapter(index),chapters.length===1]];
-  controls.forEach(([label,fn,disabled])=>{const b=document.createElement("button");b.type="button";b.textContent=label;b.disabled=disabled;b.addEventListener("click",fn);actions.appendChild(b)});
-  top.append(number,actions);
-  const title=document.createElement("input");title.type="text";title.maxLength=180;title.placeholder="Chapter title";title.value=chapter.title;title.addEventListener("input",()=>chapters[index].title=title.value);
-  const body=document.createElement("textarea");body.placeholder="Write the chapter here…";body.value=chapter.content;body.addEventListener("input",()=>chapters[index].content=body.value);
-  card.append(top,title,body);chapterList.appendChild(card);
+const partList=document.querySelector("#partList"),addPartButton=document.querySelector("#addPart"),indexPreview=document.querySelector("#indexPreview");
+let parts=[];
+function renderParts(){
+ partList.innerHTML="";
+ parts.forEach((part,pi)=>{
+  const card=document.createElement("section");card.className="part-card";
+  const head=document.createElement("div");head.className="part-card-head";
+  const label=document.createElement("span");label.className="part-label";label.textContent="PART "+(pi+1);
+  const actions=document.createElement("div");actions.className="part-actions";
+  [["↑",()=>movePart(pi,-1),pi===0],["↓",()=>movePart(pi,1),pi===parts.length-1],["Remove part",()=>removePart(pi),parts.length===1]].forEach(([txt,fn,disabled])=>{const b=document.createElement("button");b.type="button";b.textContent=txt;b.disabled=disabled;b.addEventListener("click",fn);actions.appendChild(b)});
+  head.append(label,actions);
+  const partTitle=document.createElement("input");partTitle.type="text";partTitle.maxLength=100;partTitle.placeholder="Part title (e.g. Part I — The Beginning)";partTitle.value=part.title;partTitle.setAttribute("aria-label","Part "+(pi+1)+" title");partTitle.addEventListener("input",()=>{parts[pi].title=partTitle.value;renderIndexPreview()});
+  const chapterHost=document.createElement("div");chapterHost.className="part-chapters";
+  part.chapters.forEach((chapter,ci)=>{
+   const ch=document.createElement("article");ch.className="chapter-card";
+   const top=document.createElement("div");top.className="chapter-card-top";
+   const n=document.createElement("span");n.className="chapter-number";n.textContent="CHAPTER "+(ci+1);
+   const ca=document.createElement("div");ca.className="chapter-actions";
+   [["↑",()=>moveChapter(pi,ci,-1),ci===0],["↓",()=>moveChapter(pi,ci,1),ci===part.chapters.length-1],["Remove",()=>removeChapter(pi,ci),part.chapters.length===1]].forEach(([txt,fn,disabled])=>{const b=document.createElement("button");b.type="button";b.textContent=txt;b.disabled=disabled;b.addEventListener("click",fn);ca.appendChild(b)});
+   top.append(n,ca);
+   const title=document.createElement("input");title.type="text";title.maxLength=180;title.placeholder="Chapter title";title.value=chapter.title;title.setAttribute("aria-label","Chapter "+(ci+1)+" title");title.addEventListener("input",()=>{parts[pi].chapters[ci].title=title.value;renderIndexPreview()});
+   const body=document.createElement("textarea");body.placeholder="Write this chapter here…";body.value=chapter.content;body.setAttribute("aria-label","Chapter "+(ci+1)+" content");body.addEventListener("input",()=>parts[pi].chapters[ci].content=body.value);
+   ch.append(top,title,body);chapterHost.appendChild(ch);
+  });
+  const add=document.createElement("button");add.type="button";add.className="part-add";add.textContent="＋ Add chapter to this part";add.addEventListener("click",()=>{parts[pi].chapters.push({title:"Chapter "+(parts[pi].chapters.length+1),content:""});renderParts()});
+  card.append(head,partTitle,chapterHost,add);partList.appendChild(card);
  });
+ renderIndexPreview();
 }
-function addChapter(title="",content=""){chapters.push({title:title||"Chapter "+(chapters.length+1),content});renderChapters()}
-function moveChapter(index,delta){const target=index+delta;if(target<0||target>=chapters.length)return;[chapters[index],chapters[target]]=[chapters[target],chapters[index]];renderChapters()}
-function removeChapter(index){if(chapters.length<=1)return;if(!confirm("Remove this chapter?"))return;chapters.splice(index,1);renderChapters()}
-function compileChapters(){return chapters.map((chapter,index)=>"# "+(chapter.title.trim()||"Chapter "+(index+1))+"\n\n"+chapter.content.trim()).join("\n\n---\n\n")}
-addChapterButton.addEventListener("click",()=>{addChapter();chapterList.lastElementChild.scrollIntoView({behavior:"smooth",block:"center"})});
-addChapter();
-
+function renderIndexPreview(){
+ const rows=parts.flatMap((part,pi)=>[{part:true,title:part.title||("Part "+(pi+1))},...part.chapters.map((ch,ci)=>({title:ch.title||("Chapter "+(ci+1))}))]);
+ indexPreview.innerHTML="";const ol=document.createElement("ol");
+ rows.forEach(row=>{const li=document.createElement("li");li.textContent=(row.part?"— ":"")+row.title+(row.part?"":" · page number set automatically in reader");ol.appendChild(li)});
+ indexPreview.appendChild(ol);
+}
+function addPart(title,chapters){parts.push({title:title||("Part "+["I","II","III","IV","V","VI","VII","VIII","IX","X"][parts.length]||("Part "+(parts.length+1))),chapters:chapters?.length?chapters:[{title:"Chapter 1",content:""}]});renderParts()}
+function movePart(i,d){const t=i+d;if(t<0||t>=parts.length)return;[parts[i],parts[t]]=[parts[t],parts[i]];renderParts()}
+function removePart(i){if(parts.length<2||!confirm("Remove this part and all its chapters?"))return;parts.splice(i,1);renderParts()}
+function moveChapter(pi,ci,d){const t=ci+d;if(t<0||t>=parts[pi].chapters.length)return;[parts[pi].chapters[ci],parts[pi].chapters[t]]=[parts[pi].chapters[t],parts[pi].chapters[ci]];renderParts()}
+function removeChapter(pi,ci){if(parts[pi].chapters.length<2||!confirm("Remove this chapter?"))return;parts[pi].chapters.splice(ci,1);renderParts()}
+function compileChapters(){return parts.flatMap((part,pi)=>part.chapters.map((ch,ci)=>"# "+(part.title.trim()||("Part "+(pi+1)))+" — "+(ch.title.trim()||("Chapter "+(ci+1)))+"\n\n"+ch.content.trim())).join("\n\n")}
+function importManuscript(text){
+ const lines=text.replace(/\r\n?/g,"\n").split("\n"),parsed=[];let part={title:"Part I",chapters:[]},chapter=null,body=[];
+ const flush=()=>{if(chapter){chapter.content=body.join("\n").trim();part.chapters.push(chapter);chapter=null;body=[]}};
+ for(const line of lines){
+  const partMatch=line.trim().match(/^#{0,2}\s*(Part\s+[^:—-]+)(?:\s*[:—-]\s*(.*))?$/i);
+  const chMatch=line.trim().match(/^#{1,2}\s*(Chapter\s+\d+|Prologue|Epilogue)(?:\s*[:—-]\s*(.*))?$/i);
+  if(partMatch){flush();if(part.chapters.length)parsed.push(part);part={title:(partMatch[1]+(partMatch[2]?" — "+partMatch[2]:"")).trim(),chapters:[]};continue}
+  if(chMatch){flush();chapter={title:(chMatch[1]+(chMatch[2]?" — "+chMatch[2]:"")).trim()};continue}
+  if(!chapter&&line.trim()&&!part.chapters.length)chapter={title:"Chapter 1"};
+  if(chapter)body.push(line);
+ }
+ flush();if(part.chapters.length)parsed.push(part);
+ if(!parsed.length)parsed.push({title:"Part I",chapters:[{title:"Chapter 1",content:text.trim()}]});
+ parts=parsed;renderParts();
+}
+addPartButton.addEventListener("click",()=>{addPart();partList.lastElementChild?.scrollIntoView({behavior:"smooth",block:"center"})});
+addPart();
 manuscriptFile.addEventListener("change",async()=>{
  const file=manuscriptFile.files&&manuscriptFile.files[0];if(!file)return;
  const ext=file.name.split(".").pop().toLowerCase();
@@ -88,9 +122,7 @@ manuscriptFile.addEventListener("change",async()=>{
   text=text.replace(/\r\n?/g,"\n").trim();
   if(text.length<20)throw new Error("No readable text was found. Scanned/image-only PDFs are not supported yet; please use a text-based PDF or paste the text.");
   if(text.length>1500000)throw new Error("The extracted manuscript is over the 1,500,000-character limit. Please split it into smaller parts.");
-  const chunks=text.split(/(?=^\s{0,3}#{1,2}\s*(?:chapter\b|prologue\b|epilogue\b)|^\s*(?:chapter\s+\d+|prologue|epilogue)\b)/im).map(s=>s.trim()).filter(Boolean);
-  if(chunks.length>1){chapters=chunks.map((chunk,i)=>{const lines=chunk.split("\n"),first=lines[0].trim(),title=first.replace(/^#{1,2}\s*/,"").trim(),hasHeading=/^(?:chapter\s+\d+|prologue|epilogue)\b/i.test(title);return {title:hasHeading?title:"Chapter "+(i+1),content:hasHeading?lines.slice(1).join("\n").trim():chunk}})}else{chapters=[{title:"Chapter 1",content:text}]}
-  renderChapters();
+  importManuscript(text);
   uploadState.textContent="✓ Imported "+file.name+". Please review the text below before submitting.";
   chapterList.scrollIntoView({behavior:"smooth",block:"center"});
  }catch(err){uploadState.textContent=err.message||"Could not read this file. Please paste the manuscript instead.";manuscriptFile.value=""}
@@ -98,7 +130,7 @@ manuscriptFile.addEventListener("change",async()=>{
 form.addEventListener("submit",async e=>{
  e.preventDefault();if(form.elements.website.value)return;
  const manuscript=compileChapters();manuscriptField.value=manuscript;const f=new FormData(form);
- if(manuscript.length<20||chapters.some(ch=>!ch.content.trim())){status.textContent="Please add at least 20 characters of writing and make sure every chapter has content.";status.className="error";return}
+ if(manuscript.length<20||parts.some(part=>part.chapters.some(ch=>!ch.content.trim()))){status.textContent="Please add at least 20 characters of writing and make sure every chapter has content.";status.className="error";return}
  const cfg=window.VELLORA_CONFIG||{};
  if(!window.supabase||!cfg.url||!cfg.publishableKey){status.textContent="The submission service is unavailable. Please try again later.";status.className="error";return}
  send.disabled=true;send.textContent="Sending for review…";status.textContent="Submitting your manuscript securely…";status.className="";
@@ -106,7 +138,7 @@ form.addEventListener("submit",async e=>{
   const client=window.supabase.createClient(cfg.url,cfg.publishableKey);
   const {error}=await client.from("book_submissions").insert({title:String(f.get("title")||"").trim(),author:String(f.get("author")||"").trim(),genre:String(f.get("genre")||""),language:String(f.get("language")||"English").trim(),description:String(f.get("description")||"").trim(),manuscript_content:manuscript,cover_style:String(f.get("cover_style")||"nocturne")});
   if(error)throw error;
-  form.reset();chapters=[{title:"Chapter 1",content:""}];renderChapters();manuscriptFile.value="";uploadState.textContent="";form.querySelector('input[name="cover_style"][value="nocturne"]').checked=true;
+  form.reset();parts=[{title:"Part I",chapters:[{title:"Chapter 1",content:""}]}];renderParts();manuscriptFile.value="";uploadState.textContent="";form.querySelector('input[name="cover_style"][value="nocturne"]').checked=true;
   status.textContent="Your story has been received. It is now pending private admin review and will not appear in VELLORA until approved.";status.className="success";
  }catch(err){status.textContent=err.message||"We couldn't send your submission. Please try again.";status.className="error"}
  finally{send.disabled=false;send.textContent="Send for admin review"}
