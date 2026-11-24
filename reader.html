@@ -137,6 +137,43 @@ body::after{content:"";position:fixed;inset:0;pointer-events:none;background:rad
 @media(max-width:639px){#top .back{padding:10px 8px;letter-spacing:.08em}#top .sp small{display:none}.stage{inset:64px 0 56px}}
 @media print{#panel{display:none!important}}
 .preview-flag{font:600 .58rem var(--ui);letter-spacing:.13em;color:var(--accent);border:1px solid var(--border);border-radius:999px;padding:6px 9px;white-space:nowrap}@media(max-width:639px){.preview-flag{font-size:.5rem;padding:5px 6px;letter-spacing:.06em}}
+
+/* ===== MOBILE READER: compact controls, swipe-first navigation ===== */
+@media (max-width: 767px){
+  /* A 709px mobile-like viewport must use the touch-first layout too. */
+  #pv,#nx{display:none!important}
+  #nav{
+    height:auto;
+    min-height:0;
+    flex-wrap:nowrap;
+    justify-content:center;
+    gap:clamp(8px,2.5vw,16px);
+    padding:9px 12px calc(9px + env(safe-area-inset-bottom, 0px));
+    background:color-mix(in srgb,var(--bg) 94%,transparent);
+    backdrop-filter:blur(14px);
+    -webkit-backdrop-filter:blur(14px);
+    border-top:1px solid color-mix(in srgb,var(--border) 75%,transparent);
+    letter-spacing:.04em;
+  }
+  #pl{white-space:nowrap;font-size:.68rem;letter-spacing:.04em}
+  .quick-page-search{flex:none;gap:5px}
+  .quick-page-search label{display:inline}
+  .quick-page-search input{width:58px;padding:7px 5px}
+  .quick-page-search button{padding:7px 10px}
+  #stage{min-height:0}
+  .stage{inset:66px 0 66px}
+  .book{max-height:100%;max-width:100%}
+  .book:not(.two) .pg{
+    width:min(440px,calc(100vw - 24px));
+    height:calc(100dvh - 142px);
+    max-height:100%;
+    min-height:0;
+    padding:clamp(18px,2.8vh,30px) clamp(18px,4.5vw,28px) 46px;
+  }
+  .pg .wm{left:clamp(18px,4.5vw,28px)}
+  .pg .pn{right:clamp(18px,4.5vw,28px)}
+}
+
 </style>
 </head>
 <body>
