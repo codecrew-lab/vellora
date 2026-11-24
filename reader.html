@@ -283,13 +283,14 @@ function setup(){
 
 /* Dynamic contents index and page-number navigation use the exact current pagination. */
 function chapterHeadingInfo(label){
- const match=String(label||"").match(/^(Part\\s+.+?)\\s+[—-]\\s+(.+)$/i);
+ const match=String(label||"").match(/^(Part\s+.+?)\s+[—-]\s+(.+)$/i);
  return match?{part:match[1].trim(),chapter:match[2].trim()}:{part:"",chapter:String(label||"Untitled chapter")};
 }
 function renderContentsIndex(){
  const host=$("#contentsList");if(!host)return;host.innerHTML="";
  let lastPart="";
  chapters.forEach((chapter,chapterIndex)=>{
+  if(chapter.s==="Section")return;
   const pageIndex=pages.findIndex(page=>page.chapterIndex===chapterIndex);
   if(pageIndex<0)return;
   const info=chapterHeadingInfo(chapter.h);
