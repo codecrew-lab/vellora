@@ -11,7 +11,7 @@
 <meta name="theme-color" content="#211a16">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Lora:ital,wght@0,400;0,500;1,400&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="styles.css?v=20261120-full-index">
+<link rel="stylesheet" href="styles.css?v=20261124-shelf-alignment-v2">
 <style>
 
 :root{--display:'Cormorant Garamond',Georgia,serif;--body:'Lora',Georgia,serif;--ui:'DM Sans',system-ui,sans-serif}
@@ -254,6 +254,49 @@ header.hero h1{font-size:clamp(2.4rem,6vw,4rem)}
 #installApp[hidden]{display:none!important}
 #installApp{margin-left:10px}
 @media(max-width:639px){#installApp{margin:12px 0 0}}
+
+/* Final homepage shelf alignment: every book starts at the same top edge. */
+#continue .cont,
+#recommendedShelf .cont {
+  display: flex !important;
+  align-items: flex-start !important;
+  justify-content: flex-start !important;
+}
+#continue .cont > .book-card,
+#recommendedShelf .cont > .book-card {
+  align-self: flex-start !important;
+  flex: 0 0 clamp(124px, 36vw, 146px);
+  width: clamp(124px, 36vw, 146px);
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+}
+#continue .cont > .book-card > .card,
+#recommendedShelf .cont > .book-card > .card {
+  display: block;
+  width: 100%;
+  height: auto;
+  min-height: 0;
+  margin: 0;
+  padding: 0 0 12px;
+  transform: none;
+}
+#continue .cont > .book-card .cover,
+#recommendedShelf .cont > .book-card .cover {
+  display: flex;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 2 / 3;
+  margin: 0;
+}
+@media (min-width: 640px) {
+  #continue .cont > .book-card,
+  #recommendedShelf .cont > .book-card {
+    flex-basis: clamp(150px, 18vw, 184px);
+    width: clamp(150px, 18vw, 184px);
+  }
+}
+
 </style>
 </head>
 <body>
