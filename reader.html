@@ -192,6 +192,8 @@ function parseManuscript(source){
     flushChapter();
     if(activePart!==clean){
       current={h:safeText(clean),s:"Part",p:[]};hasHeading=true;flushChapter();activePart=clean;
+    }else{
+      current={h:"",s:"",p:[]};hasHeading=false;
     }
   };
   for(const raw of lines){
