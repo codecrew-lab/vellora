@@ -69,7 +69,7 @@ background-image:radial-gradient(rgba(120,95,60,.1) 1px,transparent 1px);backgro
  #print .wmf{position:fixed;bottom:-12mm;left:0;font-family:var(--display);letter-spacing:.3em;font-size:7pt;color:var(--text2);opacity:.5}
 }
 .page-search{padding:10px 12px;border-top:1px solid var(--border);display:grid;gap:8px}.page-search label{font-size:.78rem;color:var(--text2)}.page-search>div{display:flex;gap:8px}.page-search input{min-width:0;width:100%;padding:9px 10px;border:1px solid var(--border);border-radius:8px;background:var(--bg);color:var(--text);font:inherit}.page-search button{border:1px solid var(--border);border-radius:8px;padding:8px 14px;background:var(--surface);white-space:nowrap}.page-search small{min-height:1em;color:var(--text2);font-size:.72rem}
-#contentsPanel{position:fixed;inset:0;z-index:80;background:rgba(12,8,5,.55);display:none;align-items:stretch;justify-content:flex-end;font-family:var(--ui)}#contentsPanel.show{display:flex}#contentsPanel .contents-card{width:min(430px,100%);height:100%;overflow:auto;background:var(--surface);color:var(--text);border-left:1px solid var(--border);box-shadow:-20px 0 60px rgba(0,0,0,.3);padding:24px clamp(16px,4vw,30px)}.contents-head{display:flex;align-items:center;justify-content:space-between;gap:12px;border-bottom:1px solid var(--border);padding-bottom:16px;margin-bottom:16px}.contents-head h2{font:600 1.8rem var(--display)}.contents-head button{border:1px solid var(--border);border-radius:999px;padding:8px 12px}.contents-subtitle{font-size:.72rem;color:var(--text2);line-height:1.6;margin-bottom:16px}.contents-list{display:grid;gap:5px}.contents-part{padding:12px 8px 5px;color:var(--accent);font-size:.72rem;letter-spacing:.1em;text-transform:uppercase}.contents-part-entry{font-weight:700;color:var(--accent);border-top:1px solid var(--border);margin-top:8px;padding-top:14px}.contents-entry{width:100%;display:flex;align-items:center;justify-content:space-between;gap:12px;text-align:left;padding:10px 9px;border-radius:8px;font:500 .86rem var(--ui);color:var(--text)}.contents-entry:hover{background:var(--bg)}.contents-entry span:first-child{min-width:0;overflow-wrap:anywhere}.contents-page{flex:none;color:var(--accent);font-variant-numeric:tabular-nums}.contents-empty{color:var(--text2);font-size:.85rem;padding:12px}
+#contentsPanel{position:fixed;inset:0;z-index:80;background:rgba(12,8,5,.55);display:none;align-items:stretch;justify-content:flex-end;font-family:var(--ui)}#contentsPanel.show{display:flex}#contentsPanel .contents-card{width:min(430px,100%);height:100%;overflow:auto;background:var(--surface);color:var(--text);border-left:1px solid var(--border);box-shadow:-20px 0 60px rgba(0,0,0,.3);padding:24px clamp(16px,4vw,30px)}.contents-head{display:flex;align-items:center;justify-content:space-between;gap:12px;border-bottom:1px solid var(--border);padding-bottom:16px;margin-bottom:16px}.contents-head h2{font:600 1.8rem var(--display)}.contents-head button{border:1px solid var(--border);border-radius:999px;padding:8px 12px}.contents-subtitle{font-size:.72rem;color:var(--text2);line-height:1.6;margin-bottom:16px}.contents-list{display:grid;gap:5px}.contents-part{padding:12px 8px 5px;color:var(--accent);font-size:.72rem;letter-spacing:.1em;text-transform:uppercase}.contents-part-entry{font-weight:700;color:var(--accent);border-top:1px solid var(--border);margin-top:8px;padding-top:14px}.contents-entry{width:100%;display:flex;align-items:center;justify-content:space-between;gap:12px;text-align:left;padding:10px 9px;border-radius:8px;font:500 .86rem var(--ui);color:var(--text)}.contents-entry:hover{background:var(--bg)}.contents-chapter-entry{padding-left:24px}.contents-entry span:first-child{min-width:0;overflow-wrap:anywhere}.contents-page{flex:none;color:var(--accent);font-variant-numeric:tabular-nums}.contents-empty{color:var(--text2);font-size:.85rem;padding:12px}
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 
 /* ===== PREMIUM LAYER ===== */
@@ -184,20 +184,30 @@ function safeText(value){return String(value??"").replace(/&/g,"&amp;").replace(
 function formatParagraph(value){return safeText(value).replace(/\*\*(.+?)\*\*/g,"<strong>$1</strong>").replace(/\*(.+?)\*/g,"<em>$1</em>").replace(/`(.+?)`/g,"<code>$1</code>")}
 function parseManuscript(source){
   const lines=String(source||"").replace(/\r\n?/g,"\n").split("\n");
-  const result=[];let current={h:"The Story",s:"",p:[]},paragraph=[],hasHeading=false;
+  const result=[];let current={h:"The Story",s:"",p:[]},paragraph=[],hasHeading=false,activePart="";
   const flushParagraph=()=>{const value=paragraph.join(" ").trim();if(value)current.p.push(formatParagraph(value));paragraph=[]};
-  const flushChapter=()=>{flushParagraph();if(current.p.length||hasHeading)result.push(current)};
+  const flushChapter=()=>{flushParagraph();if(current.p.length||hasHeading)result.push(current);hasHeading=false};
+  const addPart=name=>{
+    const clean=String(name||"Part I").trim();
+    flushChapter();
+    if(activePart!==clean){
+      current={h:safeText(clean),s:"Part",p:[]};hasHeading=true;flushChapter();activePart=clean;
+    }
+  };
   for(const raw of lines){
     const line=raw.trim();
     if(!line){flushParagraph();continue}
-    const part=line.match(/^#\s+(Part\s+.+)$/i);
-    const chapter=line.match(/^#\s+(.+)$/);
+    const partLine=line.match(/^##\s+(Part\s+.+)$/i);
+    const heading=line.match(/^#\s+(.+)$/);
     const section=line.match(/^##\s+(.+)$/);
-    if(part||chapter||section){
-      flushChapter();
-      current={h:safeText((part||chapter||section)[1].trim()),s:part?"Part":section?"Section":"",p:[]};
-      hasHeading=true;continue;
+    if(partLine){addPart(partLine[1]);continue}
+    if(heading){
+      const value=heading[1].trim();
+      const combined=value.match(/^(Part\s+.+?)\s+[—-]\s+(.+)$/i);
+      if(combined){addPart(combined[1]);flushChapter();current={h:safeText(combined[2].trim()),s:"Chapter",p:[]};hasHeading=true;continue}
+      flushChapter();current={h:safeText(value),s:"Chapter",p:[]};hasHeading=true;continue;
     }
+    if(section){flushChapter();current={h:safeText(section[1].trim()),s:"Section",p:[]};hasHeading=true;continue}
     paragraph.push(line);
   }
   flushChapter();
@@ -289,7 +299,8 @@ function renderContentsIndex(){
   if(chapter.s==="Section")return;
   const pageIndex=pages.findIndex(page=>page.chapterIndex===chapterIndex);
   if(pageIndex<0)return;
-  const button=document.createElement("button");button.type="button";button.className=chapter.s==="Part"?"contents-entry contents-part-entry":"contents-entry";
+  const button=document.createElement("button");button.type="button";
+  button.className=chapter.s==="Part"?"contents-entry contents-part-entry":"contents-entry contents-chapter-entry";
   const name=document.createElement("span");name.textContent=chapter.h;
   const page=document.createElement("span");page.className="contents-page";page.textContent="Page "+(pageIndex+1);
   button.append(name,page);button.addEventListener("click",()=>{jumpToPage(pageIndex+1);closeContentsIndex()});host.appendChild(button);
