@@ -92,7 +92,7 @@ manuscriptFile.addEventListener("change",async()=>{
   if(chunks.length>1){chapters=chunks.map((chunk,i)=>{const lines=chunk.split("\n"),first=lines[0].trim(),title=first.replace(/^#{1,2}\s*/,"").trim(),hasHeading=/^(?:chapter\s+\d+|prologue|epilogue)\b/i.test(title);return {title:hasHeading?title:"Chapter "+(i+1),content:hasHeading?lines.slice(1).join("\n").trim():chunk}})}else{chapters=[{title:"Chapter 1",content:text}]}
   renderChapters();
   uploadState.textContent="✓ Imported "+file.name+". Please review the text below before submitting.";
-  manuscriptField.scrollIntoView({behavior:"smooth",block:"center"});
+  chapterList.scrollIntoView({behavior:"smooth",block:"center"});
  }catch(err){uploadState.textContent=err.message||"Could not read this file. Please paste the manuscript instead.";manuscriptFile.value=""}
 });
 form.addEventListener("submit",async e=>{
