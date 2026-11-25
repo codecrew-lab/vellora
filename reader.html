@@ -260,7 +260,7 @@ const st={get(k,d){if(previewMode)return Object.prototype.hasOwnProperty.call(pr
 const OFFLINE_DB="vellora-offline-library";
 function offlineStory(storyId){return new Promise((resolve,reject)=>{if(!("indexedDB" in window)){resolve(null);return}const q=indexedDB.open(OFFLINE_DB,1);q.onupgradeneeded=()=>{if(!q.result.objectStoreNames.contains("books"))q.result.createObjectStore("books",{keyPath:"id"})};q.onsuccess=()=>{const d=q.result;try{const t=d.transaction("books","readonly"),g=t.objectStore("books").get(String(storyId));g.onsuccess=()=>{const v=g.result||null;d.close();resolve(v&&v._offline?v:null)};g.onerror=()=>{const e=g.error;d.close();reject(e)}}catch(e){d.close();reject(e)}};q.onerror=()=>reject(q.error)})}
 let id=new URLSearchParams(location.search).get("id")||"";
-let reviewDb=null;
+let reviewDb=null,reviewLoadedFor="";
 let title="Loading story…",genre="VELLORA EDITIONS",author="VELLORA Editions",chapters=[];
 $("#ttl").textContent=title;document.title="Loading story – VELLORA";
 function safeText(value){return String(value??"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#39;")}
@@ -435,7 +435,7 @@ function render(){
   $("#pl").textContent=(two&&pages[idx+1]?"Pages "+(idx+1)+"-"+(idx+2):"Page "+(idx+1))+" of "+pages.length+" · "+pct+"%";
   $("#pv").disabled=idx<=0;$("#nx").disabled=idx+(two?2:1)>last;
   $("#prog").style.width=pct+"%";
-  $("#reviewOpen").classList.toggle("visible",visibleEnd>=pages.length&&!previewMode);if(visibleEnd<pages.length)$("#reviewSheet").hidden=true;if(visibleEnd>=pages.length&&!previewMode)loadApprovedReviews();
+  $("#reviewOpen").classList.toggle("visible",visibleEnd>=pages.length&&!previewMode);if(visibleEnd<pages.length)$("#reviewSheet").hidden=true;if(visibleEnd>=pages.length&&!previewMode&&reviewLoadedFor!==id){reviewLoadedFor=id;loadApprovedReviews();}
   renderContentsIndex();
   pos=pages[idx].w;st.set("vellora.pos."+id,pos);
   st.set("vellora.progress."+id,{page:idx+1,totalPages:pages.length,percent:pct,wordPosition:pos,updatedAt:Date.now()});
