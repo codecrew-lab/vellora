@@ -792,3 +792,18 @@ dialog::backdrop{background:rgba(20,14,10,.68);backdrop-filter:blur(5px)}
 #chips.expanded{flex-wrap:wrap!important;overflow:visible!important}
 #chips .chip{min-height:36px!important}
 @media(max-width:639px){#chips .chip{min-height:34px!important}}
+
+
+/* Home organization: My Shelf shortcuts and progressive Library reveal. */
+.library-pagination{display:flex;justify-content:center;align-items:center;gap:12px;flex-wrap:wrap;margin:28px 0 12px}
+.library-pagination button,.shelf-jump a{font:500 .76rem var(--ui);letter-spacing:.1em;text-transform:uppercase;text-decoration:none;color:var(--text);border:1px solid var(--border);background:var(--surface);padding:11px 22px;border-radius:3px;transition:background .2s,border-color .2s,transform .2s}
+.library-pagination button:hover,.shelf-jump a:hover{border-color:var(--accent);background:color-mix(in srgb,var(--accent) 10%,var(--surface));transform:translateY(-1px)}
+.my-shelf{margin-top:clamp(56px,8vw,96px)}
+.my-shelf>.sec{margin-bottom:22px}
+.shelf-jump{display:flex;justify-content:center;gap:9px;flex-wrap:wrap;margin:0 auto 34px}
+.shelf-jump a{padding:9px 15px;font-size:.68rem}
+.my-shelf .discovery-section{margin:38px 0 26px}
+.my-shelf .discovery-heading{margin-bottom:12px}
+.my-shelf .discovery-heading h2{font-size:clamp(1.55rem,2.8vw,2.1rem)}
+.my-shelf .empty-state{width:100%;padding:24px 18px}
+@media(max-width:639px){.shelf-jump{justify-content:flex-start;gap:7px}.shelf-jump a{padding:9px 11px;font-size:.62rem}.library-pagination{margin-top:22px}.my-shelf{margin-top:52px}}
