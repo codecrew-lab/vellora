@@ -759,15 +759,15 @@ dialog::backdrop{background:rgba(20,14,10,.68);backdrop-filter:blur(5px)}
 }
 
 /* Reader-controlled Continue Reading and Offline Books shelves. */
-.shelf-heading{position:relative;display:flex;align-items:center;justify-content:center;min-width:0}
-.shelf-heading .sec{flex:1;min-width:0}
+.shelf-heading{display:flex;align-items:center;justify-content:space-between;gap:16px;min-width:0}
+.shelf-heading .sec,.shelf-heading .discovery-heading{flex:1;min-width:0;margin:0;text-align:left}
+.shelf-heading .discovery-heading h2{margin-top:7px}
 .shelf-manage{
-  position:absolute;
-  right:0;
-  top:50%;
-  transform:translateY(-50%);
+  position:static;
+  flex:0 0 auto;
+  transform:none;
   min-height:34px;
-  padding:6px 13px;
+  padding:7px 15px;
   border:1px solid var(--border);
   border-radius:999px;
   background:color-mix(in srgb,var(--surface) 86%,transparent);
@@ -783,7 +783,7 @@ dialog::backdrop{background:rgba(20,14,10,.68);backdrop-filter:blur(5px)}
 .cont.managing .book-card{outline:1px dashed color-mix(in srgb,var(--accent) 65%,transparent);outline-offset:3px;border-radius:4px}
 @media(max-width:639px){
   .shelf-manage{right:0;padding:5px 10px;font-size:.62rem}
-  .shelf-heading .sec{padding-inline:48px}
+  .shelf-heading .sec,.shelf-heading .discovery-heading{padding-inline:0}
   .shelf-remove{top:43px;right:6px;width:29px;height:29px}
 }
 
