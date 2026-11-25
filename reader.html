@@ -245,7 +245,7 @@ function parseManuscript(source){
     const section=line.match(/^##\s+(.+)$/);
     if(partLine||plainPart){addPart((partLine||plainPart)[1]);continue}
     if(heading||plainChapter){
-      const value=heading[1].trim();
+      const value=(heading||plainChapter)[1].trim();
       const combined=value.match(/^(Part\s+.+?)\s+[—-]\s+(.+)$/i);
       if(combined){addPart(combined[1]);current={h:safeText(combined[2].trim()),s:"Chapter",p:[]};hasHeading=true;continue}
       flushChapter();current={h:safeText(value),s:"Chapter",p:[]};hasHeading=true;continue;
