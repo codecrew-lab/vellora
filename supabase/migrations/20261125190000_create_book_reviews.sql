@@ -15,6 +15,8 @@ create index if not exists book_reviews_pending_idx on public.book_reviews (subm
 alter table public.book_reviews enable row level security;
 revoke all on table public.book_reviews from anon, authenticated;
 grant select, insert on table public.book_reviews to anon, authenticated;
+-- The Admin Edge Function uses the service_role key to review pending submissions.
+grant select, update on table public.book_reviews to service_role;
 drop policy if exists "Anyone can read approved book reviews" on public.book_reviews;
 create policy "Anyone can read approved book reviews" on public.book_reviews for select to anon, authenticated using (status = 'approved');
 drop policy if exists "Readers can submit pending book reviews" on public.book_reviews;
