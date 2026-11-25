@@ -591,9 +591,8 @@ dialog{border-radius:3px;border-color:var(--accent);box-shadow:0 28px 90px rgba(
 dialog[open]{animation:vellora-dialog-in .32s var(--vellora-ease) both}
 dialog::backdrop{background:rgba(20,14,10,.68);backdrop-filter:blur(5px)}
 @keyframes vellora-dialog-in{from{opacity:0;transform:translateY(14px) scale(.985)}to{opacity:1;transform:none}}
-/* Animated entrance for every content area and dynamic Supabase book card. */
-.rv{opacity:0;transform:translateY(26px);transition:opacity .85s ease,transform .85s var(--vellora-ease);transition-delay:var(--rv-delay,0ms)}
-.rv.in{opacity:1;transform:none}
+/* Keep library sections and dynamically loaded book cards visible immediately. */
+.rv,.rv.in{opacity:1;transform:none;transition:none;transition-delay:0ms}
 .page-frame{perspective:1400px;transform-origin:center;transition:transform .42s var(--vellora-ease),opacity .42s,filter .42s}
 .page-frame.turn-next{transform:translateX(24px) rotateY(-8deg) scale(.985);opacity:.38;filter:brightness(.92)}
 .page-frame.turn-prev{transform:translateX(-24px) rotateY(8deg) scale(.985);opacity:.38;filter:brightness(.92)}
