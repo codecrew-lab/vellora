@@ -308,7 +308,7 @@ header.hero h1{font-size:clamp(2.4rem,6vw,4rem)}
   <button id="open">Open the World</button>
 </div>
 
-<div class="top"><a class="tlogo" href="#">VELLORA</a><nav><a class="tl" href="#library">Library</a><button class="tb" id="recentBtn" aria-expanded="false" aria-controls="panel">Recently read</button><button class="tb ic" id="gear" aria-label="Settings" aria-expanded="false" aria-controls="panel"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M4 7h9M17 7h3M4 17h3M11 17h9"/><circle cx="15" cy="7" r="2"/><circle cx="9" cy="17" r="2"/></svg></button></nav></div>
+<div class="top"><a class="tlogo" href="#">VELLORA</a><nav><a class="tl" href="#library">Library</a><a class="tl" href="#myShelf">My Shelf</a><button class="tb ic" id="gear" aria-label="Settings" aria-expanded="false" aria-controls="panel"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M4 7h9M17 7h3M4 17h3M11 17h9"/><circle cx="15" cy="7" r="2"/><circle cx="9" cy="17" r="2"/></svg></button></nav></div>
 <nav id="panel" aria-label="Main menu"></nav>
 
 <main class="wrap">
@@ -320,11 +320,7 @@ header.hero h1{font-size:clamp(2.4rem,6vw,4rem)}
     <button class="btn secondary" id="installApp" type="button" hidden>Install VELLORA</button>
   </header>
 
-  <div class="visit-library"><a class="btn" href="#library">Visit Library</a></div>
   <section id="featured" aria-label="Featured Book"></section>
-  <section id="offlineShelf" aria-label="Offline saved books"><div class="shelf-heading"><div class="sec"><small>Available without internet</small><h2>Offline Books</h2><p class="count" id="offlineShelfCount"></p></div><button type="button" class="shelf-manage" id="manageOffline" aria-pressed="false">Manage</button></div><div class="cont" id="offlineShelfRow"></div></section>
-  <section id="continue" hidden><div class="shelf-heading"><div class="sec"><small>Pick up where you left off</small><h2>Continue Reading</h2></div><button type="button" class="shelf-manage" id="manageContinue" aria-pressed="false">Manage</button></div><div class="cont" id="contRow"></div></section>
-  <section id="recommendedShelf" class="discovery-section" hidden aria-label="Recommended Books"></section>
 
   <section id="library">
     <div class="sec"><small>The Collection</small><h2>The Library</h2></div>
@@ -341,6 +337,27 @@ header.hero h1{font-size:clamp(2.4rem,6vw,4rem)}
       <p class="count" id="count" aria-live="polite"></p>
     </div>
     <div class="grid" id="grid"></div>
+    <div id="libraryPagination" class="library-pagination" aria-label="Library pagination"></div>
+  </section>
+
+  <section id="myShelf" class="my-shelf" aria-label="My Shelf">
+    <div class="sec"><small>Your personal library</small><h2>My Shelf</h2></div>
+    <nav class="shelf-jump" aria-label="My Shelf sections">
+      <a href="#recentShelf">Recently Read</a><a href="#continue">Continue Reading</a><a href="#recommendedShelf">Recommended for You</a><a href="#offlineShelf">Offline Books</a>
+    </nav>
+    <section id="recentShelf" class="discovery-section" aria-label="Recently Read">
+      <div class="discovery-heading"><span class="eyebrow">Your reading history</span><h2>Recently Read</h2></div>
+      <div class="cont" id="recentRow"></div>
+    </section>
+    <section id="continue" class="discovery-section" aria-label="Continue Reading">
+      <div class="shelf-heading"><div class="discovery-heading"><span class="eyebrow">Pick up where you left off</span><h2>Continue Reading</h2></div><button type="button" class="shelf-manage" id="manageContinue" aria-pressed="false">Manage</button></div>
+      <div class="cont" id="contRow"></div>
+    </section>
+    <section id="recommendedShelf" class="discovery-section" aria-label="Recommended for You"></section>
+    <section id="offlineShelf" class="discovery-section" aria-label="Offline saved books">
+      <div class="shelf-heading"><div class="discovery-heading"><span class="eyebrow">Available without internet</span><h2>Offline Books</h2><p class="count" id="offlineShelfCount"></p></div><button type="button" class="shelf-manage" id="manageOffline" aria-pressed="false">Manage</button></div>
+      <div class="cont" id="offlineShelfRow"></div>
+    </section>
   </section>
 </main>
 <footer><span class="logo">VELLORA</span>A beautiful world where stories come to life.<br><a href="submit.html">Submit your book for review</a><br>© 2026 Vellora. A world of stories.</footer>
@@ -351,7 +368,7 @@ header.hero h1{font-size:clamp(2.4rem,6vw,4rem)}
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.119.1/dist/umd/supabase.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
 <script src="config.js"></script>
-<script src="app.js?v=20261124-shelf-management-v1"></script>
+<script src="app.js?v=20261125-home-organization-v1"></script>
 
 
 <script>
