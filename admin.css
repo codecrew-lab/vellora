@@ -273,3 +273,11 @@ html,body{min-width:320px;max-width:100%;overflow-x:clip}
  .studio-stats{white-space:normal}
 }
 @media(prefers-reduced-motion:reduce){.studio-add-chapter,.studio-add-part{transition:none}}
+
+/* Clear separation between private drafts and published catalogue. */
+.admin-book-group{margin-top:26px}
+.admin-book-group:first-child{margin-top:8px}
+.admin-book-group-head{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin:0 0 12px;padding:0 0 10px;border-bottom:1px solid var(--admin-line,rgba(207,177,125,.28))}
+.admin-book-group-head h3{margin:0;font:600 clamp(1.15rem,2.5vw,1.45rem) var(--display,Georgia,serif);color:var(--text,#eadfc9)}
+.admin-book-group-head span{font:600 .68rem var(--ui,Arial,sans-serif);letter-spacing:.1em;text-transform:uppercase;color:var(--muted,#b7a88f);white-space:nowrap}
+.admin-book-empty{padding:12px 0;margin:0}
