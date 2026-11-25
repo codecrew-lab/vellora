@@ -796,17 +796,17 @@ dialog::backdrop{background:rgba(20,14,10,.68);backdrop-filter:blur(5px)}
 
 /* Home organization: My Shelf shortcuts and progressive Library reveal. */
 .library-pagination{display:flex;justify-content:center;align-items:center;gap:12px;flex-wrap:wrap;margin:28px 0 12px}
-.library-pagination button,.shelf-jump a{font:500 .76rem var(--ui);letter-spacing:.1em;text-transform:uppercase;text-decoration:none;color:var(--text);border:1px solid var(--border);background:var(--surface);padding:11px 22px;border-radius:3px;transition:background .2s,border-color .2s,transform .2s}
+.library-pagination button,.shelf-jump a{display:flex;align-items:center;justify-content:center;min-width:0;min-height:44px;font:500 .76rem var(--ui);letter-spacing:.08em;text-transform:uppercase;text-align:center;text-decoration:none!important;color:var(--text)!important;border:1px solid var(--border);background:var(--surface);padding:11px 16px;border-radius:4px;white-space:normal;line-height:1.35;overflow-wrap:anywhere;transition:background .2s,border-color .2s,transform .2s}
 .library-pagination button:hover,.shelf-jump a:hover{border-color:var(--accent);background:color-mix(in srgb,var(--accent) 10%,var(--surface));transform:translateY(-1px)}
 .my-shelf{margin-top:clamp(56px,8vw,96px)}
 .my-shelf>.sec{margin-bottom:22px}
-.shelf-jump{display:flex;justify-content:center;gap:9px;flex-wrap:wrap;margin:0 auto 34px}
-.shelf-jump a{padding:9px 15px;font-size:.68rem}
+.shelf-jump{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin:0 auto 34px;width:min(100%,760px)}
+.shelf-jump a{padding:12px 16px;font-size:.7rem}
 .my-shelf .discovery-section{margin:38px 0 26px}
 .my-shelf .discovery-heading{margin-bottom:12px}
 .my-shelf .discovery-heading h2{font-size:clamp(1.55rem,2.8vw,2.1rem)}
 .my-shelf .empty-state{width:100%;padding:24px 18px}
-@media(max-width:639px){.shelf-jump{justify-content:flex-start;gap:7px}.shelf-jump a{padding:9px 11px;font-size:.62rem}.library-pagination{margin-top:22px}.my-shelf{margin-top:52px}}
+@media(max-width:639px){.shelf-jump{grid-template-columns:minmax(0,1fr);gap:8px}.shelf-jump a{min-height:46px;padding:11px 14px;font-size:.68rem}.library-pagination{margin-top:22px}.my-shelf{margin-top:52px}}
 
 /* Prominent My Shelf shortcut beside the primary hero action. */
 header.hero .shelf-cta{display:inline-flex;align-items:center;justify-content:center;gap:11px;min-width:min(100%,240px);margin:14px auto 0;padding:.78rem 1.5rem;border:1px solid var(--border);background:color-mix(in srgb,var(--surface) 82%,transparent);color:var(--text);text-decoration:none;box-shadow:0 7px 18px rgba(50,32,15,.07)}
