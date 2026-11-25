@@ -8,7 +8,6 @@
 <style>
 :root{--display:'Cormorant Garamond',Georgia,serif;--body:'Lora',Georgia,serif;--ui:'DM Sans',system-ui,sans-serif;--fs:18px}
 [data-theme=manuscript]{--bg:#EDE3D0;--surface:#F6EEDC;--text:#45372B;--text2:#776653;--accent:#A98A59;--border:#C9B99D}
-[data-theme=vellum]{--bg:#FAF7F2;--surface:#FFFCF7;--text:#453A31;--text2:#827568;--accent:#B49A73;--border:#E6DED2}
 [data-theme=heritage]{--bg:#211A16;--surface:#2D231C;--text:#E5D5BE;--text2:#B6A28A;--accent:#B18A55;--border:#514031}
 *{box-sizing:border-box;margin:0}
 html,body{height:100%}
@@ -154,11 +153,10 @@ body::after{content:"";position:fixed;inset:0;pointer-events:none;background:rad
 <nav id="panel" aria-label="Reader settings">
   <h2>Appearance</h2><p class="subt">Choose how Vellora looks.</p>
   <div class="themes">
-    <button class="th" data-theme-pick="manuscript"><span class="sw" style="background:#EDE3D0"></span><span><b>Enhanced Manuscript</b><small>Faded manuscript</small></span></button>
-    <button class="th" data-theme-pick="vellum"><span class="sw" style="background:#FFFCF7"></span><span><b>Classic Vellum</b><small>Warm ivory</small></span></button>
-    <button class="th" data-theme-pick="heritage"><span class="sw" style="background:#2D231C"></span><span><b>Dark Heritage</b><small>Deep antique brown</small></span></button>
+    <button class="th" data-theme-pick="manuscript"><span class="sw" style="background:#EDE3D0"></span><span><b>Manuscript</b><small>Warm, textured manuscript</small></span></button>
+    <button class="th" data-theme-pick="heritage"><span class="sw" style="background:#2D231C"></span><span><b>Dark Mode</b><small>Dark manuscript appearance</small></span></button>
   </div>
-  <select id="th" hidden><option value="manuscript">Manuscript</option><option value="vellum">Vellum</option><option value="heritage">Heritage</option></select>
+  <select id="th" hidden><option value="manuscript">Manuscript</option><option value="heritage">Dark Mode</option></select>
   <button class="mi" id="snd" aria-pressed="true">Sound on</button>
   <button class="mi" id="pdf">Save as PDF</button>
 </nav>
@@ -196,7 +194,7 @@ st.set("vellora.recent",[id,...st.get("vellora.recent",[]).filter(x=>x!==id)].sl
 /* theme, font, sound */
 const root=document.documentElement;
 let fs=st.get("vellora.fs",18),sound=st.get("vellora.sound",true);
-function applyPrefs(){root.dataset.theme=st.get("vellora.theme","manuscript");$("#th").value=root.dataset.theme;root.style.setProperty("--fs",fs+"px");$("#snd").textContent=sound?"Sound on":"Sound off";$("#snd").setAttribute("aria-pressed",sound)}
+function applyPrefs(){let savedTheme=st.get("vellora.theme","manuscript");if(savedTheme!=="manuscript"&&savedTheme!=="heritage"){savedTheme="manuscript";st.set("vellora.theme",savedTheme)}root.dataset.theme=savedTheme;$("#th").value=savedTheme;root.style.setProperty("--fs",fs+"px");$("#snd").textContent=sound?"Sound on":"Sound off";$("#snd").setAttribute("aria-pressed",sound)}
 applyPrefs();
 
 /* pagination: pages hold HTML and the index of their first word */
