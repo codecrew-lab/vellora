@@ -239,11 +239,13 @@ function parseManuscript(source){
     const line=raw.trim();
     if(!line){flushParagraph();continue}
     const partLine=line.match(/^##\s+(Part\s+.+)$/i);
+    const plainPart=line.match(/^(Part\s+(?:\d+|[IVXLCDM]+|One|Two|Three|Four|Five|Six|Seven|Eight|Nine|Ten)(?:\s*[—:-]\s*.+)?)$/i);
     const heading=line.match(/^#\s+(.+)$/);
+    const plainChapter=line.match(/^(Chapter\s+(?:\d+|[IVXLCDM]+|One|Two|Three|Four|Five|Six|Seven|Eight|Nine|Ten)(?:\s*[:.—-]?\s*.*)?)$/i);
     const section=line.match(/^##\s+(.+)$/);
-    if(partLine){addPart(partLine[1]);continue}
-    if(heading){
-      const value=heading[1].trim();
+    if(partLine||plainPart){addPart((partLine||plainPart)[1]);continue}
+    if(heading||plainChapter){
+      const value=(heading||plainChapter)[1].trim();
       const combined=value.match(/^(Part\s+.+?)\s+[—-]\s+(.+)$/i);
       if(combined){addPart(combined[1]);current={h:safeText(combined[2].trim()),s:"Chapter",p:[]};hasHeading=true;continue}
       flushChapter();current={h:safeText(value),s:"Chapter",p:[]};hasHeading=true;continue;
@@ -319,8 +321,12 @@ function paginate(){
         if(pageIndex>=0)following.push({name:chapters[j].h,page:pageIndex+1});
       }
     }
+    if(!following.length){
+      const firstStoryPage=built.findIndex(page=>page.chapterIndex>partIndex&&chapters[page.chapterIndex]?.s!=="Part");
+      if(firstStoryPage>=0)following.push({name:"The Story",page:firstStoryPage+1});
+    }
     if(following.length){
-      part.indexMarkup='<section class="part-chapter-index"><h3>Chapters in this part</h3><ol>'+following.map(item=>'<li><span>'+item.name+'</span><span>'+item.page+'</span></li>').join("")+'</ol></section>';
+      part.indexMarkup='<section class="part-chapter-index"><h3>Chapters in this part</h3><ol>'+following.map(item=>'<li><span>'+safeText(item.name)+'</span><span>'+item.page+'</span></li>').join("")+'</ol></section>';
     }
   });
   pages=buildPages(true);
