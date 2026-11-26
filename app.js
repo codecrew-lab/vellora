@@ -42,7 +42,7 @@ function theme(t){if(!themes.some(x=>x[0]===t))t="manuscript";document.documentE
 theme(store.get("vellora.theme","manuscript"));
 
 /* One persistent soundtrack instance shared by the Library and in-page Reader. */
-const velloraTracks=["https://egyrlxgpgkflcejtgvvc.supabase.co/storage/v1/object/public/vellora-music/ocean-piano-waves.mp3","https://egyrlxgpgkflcejtgvvc.supabase.co/storage/v1/object/public/vellora-music/calm-reading-chill-hop.mp3","https://egyrlxgpgkflcejtgvvc.supabase.co/storage/v1/object/public/vellora-music/midnight-echoes-lofi.mp3","https://egyrlxgpgkflcejtgvvc.supabase.co/storage/v1/object/public/vellora-music/reading-books.mp3","https://egyrlxgpgkflcejtgvvc.supabase.co/storage/v1/object/public/vellora-music/reading.mp3"];
+const velloraTracks=["https://egyrlxgpgkflcejtgvvc.supabase.co/storage/v1/object/public/vellora-music/konstantinpazuzustudio-ocean-piano-waves-part-4-510370.mp3","https://egyrlxgpgkflcejtgvvc.supabase.co/storage/v1/object/public/vellora-music/adiiswanto-calm-reading-chill-hop-music-475936.mp3","https://egyrlxgpgkflcejtgvvc.supabase.co/storage/v1/object/public/vellora-music/lofcosmos-midnight-echoes-lofi-271366.mp3","https://egyrlxgpgkflcejtgvvc.supabase.co/storage/v1/object/public/vellora-music/leberch-reading-books-590361.mp3","https://egyrlxgpgkflcejtgvvc.supabase.co/storage/v1/object/public/vellora-music/leberch-reading-590426.mp3"];
 const velloraTrackNames=["Ocean Piano Waves","Calm Reading Chill Hop","Midnight Echoes Lo-fi","Reading Books","Reading"];
 const velloraMusic=new Audio();velloraMusic.preload="none";velloraMusic.loop=true;
 let lastMusicSave=0;
