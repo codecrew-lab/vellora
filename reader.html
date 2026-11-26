@@ -533,12 +533,6 @@ $("#ap").onclick=()=>{fs=Math.min(26,fs+2);st.set("vellora.fs",fs);applyPrefs();
 $("#am").onclick=()=>{fs=Math.max(14,fs-2);st.set("vellora.fs",fs);applyPrefs();setup()};
 $("#th").onchange=e=>{st.set("vellora.theme",e.target.value);applyPrefs();setup()};
 $("#snd").onclick=()=>{sound=!sound;st.set("vellora.sound",sound);applyPrefs()};
-$("#atmoToggle").addEventListener("click",()=>{atmospherePrefs.enabled=!atmospherePrefs.enabled;applyAtmosphereControls();syncAtmosphere()});
-$("#musicSelect").addEventListener("change",e=>{atmospherePrefs.music=e.target.value;saveAtmosphere();if(atmospherePrefs.enabled)syncAtmosphere()});$("#ambienceSelect").addEventListener("change",e=>{atmospherePrefs.ambience=e.target.value;saveAtmosphere();if(atmospherePrefs.enabled)syncAtmosphere()});
-[["masterVolume","master","masterValue"],["musicVolume","musicVolume","musicValue"],["ambienceVolume","ambienceVolume","ambienceValue"]].forEach(([id,key,out])=>$("#"+id).addEventListener("input",e=>{atmospherePrefs[key]=Number(e.target.value);$("#"+out).textContent=e.target.value+"%";saveAtmosphere();if(key==="master"&&atmoMaster)atmoMaster.gain.setTargetAtTime(atmospherePrefs.master/100,ac.currentTime,.08);if(key==="musicVolume"&&musicBus)musicBus.gain.setTargetAtTime(atmospherePrefs.musicVolume/100,ac.currentTime,.08);if(key==="ambienceVolume"&&ambienceBus)ambienceBus.gain.setTargetAtTime(atmospherePrefs.ambienceVolume/100,ac.currentTime,.08);$("#atmoMute").textContent=atmospherePrefs.master===0?"Unmute":"Mute"}));
-$("#atmoMute").addEventListener("click",()=>{atmospherePrefs.master=atmospherePrefs.master===0?35:0;saveAtmosphere();applyAtmosphereControls();if(atmoMaster)atmoMaster.gain.setTargetAtTime(atmospherePrefs.master/100,ac.currentTime,.08)});
-$("#atmoReset").addEventListener("click",()=>{atmospherePrefs.music="piano";atmospherePrefs.ambience="rain";atmospherePrefs.master=30;atmospherePrefs.musicVolume=40;atmospherePrefs.ambienceVolume=25;atmospherePrefs.enabled=false;saveAtmosphere();applyAtmosphereControls();syncAtmosphere()});
-document.addEventListener("visibilitychange",()=>{if(document.hidden&&ac?.state==="running")ac.suspend();else if(!document.hidden&&atmospherePrefs.enabled&&ac?.state==="suspended")ac.resume()});
 let rt;addEventListener("resize",()=>{clearTimeout(rt);rt=setTimeout(()=>{if((innerWidth>=900)!==two||true)setup()},250)});
 
 /* PDF: prints a clean book layout (cover, chapters, page numbers, faint VELLORA mark) in the chosen theme. Choose "Save as PDF" in the print dialog. */
