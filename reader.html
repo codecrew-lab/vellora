@@ -473,6 +473,7 @@ $("#contentsClose").addEventListener("click",closeContentsIndex);
 $("#contentsPanel").addEventListener("click",e=>{if(e.target===$("#contentsPanel"))closeContentsIndex()});
 $("#pageSearchGo").addEventListener("click",()=>jumpToPage($("#pageSearch").value));
 $("#pageSearch").addEventListener("keydown",e=>{if(e.key==="Enter"){e.preventDefault();jumpToPage(e.currentTarget.value)}});
+let ac;
 function audioContext(){ac=ac||new (window.AudioContext||window.webkitAudioContext)();if(ac.state==="suspended")ac.resume();return ac}
 function clickSound(){
   if(!sound)return;try{
