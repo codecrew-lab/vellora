@@ -57,7 +57,7 @@ function showLanding(){
 $("#open").onclick=()=>{
   landing.classList.add("opening");
   store.set("vellora.seen",1);
-  setTimeout(()=>{landing.hidden=true},window.matchMedia("(prefers-reduced-motion: reduce)").matches?40:2250);
+  setTimeout(()=>{landing.hidden=true;document.body.classList.add("library-ready")},window.matchMedia("(prefers-reduced-motion: reduce)").matches?40:2250);
 };
 /* Always show the signature opening on a fresh page load, even if a
    previous preview already set the old one-time seen flag. */
