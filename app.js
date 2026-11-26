@@ -70,6 +70,7 @@ function showLanding(){
   $("#open").focus();
 }
 $("#open").onclick=()=>{
+  musicCollapse();
   musicFadeIn();
   landing.classList.add("opening");
   store.set("vellora.seen",1);
