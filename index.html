@@ -296,6 +296,23 @@ header.hero h1{font-size:clamp(2.4rem,6vw,4rem)}
   }
 }
 
+
+/* Library-only background atmosphere controls */
+#librarySoundPanel{display:none;position:fixed;right:22px;bottom:22px;z-index:45;width:min(340px,calc(100vw - 28px));padding:16px 18px;background:color-mix(in srgb,var(--surface) 92%,transparent);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border:1px solid var(--accent);border-radius:14px;box-shadow:0 18px 48px rgba(25,16,8,.28);font-family:var(--ui);color:var(--text)}
+body.library-ready #librarySoundPanel{display:block}
+#librarySoundPanel .sound-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:10px}
+#librarySoundPanel .sound-head strong{font-family:var(--display);font-size:1.35rem;font-weight:600}
+#librarySoundPanel .sound-status{font-size:.68rem;letter-spacing:.12em;text-transform:uppercase;color:var(--text2)}
+#librarySoundPanel label{display:block;font-size:.7rem;letter-spacing:.1em;text-transform:uppercase;color:var(--text2);margin:9px 0 5px}
+#librarySoundPanel select{width:100%;padding:9px 11px;border:1px solid var(--border);border-radius:8px;background:var(--bg);color:var(--text);font:.85rem var(--ui)}
+#librarySoundPanel .sound-actions{display:flex;gap:8px;margin-top:12px}
+#librarySoundPanel button{padding:9px 14px;border:1px solid var(--border);border-radius:999px;font:.72rem var(--ui);letter-spacing:.08em;text-transform:uppercase}
+#librarySoundPanel #librarySoundPlay{background:linear-gradient(180deg,#f8ebc8,#d9b673 55%,#a77d3e);color:#211a16;border-color:transparent;flex:1}
+#librarySoundPanel input[type=range]{width:100%;accent-color:var(--accent)}
+#librarySoundPanel .sound-volume{display:flex;align-items:center;gap:10px}
+#librarySoundPanel .sound-volume output{min-width:36px;text-align:right;font-size:.75rem;color:var(--text2);font-variant-numeric:tabular-nums}
+@media(max-width:639px){#librarySoundPanel{right:12px;bottom:12px;padding:13px 15px}}
+
 </style>
 </head>
 <body>
@@ -363,6 +380,18 @@ header.hero h1{font-size:clamp(2.4rem,6vw,4rem)}
     </section>
   </section>
 </main>
+
+<aside id="librarySoundPanel" aria-label="Library background sound">
+  <div class="sound-head"><strong>Library Atmosphere</strong><span class="sound-status" id="librarySoundStatus">Sound off</span></div>
+  <label for="librarySoundType">Choose your sound</label>
+  <select id="librarySoundType">
+    <option value="piano">Peaceful Piano</option><option value="cinematic">Cinematic Dream</option><option value="fantasy">Enchanted Fantasy</option><option value="rain">Gentle Rain</option><option value="ocean">Ocean Waves</option><option value="forest">Forest Birds</option><option value="fire">Cozy Fireplace</option>
+  </select>
+  <label for="librarySoundVolume">Volume</label>
+  <div class="sound-volume"><input id="librarySoundVolume" type="range" min="0" max="100" value="28"><output id="librarySoundVolumeValue">28%</output></div>
+  <div class="sound-actions"><button type="button" id="librarySoundPlay">▶ Play sound</button><button type="button" id="librarySoundMute">Mute</button></div>
+</aside>
+
 <footer><span class="logo">VELLORA</span>A beautiful world where stories come to life.<br><a href="submit.html">Submit your book for review</a><br>© 2026 Vellora. A world of stories.</footer>
 <div id="reader" class="reader" hidden><div class="reader-top"><button id="closeReader" class="reader-back">← Library</button><strong id="readerTitle">VELLORA Reader</strong><div class="reader-tools"><select id="readerTheme" aria-label="Reading theme"><option value="manuscript">Manuscript</option><option value="heritage">Dark Mode</option></select><button id="soundToggle">Sound on</button><button id="bookmarkPage" class="ribbon">Ribbon</button><button id="readerPdf" class="reader-pdf">PDF</button></div></div><div class="reader-main"><aside class="reader-side"><label for="chapterSelect">Chapters</label><select id="chapterSelect"><option value="">Page navigation</option></select><label for="bookmarkSelect" class="bookmark-label">Your bookmarks</label><select id="bookmarkSelect"><option value="">Saved bookmarks (0)</option></select><div id="readerProgress" role="status"></div></aside><div id="pageStage" class="page-stage"><button id="prevPage" class="page-arrow" aria-label="Previous page">‹</button><div id="pageFrame" class="page-frame"><canvas id="pdfCanvas"></canvas></div><button id="nextPage" class="page-arrow" aria-label="Next page">›</button></div></div><section id="bookReviewPanel" class="book-review-panel" role="dialog" aria-modal="false" aria-labelledby="bookReviewTitle" hidden><button type="button" id="closeBookReview" class="review-close" aria-label="Close review form">×</button><div class="review-kicker">THE LAST PAGE</div><h2 id="bookReviewTitle">You reached the end of this story.</h2><p class="review-intro">We would love to hear what you thought. Your review goes to the VELLORA team for approval before it appears publicly.</p><div id="approvedBookReviews" class="approved-book-reviews"></div><form id="bookReviewForm" class="book-review-form"><label for="reviewDisplayName">Your name <span>(optional)</span></label><input id="reviewDisplayName" name="display_name" maxlength="60" placeholder="Reader"><fieldset><legend>Your rating</legend><div class="review-stars"><label><input type="radio" name="rating" value="1" required><span>★</span></label><label><input type="radio" name="rating" value="2"><span>★</span></label><label><input type="radio" name="rating" value="3"><span>★</span></label><label><input type="radio" name="rating" value="4"><span>★</span></label><label><input type="radio" name="rating" value="5"><span>★</span></label></div></fieldset><label for="reviewText">Your review</label><textarea id="reviewText" name="review_text" rows="4" minlength="10" maxlength="2000" required placeholder="What did you enjoy? What stayed with you after reading?"></textarea><button class="btn" type="submit" id="submitBookReview">Submit review</button></form><p id="bookReviewStatus" role="status" aria-live="polite"></p></section><div class="reader-bottom"><button type="button" id="openBookReview" class="review-open" hidden>Write a review <span aria-hidden="true">✎</span></button><span id="pageLabel">Page 0 of 0</span><input id="pageRange" type="range" min="1" max="1" value="1" aria-label="Reading progress"></div></div>
 
@@ -418,6 +447,28 @@ header.hero h1{font-size:clamp(2.4rem,6vw,4rem)}
 })();
 </script>
 
+
+
+<script>
+/* Optional, visitor-controlled atmosphere for the Library only. No autoplay. */
+(()=>{
+ const panel=document.getElementById("librarySoundPanel");if(!panel)return;
+ const $=id=>document.getElementById(id),type=$("librarySoundType"),volume=$("librarySoundVolume"),value=$("librarySoundVolumeValue"),play=$("librarySoundPlay"),mute=$("librarySoundMute"),status=$("librarySoundStatus");
+ const saved=k=>{try{return JSON.parse(localStorage.getItem("vellora.libraryAudio."+k))}catch(_){return null}},persist=(k,v)=>{try{localStorage.setItem("vellora.libraryAudio."+k,JSON.stringify(v))}catch(_){}};
+ type.value=saved("type")||"piano";volume.value=saved("volume")??28;value.textContent=volume.value+"%";
+ let ctx=null,nodes=[],timer=null,playing=false,muted=false,master=null;
+ const presets={piano:{notes:[261.63,329.63,392,523.25],wave:"sine",filter:1800,noise:0},cinematic:{notes:[110,164.81,220,329.63],wave:"triangle",filter:900,noise:.012},fantasy:{notes:[174.61,220,261.63,349.23,440],wave:"sine",filter:1500,noise:.004},rain:{notes:[130.81,196,261.63],wave:"sine",filter:700,noise:.045},ocean:{notes:[82.41,123.47,164.81],wave:"sine",filter:500,noise:.06},forest:{notes:[196,246.94,293.66,392],wave:"sine",filter:1200,noise:.018},fire:{notes:[98,146.83,196],wave:"triangle",filter:450,noise:.035}};
+ function stopNodes(){if(timer){clearInterval(timer);timer=null}nodes.forEach(n=>{try{n.stop?.()}catch(_){}try{n.disconnect()}catch(_){}});nodes=[]}
+ function addNoise(p,vol){if(!vol)return;const len=ctx.sampleRate*3,buf=ctx.createBuffer(1,len,ctx.sampleRate),data=buf.getChannelData(0);for(let i=0;i<len;i++)data[i]=(Math.random()*2-1)*.55;const src=ctx.createBufferSource(),f=ctx.createBiquadFilter(),g=ctx.createGain();src.buffer=buf;src.loop=true;f.type="lowpass";f.frequency.value=p.filter;g.gain.value=vol;src.connect(f);f.connect(g);g.connect(master);src.start();nodes.push(src,f,g)}
+ function addChord(p){p.notes.forEach((hz,i)=>{const o=ctx.createOscillator(),g=ctx.createGain(),l=ctx.createOscillator(),lg=ctx.createGain();o.type=p.wave;o.frequency.value=hz*(i===0?1:1.002);g.gain.value=(i===0?.012:.007)*(type.value==="piano"?.65:1);l.frequency.value=.06+i*.018;lg.gain.value=hz*.006;l.connect(lg);lg.connect(o.frequency);o.connect(g);g.connect(master);o.start();l.start();nodes.push(o,g,l,lg)})}
+ function start(){const AC=window.AudioContext||window.webkitAudioContext;if(!AC){status.textContent="Audio unavailable";return}try{ctx=ctx||new AC();if(ctx.state==="suspended")ctx.resume();stopNodes();master=ctx.createGain();master.gain.value=Number(volume.value)/100*(muted?0:1)*.34;master.connect(ctx.destination);const p=presets[type.value]||presets.piano;addChord(p);addNoise(p,p.noise);if(type.value==="piano"||type.value==="fantasy"){timer=setInterval(()=>{if(!playing||!ctx)return;const hz=p.notes[Math.floor(Math.random()*p.notes.length)],o=ctx.createOscillator(),g=ctx.createGain(),now=ctx.currentTime;o.type="sine";o.frequency.value=hz*2;g.gain.setValueAtTime(.0001,now);g.gain.exponentialRampToValueAtTime(.018*Number(volume.value)/100,now+.025);g.gain.exponentialRampToValueAtTime(.0001,now+1.4);o.connect(g);g.connect(master);o.start(now);o.stop(now+1.45);nodes.push(o,g)},type.value==="piano"?950:1450)}playing=true;play.textContent="Ⅱ Pause sound";status.textContent=muted?"Muted":"Playing"}catch(e){console.warn("Library atmosphere:",e);status.textContent="Could not play"}}
+ function pause(){stopNodes();playing=false;play.textContent="▶ Play sound";status.textContent="Sound off"}
+ play.addEventListener("click",()=>playing?pause():start());type.addEventListener("change",()=>{persist("type",type.value);if(playing)start()});
+ volume.addEventListener("input",()=>{value.textContent=volume.value+"%";persist("volume",Number(volume.value));if(master&&playing)master.gain.setTargetAtTime(Number(volume.value)/100*(muted?0:1)*.34,ctx.currentTime,.08)});
+ mute.addEventListener("click",()=>{muted=!muted;mute.textContent=muted?"Unmute":"Mute";if(master&&playing)master.gain.setTargetAtTime(Number(volume.value)/100*(muted?0:1)*.34,ctx.currentTime,.06);status.textContent=muted?"Muted":playing?"Playing":"Sound off"});
+ window.addEventListener("pagehide",pause);
+})();
+</script>
 
 <script>
 (()=> {
