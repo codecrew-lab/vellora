@@ -330,6 +330,8 @@ header.hero h1{font-size:clamp(2.4rem,6vw,4rem)}
 
   <section id="featured" aria-label="Featured Book"></section>
 
+  <section id="recommendedShelf" class="discovery-section" aria-label="Recommended for You"></section>
+
   <section id="library">
     <div class="sec"><small>The Collection</small><h2>The Library</h2></div>
     <div class="finder">
@@ -351,7 +353,7 @@ header.hero h1{font-size:clamp(2.4rem,6vw,4rem)}
   <section id="myShelf" class="my-shelf" aria-label="My Shelf">
     <div class="sec"><small>Your personal library</small><h2>My Shelf</h2></div>
     <nav class="shelf-jump" aria-label="My Shelf sections">
-      <a href="#recentShelf">Recently Read</a><a href="#continue">Continue Reading</a><a href="#recommendedShelf">Recommended for You</a><a href="#offlineShelf">Offline Books</a>
+      <a href="#recentShelf">Recently Read</a><a href="#continue">Continue Reading</a><a href="#offlineShelf">Offline Books</a>
     </nav>
     <section id="recentShelf" class="discovery-section" aria-label="Recently Read">
       <div class="shelf-heading"><div class="discovery-heading"><span class="eyebrow">Your reading history</span><h2>Recently Read</h2></div><button type="button" class="shelf-manage" id="manageRecent" aria-pressed="false">Manage</button></div>
@@ -361,7 +363,6 @@ header.hero h1{font-size:clamp(2.4rem,6vw,4rem)}
       <div class="shelf-heading"><div class="discovery-heading"><span class="eyebrow">Pick up where you left off</span><h2>Continue Reading</h2></div><button type="button" class="shelf-manage" id="manageContinue" aria-pressed="false">Manage</button></div>
       <div class="cont" id="contRow"></div>
     </section>
-    <section id="recommendedShelf" class="discovery-section" aria-label="Recommended for You"></section>
     <section id="offlineShelf" class="discovery-section" aria-label="Offline saved books">
       <div class="shelf-heading"><div class="discovery-heading"><span class="eyebrow">Available without internet</span><h2>Offline Books</h2><p class="count" id="offlineShelfCount"></p></div><button type="button" class="shelf-manage" id="manageOffline" aria-pressed="false">Manage</button></div>
       <div class="cont" id="offlineShelfRow"></div>
