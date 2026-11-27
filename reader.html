@@ -370,7 +370,7 @@ async function loadApprovedReviews(){
   if(st.get("vellora.reviewed."+id,false)){$("#reviewForm").hidden=true;$("#reviewStatus").textContent="You've already submitted a review for this book from this device. Thank you!"}
  }catch(error){host.innerHTML='<p class="review-muted">Reader reviews are temporarily unavailable.</p>';console.warn("VELLORA reviews:",error)}
 }
-$("#reviewOpen").addEventListener("click",()=>{$("#reviewSheet").hidden=false;$("#reviewClose").focus()});
+$("#reviewOpen").addEventListener("click",()=>openReadingDiary());
 $("#reviewClose").addEventListener("click",()=>{$("#reviewSheet").hidden=true;$("#reviewOpen").focus()});
 $("#reviewForm").addEventListener("submit",async event=>{
  event.preventDefault();const client=getReviewDb(),form=event.currentTarget,button=$("#reviewSubmit"),status=$("#reviewStatus");
@@ -395,6 +395,12 @@ applyPrefs();
 
 /* pagination: pages hold HTML and the index of their first word */
 let pages=[],idx=0,two=false,bm=null,pos=0,diaryPromptedFor="",diaryPromptTimer=null;
+function openReadingDiary(){
+  const diary=window.VelloraDiary;
+  if(!diary)return;
+  const entry=diary.complete({id,title,author,cover_url:coverUrl});
+  if(entry)diary.open(entry);
+}
 const probe=document.createElement("div");probe.className="pg probe";document.body.appendChild(probe);
 const fits=h=>{probe.innerHTML=h;return probe.scrollHeight<=probe.clientHeight+1};
 function paginate(){
@@ -461,7 +467,7 @@ function render(){
   $("#pl").textContent=(two&&pages[idx+1]?"Pages "+(idx+1)+"-"+(idx+2):"Page "+(idx+1))+" of "+pages.length+" · "+pct+"%";
   $("#pv").disabled=idx<=0;$("#nx").disabled=idx+(two?2:1)>last;
   $("#prog").style.width=pct+"%";
-  $("#reviewOpen").classList.toggle("visible",visibleEnd>=pages.length&&!previewMode);if(visibleEnd<pages.length)$("#reviewSheet").hidden=true;if(visibleEnd>=pages.length&&!previewMode&&reviewLoadedFor!==id){reviewLoadedFor=id;loadApprovedReviews();}
+  $("#reviewOpen").classList.toggle("visible",visibleEnd>=pages.length&&!previewMode);if(visibleEnd>=pages.length&&!previewMode){if(window.VelloraDiary)window.VelloraDiary.complete({id,title,author,cover_url:coverUrl});if(reviewLoadedFor!==id){reviewLoadedFor=id;loadApprovedReviews();}}
   if(visibleEnd>=pages.length&&!previewMode&&diaryPromptedFor!==id){
     if(diaryPromptTimer===null){
       diaryPromptTimer=setTimeout(()=>{
@@ -469,8 +475,7 @@ function render(){
         const currentEnd=Math.min(pages.length,idx+(two&&pages[idx+1]?2:1));
         if(currentEnd>=pages.length&&!previewMode&&diaryPromptedFor!==id){
           diaryPromptedFor=id;
-          $("#reviewSheet").hidden=false;
-          $("#reviewClose").focus();
+          openReadingDiary();
         }
       },25000);
     }
