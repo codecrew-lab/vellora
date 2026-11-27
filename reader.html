@@ -176,7 +176,7 @@ body::after{content:"";position:fixed;inset:0;pointer-events:none;background:rad
 
 
 /* End-of-book reviews live in the reader shell, never inside the manuscript page. */
-#reviewOpen{position:fixed;z-index:70;right:clamp(14px,3vw,30px);bottom:calc(76px + env(safe-area-inset-bottom,0px));display:none;align-items:center;gap:9px;min-height:42px;padding:10px 17px;border:1px solid color-mix(in srgb,var(--accent) 65%,var(--border));border-radius:999px;background:var(--surface);color:var(--text);box-shadow:0 8px 24px rgba(30,20,12,.2);font:600 .72rem var(--ui);letter-spacing:.07em;text-transform:uppercase}
+#lettersOpen{position:fixed;z-index:70;right:clamp(14px,3vw,30px);bottom:calc(126px + env(safe-area-inset-bottom,0px));display:none;align-items:center;gap:9px;min-height:42px;padding:10px 17px;border:1px solid color-mix(in srgb,var(--accent) 65%,var(--border));border-radius:999px;background:#211a16;color:#f6eedc;box-shadow:0 8px 24px rgba(30,20,12,.24);font:600 .72rem var(--ui);letter-spacing:.07em;text-transform:uppercase}\n#lettersOpen.visible{display:inline-flex}\n#reviewOpen{position:fixed;z-index:70;right:clamp(14px,3vw,30px);bottom:calc(76px + env(safe-area-inset-bottom,0px));display:none;align-items:center;gap:9px;min-height:42px;padding:10px 17px;border:1px solid color-mix(in srgb,var(--accent) 65%,var(--border));border-radius:999px;background:var(--surface);color:var(--text);box-shadow:0 8px 24px rgba(30,20,12,.2);font:600 .72rem var(--ui);letter-spacing:.07em;text-transform:uppercase}
 #reviewOpen.visible{display:inline-flex}
 #reviewOpen span{font-size:1rem;color:var(--accent)}
 #reviewSheet{position:fixed;z-index:90;left:50%;bottom:calc(128px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);width:min(660px,calc(100vw - 28px));max-height:min(72dvh,680px);overflow:auto;overscroll-behavior:contain;padding:22px clamp(18px,4vw,30px);border:1px solid var(--border);border-radius:14px;background:var(--surface);color:var(--text);box-shadow:0 18px 60px rgba(25,17,10,.3);font-family:var(--ui)}
@@ -234,7 +234,7 @@ body::after{content:"";position:fixed;inset:0;pointer-events:none;background:rad
 <div id="nav" class="ui"><button id="pv">Previous</button><span id="pl" aria-live="polite"></span><div class="quick-page-search" role="search" aria-label="Find a page"><label for="pageSearch">Page</label><input id="pageSearch" type="number" min="1" step="1" inputmode="numeric" placeholder="No."><button type="button" id="pageSearchGo">Go</button></div><button id="nx">Next</button><small id="pageSearchStatus" aria-live="polite" style="position:absolute;bottom:100%;background:var(--surface);padding:3px 8px;border-radius:6px"></small></div>
 <div id="contentsPanel" aria-hidden="true"><section class="contents-card" role="dialog" aria-modal="true" aria-labelledby="contentsTitle"><div class="contents-head"><h2 id="contentsTitle">Contents</h2><button type="button" id="contentsClose">Close</button></div><p class="contents-subtitle">Page numbers update automatically when the reader layout or text size changes.</p><div id="contentsList" class="contents-list"></div></section></div>
 
-<button type="button" id="reviewOpen" aria-haspopup="dialog" aria-controls="reviewSheet">Write a review <span aria-hidden="true">✎</span></button>
+<button type="button" id="lettersOpen" aria-label="Open your six story letters">Read your six letters <span aria-hidden="true">✉</span></button>\n<button type="button" id="reviewOpen" aria-haspopup="dialog" aria-controls="reviewSheet">Write a review <span aria-hidden="true">✎</span></button>
 <section id="reviewSheet" role="dialog" aria-modal="false" aria-labelledby="reviewTitle" hidden>
  <div class="review-head"><h2 id="reviewTitle">Share your thoughts</h2><button type="button" id="reviewClose" aria-label="Close review form">×</button></div>
  <form id="reviewForm">
@@ -349,7 +349,7 @@ async function loadApprovedReviews(){
   if(st.get("vellora.reviewed."+id,false)){$("#reviewForm").hidden=true;$("#reviewStatus").textContent="You've already submitted a review for this book from this device. Thank you!"}
  }catch(error){host.innerHTML='<p class="review-muted">Reader reviews are temporarily unavailable.</p>';console.warn("VELLORA reviews:",error)}
 }
-$("#reviewOpen").addEventListener("click",()=>{$("#reviewSheet").hidden=false;$("#reviewClose").focus()});
+$("#reviewOpen").addEventListener("click",()=>{$("#reviewSheet").hidden=false;$("#reviewClose").focus()});\n$("#lettersOpen").addEventListener("click",()=>{const existing=window.VelloraDiary?.all().find(x=>String(x.book_id)===String(id));const entry=existing||window.VelloraDiary?.complete({id,title,author,cover_url:coverUrl});const diary=document.getElementById("velloraDiaryEditor");if(diary?.open)diary.close();if(entry&&window.VelloraAuthorLetters){window.VelloraAuthorLetters.open(entry)}else{alert("Your story letters could not be opened. Please refresh the reader and try again.")}});
 $("#reviewClose").addEventListener("click",()=>{$("#reviewSheet").hidden=true;$("#reviewOpen").focus()});
 $("#reviewForm").addEventListener("submit",async event=>{
  event.preventDefault();const client=getReviewDb(),form=event.currentTarget,button=$("#reviewSubmit"),status=$("#reviewStatus");
@@ -440,7 +440,7 @@ function render(){
   $("#pl").textContent=(two&&pages[idx+1]?"Pages "+(idx+1)+"-"+(idx+2):"Page "+(idx+1))+" of "+pages.length+" · "+pct+"%";
   $("#pv").disabled=idx<=0;$("#nx").disabled=idx+(two?2:1)>last;
   $("#prog").style.width=pct+"%";
-  $("#reviewOpen").classList.toggle("visible",visibleEnd>=pages.length&&!previewMode);if(visibleEnd<pages.length)$("#reviewSheet").hidden=true;if(visibleEnd>=pages.length&&!previewMode&&reviewLoadedFor!==id){reviewLoadedFor=id;loadApprovedReviews();}
+  $("#reviewOpen").classList.toggle("visible",visibleEnd>=pages.length&&!previewMode);$("#lettersOpen").classList.toggle("visible",visibleEnd>=pages.length&&!previewMode);if(visibleEnd<pages.length)$("#reviewSheet").hidden=true;if(visibleEnd>=pages.length&&!previewMode&&reviewLoadedFor!==id){reviewLoadedFor=id;loadApprovedReviews();}
   if(visibleEnd>=pages.length&&!previewMode&&diaryPromptedFor!==id){diaryPromptedFor=id;window.VelloraDiary?.complete({id,title,author,cover_url:coverUrl});}
   renderContentsIndex();
   pos=pages[idx].w;st.set("vellora.pos."+id,pos);
