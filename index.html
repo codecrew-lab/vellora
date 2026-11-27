@@ -36,8 +36,7 @@ button{font:inherit;color:inherit;cursor:pointer;background:none;border:0}
 @keyframes float{0%{transform:translateY(0);opacity:0}20%{opacity:.55}100%{transform:translateY(-90vh) translateX(30px);opacity:0}}
 .door{position:absolute;top:0;bottom:0;width:50%;overflow:hidden;z-index:3;transition:transform 2.1s cubic-bezier(.76,0,.2,1);background:#0e0907}
 .door.l{left:0}.door.r{right:0}
-.door::after{content:"";position:absolute;top:0;bottom:0;width:1px;z-index:2;background:linear-gradient(180deg,transparent,rgba(217,182,115,.9) 30%,rgba(217,182,115,.9) 70%,transparent)}
-.door.l::after{right:0}.door.r::after{left:0}
+/* The two panels meet as one seamless cover; no visible centre seam. */
 .door-in{position:absolute;top:0;bottom:0;width:100vw;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;background:radial-gradient(ellipse at 50% 44%,#2b2018 0%,#17100c 55%,#0e0907 100%)}
 .door.l .door-in{left:0}.door.r .door-in{right:0}
 .door-in::before{content:"";position:absolute;inset:26px;border:1px solid rgba(217,182,115,.32);animation:fadeo 2s ease .2s backwards}
