@@ -12,7 +12,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Lora:ital,wght@0,400;0,500;1,400&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="styles.css?v=20261125-myshelf-shortcuts-v2">
-<link rel="stylesheet" href="vellora-motion.css?v=20261127-cinematic-safe">
+<link rel="stylesheet" href="vellora-motion.css?v=20261127-cinematic-safe">\n<link rel="stylesheet" href="reading-diary.css">
 <style>
 
 :root{--display:'Cormorant Garamond',Georgia,serif;--body:'Lora',Georgia,serif;--ui:'DM Sans',system-ui,sans-serif}
@@ -359,7 +359,7 @@ header.hero h1{font-size:clamp(2.4rem,6vw,4rem)}
   <section id="myShelf" class="my-shelf" aria-label="My Shelf">
     <div class="sec"><small>Your personal library</small><h2>My Shelf</h2></div>
     <nav class="shelf-jump" aria-label="My Shelf sections">
-      <a href="#recentShelf">Recently Read</a><a href="#continue">Continue Reading</a><a href="#offlineShelf">Offline Books</a>
+      <a href="#recentShelf">Recently Read</a><a href="#continue">Continue Reading</a><a href="#offlineShelf">Offline Books</a><a href="#readingDiary">Reading Diary</a>
     </nav>
     <section id="recentShelf" class="discovery-section" aria-label="Recently Read">
       <div class="shelf-heading"><div class="discovery-heading"><span class="eyebrow">Your reading history</span><h2>Recently Read</h2></div><button type="button" class="shelf-manage" id="manageRecent" aria-pressed="false">Manage</button></div>
@@ -372,6 +372,11 @@ header.hero h1{font-size:clamp(2.4rem,6vw,4rem)}
     <section id="offlineShelf" class="discovery-section" aria-label="Offline saved books">
       <div class="shelf-heading"><div class="discovery-heading"><span class="eyebrow">Available without internet</span><h2>Offline Books</h2><p class="count" id="offlineShelfCount"></p></div><button type="button" class="shelf-manage" id="manageOffline" aria-pressed="false">Manage</button></div>
       <div class="cont" id="offlineShelfRow"></div>
+    </section>
+    <section id="readingDiary" class="discovery-section" aria-label="My Reading Diary">
+      <div class="shelf-heading"><div class="discovery-heading"><span class="eyebrow">Stories you have finished</span><h2>My Reading Diary</h2></div></div>
+      <p class="vd-intro">A personal page for every story you finish — your rating, reflections and the little details worth remembering.</p>
+      <div id="readingDiaryEntries"></div>
     </section>
   </section>
 </main>
@@ -387,7 +392,7 @@ header.hero h1{font-size:clamp(2.4rem,6vw,4rem)}
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.119.1/dist/umd/supabase.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
 <script src="config.js"></script>
-<script src="app.js?v=20261126-library-fast-v1"></script>
+<script src="app.js?v=20261126-library-fast-v1"></script>\n<script src="reading-diary.js"></script>
 <script>
 /* Soft cinematic sliding-door sound, generated locally after the visitor's click. */
 (()=>{
