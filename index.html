@@ -359,7 +359,7 @@ header.hero h1{font-size:clamp(2.4rem,6vw,4rem)}
   <section id="myShelf" class="my-shelf" aria-label="My Shelf">
     <div class="sec"><small>Your personal library</small><h2>My Shelf</h2></div>
     <nav class="shelf-jump" aria-label="My Shelf sections">
-      <a href="#recentShelf">Recently Read</a><a href="#continue">Continue Reading</a><a href="#offlineShelf">Offline Books</a><a href="#readingDiary">Reading Diary</a>
+      <a href="#recentShelf">Recently Read</a><a href="#continue">Continue Reading</a><a href="#offlineShelf">Offline Books</a><a href="#readingDiary">Reading Diary</a><a href="#authorLetters">Authors Letters</a>
     </nav>
     <section id="recentShelf" class="discovery-section" aria-label="Recently Read">
       <div class="shelf-heading"><div class="discovery-heading"><span class="eyebrow">Your reading history</span><h2>Recently Read</h2></div><button type="button" class="shelf-manage" id="manageRecent" aria-pressed="false">Manage</button></div>
@@ -378,6 +378,7 @@ header.hero h1{font-size:clamp(2.4rem,6vw,4rem)}
       <p class="vd-intro">A personal page for every story you finish — your rating, reflections and the little details worth remembering.</p>
       <div id="readingDiaryEntries"></div>
     </section>
+    <section id="authorLetters" class="discovery-section" aria-label="Authors Letters"><div class="shelf-heading"><div class="discovery-heading"><span class="eyebrow">Keepsakes from completed stories</span><h2>Authors Letters</h2></div></div><p class="vd-intro">Six different letters for every story you complete.</p><div id="authorLettersEntries"></div></section>
   </section>
 </main>
 
@@ -392,7 +393,7 @@ header.hero h1{font-size:clamp(2.4rem,6vw,4rem)}
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.119.1/dist/umd/supabase.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
 <script src="config.js"></script>
-<script src="app.js?v=20261126-library-fast-v1"></script>\n<script src="reading-diary.js"></script>
+<script src="app.js?v=20261126-library-fast-v1"></script>\n<script src="reading-diary.js"></script><link rel="stylesheet" href="author-letters.css"><script src="author-letters.js"></script>
 <script>
 /* Soft cinematic sliding-door sound, generated locally after the visitor's click. */
 (()=>{
