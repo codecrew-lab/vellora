@@ -1,6 +1,6 @@
 "use strict";
-const CACHE="vellora-app-shell-v19",BASE="/vellora/";
-const SHELL=[BASE,BASE+"index.html",BASE+"reader.html",BASE+"submit.html",BASE+"manifest.webmanifest",BASE+"styles.css",BASE+"config.js",BASE+"app.js",BASE+"reading-analytics.js",BASE+"1795184280354.png"];
+const CACHE="vellora-app-shell-v20",BASE="/vellora/";
+const SHELL=[BASE,BASE+"index.html",BASE+"reader.html",BASE+"submit.html",BASE+"manifest.webmanifest",BASE+"styles.css",BASE+"config.js",BASE+"app.js",BASE+"reading-diary.js",BASE+"reading-diary.css",BASE+"reading-analytics.js",BASE+"1795184280354.png"];
 const STATIC_ORIGINS=new Set(["https://cdn.jsdelivr.net","https://cdnjs.cloudflare.com","https://fonts.googleapis.com","https://fonts.gstatic.com","https://sfxmint.com"]);
 self.addEventListener("install",e=>e.waitUntil((async()=>{const c=await caches.open(CACHE);await Promise.allSettled(SHELL.map(u=>c.add(u)));await self.skipWaiting()})()));
 self.addEventListener("activate",e=>e.waitUntil((async()=>{const k=await caches.keys();await Promise.all(k.filter(x=>x.startsWith("vellora-app-shell-")&&x!==CACHE).map(x=>caches.delete(x)));await self.clients.claim()})()));
