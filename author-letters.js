@@ -102,6 +102,7 @@ function watch(){
   const t=e.changedTouches?.[0],start=stage.__vaTouchX;
   if(lastPage&&Number.isFinite(start)&&t&&start-t.screenX>48){e.preventDefault();e.stopImmediatePropagation();show()}
  },{capture:true});
+ $("#closeReader")?.addEventListener("click",()=>{if(onNote)hide()},{capture:true});
  stage?.addEventListener("touchstart",e=>{stage.__vaTouchX=e.changedTouches?.[0]?.screenX},{capture:true,passive:true});
 }
 if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",watch,{once:true});else watch();
