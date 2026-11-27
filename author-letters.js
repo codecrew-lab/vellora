@@ -71,7 +71,7 @@ function hide(){
  const frame=$("#pageFrame"),prev=$("#prevPage"),next=$("#nextPage"),label=$("#pageLabel"),range=$("#pageRange");
  if(frame)frame.hidden=false;
  if(prev)prev.hidden=false;
- if(next){next.hidden=false;next.disabled=true;}
+ if(next){next.hidden=false;next.disabled=false;}
  if(label)label.textContent=originalLabel;
  if(range){range.disabled=false;if(originalRangeMax)range.max=originalRangeMax;if(originalRangeValue)range.value=originalRangeValue;}
 }
