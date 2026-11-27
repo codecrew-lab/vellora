@@ -207,6 +207,7 @@ body::after{content:"";position:fixed;inset:0;pointer-events:none;background:rad
 /* VELLORA continuous background music player */
 .vellora-music-player{position:fixed;right:16px;bottom:16px;z-index:95;width:min(310px,calc(100vw - 24px));padding:13px 15px 12px;background:rgba(28,21,17,.96);color:#ead9b8;border:1px solid rgba(205,169,105,.5);border-radius:13px;box-shadow:0 12px 38px rgba(0,0,0,.3);font-family:var(--ui,Arial,sans-serif);backdrop-filter:blur(12px);display:none}.vellora-music-player.active{display:block}.vellora-music-close{width:27px;height:27px;flex:0 0 27px;border:1px solid rgba(205,169,105,.45);border-radius:50%;background:transparent;color:#ead9b8;font-size:18px;line-height:1;cursor:pointer}.vellora-music-fab{position:fixed;right:16px;bottom:18px;z-index:120;width:54px;height:54px;border:1px solid #b99a65;border-radius:50%;background:#241a12;color:#e3c486;box-shadow:0 8px 25px rgba(0,0,0,.35);font-size:25px;display:none;align-items:center;justify-content:center;cursor:pointer}.vellora-music-fab.show{display:flex}.vellora-music-player{max-height:min(46vh,360px);overflow:auto}.vellora-music-heading{display:flex;align-items:center;gap:10px}.vellora-music-note{font-size:25px;color:#d7b77c}.vellora-music-heading div{display:flex;flex:1;min-width:0;flex-direction:column;gap:3px}.vellora-music-heading strong{font-size:10px;letter-spacing:.19em}.vellora-music-heading small{font-size:11px;color:#c6b69d;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.vellora-music-play{width:35px;height:35px;border:1px solid #b99a65;border-radius:50%;background:#d5b77d;color:#241a12;font-size:14px;cursor:pointer}.vellora-music-track-label,.vellora-music-volume label{display:block;margin:12px 0 5px;font-size:9px;letter-spacing:.16em;color:#c6b69d}.vellora-music-track{width:100%;padding:8px 9px;border:1px solid rgba(205,169,105,.35);border-radius:7px;background:#211812;color:#f0e4cd;font-size:12px}.vellora-music-volume{display:flex;align-items:center;gap:9px}.vellora-music-volume label{margin:0;white-space:nowrap}.vellora-music-volume input{min-width:0;flex:1;accent-color:#d5b77d}.vellora-music-volume span{width:34px;text-align:right;font-size:10px;font-variant-numeric:tabular-nums}@media(max-width:520px){.vellora-music-player{right:10px;bottom:10px;width:min(285px,calc(100vw - 20px));padding:10px 12px}.vellora-music-track-label,.vellora-music-volume label{margin-top:8px}}
 </style>
+<link rel="stylesheet" href="reading-diary.css">
 </head>
 <body>
 <div id="top" class="ui">
@@ -253,7 +254,7 @@ body::after{content:"";position:fixed;inset:0;pointer-events:none;background:rad
 <audio id="pageTurnAudio" src="https://sfxmint.com/dl/paper-fabric-page-turn-33.mp3" preload="auto"></audio>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.119.1/dist/umd/supabase.min.js"></script>
-<script src="config.js"></script>
+<script src="config.js"></script>\n<script src="reading-diary.js"></script>
 <script>if("serviceWorker" in navigator){window.addEventListener("load",()=>navigator.serviceWorker.register("./sw.js",{scope:"./"}).catch(e=>console.warn("VELLORA offline shell:",e)));}</script>
 <script>
 /* Live VELLORA stories are loaded from the published Supabase catalogue. */
@@ -265,7 +266,7 @@ const OFFLINE_DB="vellora-offline-library";
 function offlineStory(storyId){return new Promise((resolve,reject)=>{if(!("indexedDB" in window)){resolve(null);return}const q=indexedDB.open(OFFLINE_DB,1);q.onupgradeneeded=()=>{if(!q.result.objectStoreNames.contains("books"))q.result.createObjectStore("books",{keyPath:"id"})};q.onsuccess=()=>{const d=q.result;try{const t=d.transaction("books","readonly"),g=t.objectStore("books").get(String(storyId));g.onsuccess=()=>{const v=g.result||null;d.close();resolve(v&&v._offline?v:null)};g.onerror=()=>{const e=g.error;d.close();reject(e)}}catch(e){d.close();reject(e)}};q.onerror=()=>reject(q.error)})}
 let id=new URLSearchParams(location.search).get("id")||"";
 let reviewDb=null,reviewLoadedFor="";
-let title="Loading story…",genre="VELLORA EDITIONS",author="VELLORA Editions",chapters=[];
+let title="Loading story…",genre="VELLORA EDITIONS",author="VELLORA Editions",coverUrl="",chapters=[];
 $("#ttl").textContent=title;document.title="Loading story – VELLORA";
 function safeText(value){return String(value??"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#39;")}
 function formatParagraph(value){return safeText(value).replace(/\*\*(.+?)\*\*/g,"<strong>$1</strong>").replace(/\*(.+?)\*/g,"<em>$1</em>").replace(/`(.+?)`/g,"<code>$1</code>")}
@@ -306,7 +307,7 @@ function parseManuscript(source){
   return result.length?result:[{h:"The Story",s:"",p:[formatParagraph("This story has no manuscript text yet. Please contact the VELLORA editor.")] }];
 }
 function markRecent(){st.set("vellora.recent",[id,...st.get("vellora.recent",[]).filter(x=>String(x)!==String(id))].slice(0,12))}
-function applyStoryData(data){title=data.title||"Untitled story";genre=data.genre||"VELLORA EDITIONS";author=data.author||"VELLORA Editions";chapters=parseManuscript(data.manuscript_content);$("#ttl").textContent=title+" · "+author;document.title=title+" – VELLORA";markRecent();pos=st.get("vellora.pos."+id,0);bm=st.get("vellora.bm."+id,null);return (document.fonts?document.fonts.ready:Promise.resolve()).then(()=>setup())}
+function applyStoryData(data){title=data.title||"Untitled story";genre=data.genre||"VELLORA EDITIONS";author=data.author||"VELLORA Editions";coverUrl=data.cover_url||"";chapters=parseManuscript(data.manuscript_content);$("#ttl").textContent=title+" · "+author;document.title=title+" – VELLORA";markRecent();pos=st.get("vellora.pos."+id,0);bm=st.get("vellora.bm."+id,null);return (document.fonts?document.fonts.ready:Promise.resolve()).then(()=>setup())}
 async function loadStory(){
  try{
   if(!navigator.onLine){const cached=await offlineStory(id);if(cached&&String(cached.manuscript_content||"").trim()){await applyStoryData(cached);return}}
@@ -315,7 +316,7 @@ async function loadStory(){
   if(!window.supabase||!cfg.url||!cfg.publishableKey)throw new Error("The VELLORA library connection is unavailable.");
   const client=window.supabase.createClient(cfg.url,cfg.publishableKey);
   reviewDb=client;
-  const {data,error}=await client.from("books").select("id,title,author,genre,manuscript_content,is_published").eq("id",id).eq("is_published",true).maybeSingle();
+  const {data,error}=await client.from("books").select("id,title,author,genre,cover_url,manuscript_content,is_published").eq("id",id).eq("is_published",true).maybeSingle();
   if(error)throw error;
   if(!data)throw new Error("This story is unavailable or is no longer published.");
   if(!String(data.manuscript_content||"").trim())throw new Error("This story does not have manuscript text yet.");
@@ -372,7 +373,7 @@ function applyPrefs(){let savedTheme=st.get("vellora.theme","manuscript");if(sav
 applyPrefs();
 
 /* pagination: pages hold HTML and the index of their first word */
-let pages=[],idx=0,two=false,bm=null,pos=0;
+let pages=[],idx=0,two=false,bm=null,pos=0,diaryPromptedFor="";
 const probe=document.createElement("div");probe.className="pg probe";document.body.appendChild(probe);
 const fits=h=>{probe.innerHTML=h;return probe.scrollHeight<=probe.clientHeight+1};
 function paginate(){
@@ -439,7 +440,7 @@ function render(){
   $("#pl").textContent=(two&&pages[idx+1]?"Pages "+(idx+1)+"-"+(idx+2):"Page "+(idx+1))+" of "+pages.length+" · "+pct+"%";
   $("#pv").disabled=idx<=0;$("#nx").disabled=idx+(two?2:1)>last;
   $("#prog").style.width=pct+"%";
-  $("#reviewOpen").classList.toggle("visible",visibleEnd>=pages.length&&!previewMode);if(visibleEnd<pages.length)$("#reviewSheet").hidden=true;if(visibleEnd>=pages.length&&!previewMode&&reviewLoadedFor!==id){reviewLoadedFor=id;loadApprovedReviews();}
+  $("#reviewOpen").classList.toggle("visible",visibleEnd>=pages.length&&!previewMode);if(visibleEnd<pages.length)$("#reviewSheet").hidden=true;if(visibleEnd>=pages.length&&!previewMode&&reviewLoadedFor!==id){reviewLoadedFor=id;loadApprovedReviews();}\n  if(visibleEnd>=pages.length&&!previewMode&&diaryPromptedFor!==id){diaryPromptedFor=id;window.VelloraDiary?.complete({id,title,author,cover_url:coverUrl});}
   renderContentsIndex();
   pos=pages[idx].w;st.set("vellora.pos."+id,pos);
   st.set("vellora.progress."+id,{page:idx+1,totalPages:pages.length,percent:pct,wordPosition:pos,updatedAt:Date.now()});
