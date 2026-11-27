@@ -40,7 +40,7 @@
   const rows=all();let entry=rows.find(x=>String(x.book_id)===id);
   if(!entry){entry={book_id:id,title:String(book.title||"Untitled story"),author:String(book.author||"VELLORA Editions"),cover_url:String(book.cover_url||""),completed_at:new Date().toISOString(),rating:null,reflection:"",favourite_character:"",memorable_moment:"",closing_line:"Another story has found a place in my memories.",updated_at:new Date().toISOString()};rows.unshift(entry);write(rows)}
   else{entry.title=book.title||entry.title;entry.author=book.author||entry.author;entry.cover_url=book.cover_url||entry.cover_url;write(rows)}
-  if(!entry.rating)open(entry);return entry;
+  return entry;
  }
  document.addEventListener("click",e=>{const b=e.target.closest("[data-diary-edit]");if(b)open(all().find(x=>String(x.book_id)===String(b.dataset.diaryEdit)))});
  window.addEventListener("storage",e=>{if(e.key===KEY)renderShelf()});
