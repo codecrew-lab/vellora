@@ -440,7 +440,8 @@ function render(){
   $("#pl").textContent=(two&&pages[idx+1]?"Pages "+(idx+1)+"-"+(idx+2):"Page "+(idx+1))+" of "+pages.length+" · "+pct+"%";
   $("#pv").disabled=idx<=0;$("#nx").disabled=idx+(two?2:1)>last;
   $("#prog").style.width=pct+"%";
-  $("#reviewOpen").classList.toggle("visible",visibleEnd>=pages.length&&!previewMode);if(visibleEnd<pages.length)$("#reviewSheet").hidden=true;if(visibleEnd>=pages.length&&!previewMode&&reviewLoadedFor!==id){reviewLoadedFor=id;loadApprovedReviews();}\n  if(visibleEnd>=pages.length&&!previewMode&&diaryPromptedFor!==id){diaryPromptedFor=id;window.VelloraDiary?.complete({id,title,author,cover_url:coverUrl});}
+  $("#reviewOpen").classList.toggle("visible",visibleEnd>=pages.length&&!previewMode);if(visibleEnd<pages.length)$("#reviewSheet").hidden=true;if(visibleEnd>=pages.length&&!previewMode&&reviewLoadedFor!==id){reviewLoadedFor=id;loadApprovedReviews();}
+  if(visibleEnd>=pages.length&&!previewMode&&diaryPromptedFor!==id){diaryPromptedFor=id;window.VelloraDiary?.complete({id,title,author,cover_url:coverUrl});}
   renderContentsIndex();
   pos=pages[idx].w;st.set("vellora.pos."+id,pos);
   st.set("vellora.progress."+id,{page:idx+1,totalPages:pages.length,percent:pct,wordPosition:pos,updatedAt:Date.now()});
