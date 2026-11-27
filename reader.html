@@ -481,18 +481,15 @@ function render(){
   $("#reviewOpen").classList.toggle("visible",visibleEnd>=pages.length&&!previewMode);if(visibleEnd<pages.length)$("#reviewSheet").hidden=true;if(visibleEnd>=pages.length&&!previewMode&&reviewLoadedFor!==id){reviewLoadedFor=id;loadApprovedReviews();}
   if(visibleEnd>=pages.length&&!previewMode&&diaryPromptedFor!==id){
     if(diaryPromptTimer===null){
-      const finalPage=document.createElement("div");
-      finalPage.innerHTML=pages[pages.length-1]?.h||"";
-      const finalPageWords=(finalPage.textContent||"").trim().split(/\\s+/).filter(Boolean).length;
-      const readingDelay=Math.min(25000,Math.max(10000,10000+finalPageWords*35));
       diaryPromptTimer=setTimeout(()=>{
         diaryPromptTimer=null;
         const currentEnd=Math.min(pages.length,idx+(two&&pages[idx+1]?2:1));
         if(currentEnd>=pages.length&&!previewMode&&diaryPromptedFor!==id){
           diaryPromptedFor=id;
-          window.VelloraDiary?.complete({id,title,author,cover_url:coverUrl});
+          $("#reviewSheet").hidden=false;
+          $("#reviewClose").focus();
         }
-      },readingDelay);
+      },25000);
     }
   }else if(visibleEnd<pages.length&&diaryPromptTimer!==null){
     clearTimeout(diaryPromptTimer);
