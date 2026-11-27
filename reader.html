@@ -309,7 +309,25 @@ function parseManuscript(source){
   return result.length?result:[{h:"The Story",s:"",p:[formatParagraph("This story has no manuscript text yet. Please contact the VELLORA editor.")] }];
 }
 function markRecent(){st.set("vellora.recent",[id,...st.get("vellora.recent",[]).filter(x=>String(x)!==String(id))].slice(0,12))}
-function applyStoryData(data){title=data.title||"Untitled story";genre=data.genre||"VELLORA EDITIONS";author=data.author||"VELLORA Editions";coverUrl=data.cover_url||"";chapters=parseManuscript(data.manuscript_content);
+function buildAuthorsLetter(){
+  const clean=value=>String(value||"").replace(/<[^>]*>/g," ").replace(/&amp;/g,"&").replace(/&quot;/g,'"').replace(/&#39;/g,"'").replace(/&lt;/g,"<").replace(/&gt;/g,">").replace(/\\s+/g," ").trim();
+  const lastChapter=[...chapters].reverse().find(ch=>ch.s!=="Part"&&ch.p&&ch.p.length)||chapters[chapters.length-1]||{h:"The Story",p:[]};
+  const ending=clean((lastChapter.p||[]).slice(-1)[0]||"");
+  const finalThought=ending?(ending.length>210?ending.slice(0,207).replace(/\\s+\\S*$/,"")+"…":ending):"Even the quietest ending leaves something behind.";
+  const g=String(genre||"").toLowerCase();
+  let salutation="Dear reader,",opening="You have reached the final page, but a story rarely ends where its words do.",reflection="I hope you carry a little of this journey with you, and remember the moments that made you pause.",signoff="Thank you for giving these pages your time.";
+  if(/horror|supernatural|ghost|paranormal/.test(g)){opening="You made it to the last page. Still, some stories are not content to stay inside a book.";reflection="If a sound in the quiet feels different tonight, perhaps the story has left its final shadow with you.";signoff="Keep the light close—and thank you for daring to read."}
+  else if(/murder|crime|thriller|mystery|detective|suspense/.test(g)){opening="The clues have settled, the final page is here, and yet every mystery leaves one thought behind.";reflection="I hope you questioned every certainty, followed every uneasy detail, and found your own meaning in the truth revealed.";signoff="Until the next mystery, keep asking what lies beneath the surface."}
+  else if(/romance|love/.test(g)){opening="You have reached the end of their journey, but the feeling of a love story can linger long after its final page.";reflection="May the tenderness, courage, and small moments in these pages remind you how deeply a story can touch the heart.";signoff="With warmth, and gratitude for sharing this love story."}
+  else if(/fantasy|magic|fairy|myth/.test(g)){opening="The last page has turned, but every good journey leaves a little magic behind.";reflection="May you keep a place for wonder, believe in impossible beginnings, and remember the world you wandered through here.";signoff="Until another world calls, keep your imagination enchanted."}
+  else if(/adventure|action|quest/.test(g)){opening="The adventure ends here on paper, but the courage of a journey can travel much farther.";reflection="May this story remind you to take brave steps, meet the unknown with curiosity, and keep moving toward your own horizon.";signoff="Stay curious, stay brave, and thank you for coming along."}
+  else if(/drama|family|friendship|literary/.test(g)){opening="Some stories stay with us because they feel close to real life.";reflection="I hope these characters and their choices gave you a moment to reflect on the people, promises, and little turning points that shape us.";signoff="Thank you for letting this story share a little space in your life."}
+  const paras=[opening];
+  if(ending)paras.push("I keep thinking about the final moment in “"+clean(lastChapter.h||"the final chapter")+"”: “"+finalThought+"”");
+  paras.push(reflection,signoff);
+  return {h:"A Letter from the Author",s:"Author's Letter",p:paras.map(formatParagraph)};
+}
+function applyStoryData(data){title=data.title||"Untitled story";genre=data.genre||"VELLORA EDITIONS";author=data.author||"VELLORA Editions";coverUrl=data.cover_url||"";chapters=parseManuscript(data.manuscript_content);chapters.push(buildAuthorsLetter());
  $("#ttl").textContent=title+" · "+author;document.title=title+" – VELLORA";markRecent();pos=st.get("vellora.pos."+id,0);bm=st.get("vellora.bm."+id,null);return (document.fonts?document.fonts.ready:Promise.resolve()).then(()=>setup())}
 async function loadStory(){
  try{
