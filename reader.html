@@ -207,7 +207,7 @@ body::after{content:"";position:fixed;inset:0;pointer-events:none;background:rad
 /* VELLORA continuous background music player */
 .vellora-music-player{position:fixed;right:16px;bottom:16px;z-index:95;width:min(310px,calc(100vw - 24px));padding:13px 15px 12px;background:rgba(28,21,17,.96);color:#ead9b8;border:1px solid rgba(205,169,105,.5);border-radius:13px;box-shadow:0 12px 38px rgba(0,0,0,.3);font-family:var(--ui,Arial,sans-serif);backdrop-filter:blur(12px);display:none}.vellora-music-player.active{display:block}.vellora-music-close{width:27px;height:27px;flex:0 0 27px;border:1px solid rgba(205,169,105,.45);border-radius:50%;background:transparent;color:#ead9b8;font-size:18px;line-height:1;cursor:pointer}.vellora-music-fab{position:fixed;right:16px;bottom:18px;z-index:120;width:54px;height:54px;border:1px solid #b99a65;border-radius:50%;background:#241a12;color:#e3c486;box-shadow:0 8px 25px rgba(0,0,0,.35);font-size:25px;display:none;align-items:center;justify-content:center;cursor:pointer}.vellora-music-fab.show{display:flex}.vellora-music-player{max-height:min(46vh,360px);overflow:auto}.vellora-music-heading{display:flex;align-items:center;gap:10px}.vellora-music-note{font-size:25px;color:#d7b77c}.vellora-music-heading div{display:flex;flex:1;min-width:0;flex-direction:column;gap:3px}.vellora-music-heading strong{font-size:10px;letter-spacing:.19em}.vellora-music-heading small{font-size:11px;color:#c6b69d;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.vellora-music-play{width:35px;height:35px;border:1px solid #b99a65;border-radius:50%;background:#d5b77d;color:#241a12;font-size:14px;cursor:pointer}.vellora-music-track-label,.vellora-music-volume label{display:block;margin:12px 0 5px;font-size:9px;letter-spacing:.16em;color:#c6b69d}.vellora-music-track{width:100%;padding:8px 9px;border:1px solid rgba(205,169,105,.35);border-radius:7px;background:#211812;color:#f0e4cd;font-size:12px}.vellora-music-volume{display:flex;align-items:center;gap:9px}.vellora-music-volume label{margin:0;white-space:nowrap}.vellora-music-volume input{min-width:0;flex:1;accent-color:#d5b77d}.vellora-music-volume span{width:34px;text-align:right;font-size:10px;font-variant-numeric:tabular-nums}@media(max-width:520px){.vellora-music-player{right:10px;bottom:10px;width:min(285px,calc(100vw - 20px));padding:10px 12px}.vellora-music-track-label,.vellora-music-volume label{margin-top:8px}}
 </style>
-<link rel="stylesheet" href="reading-diary.css">
+<link rel="stylesheet" href="reading-diary.css"><link rel="stylesheet" href="author-letters.css">
 </head>
 <body>
 <div id="top" class="ui">
@@ -254,7 +254,7 @@ body::after{content:"";position:fixed;inset:0;pointer-events:none;background:rad
 <audio id="pageTurnAudio" src="https://sfxmint.com/dl/paper-fabric-page-turn-33.mp3" preload="auto"></audio>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.119.1/dist/umd/supabase.min.js"></script>
-<script src="config.js"></script>\n<script src="reading-diary.js"></script>
+<script src="config.js"></script>\n<script src="reading-diary.js?v=20261127-letters2"></script><script src="author-letters.js?v=20261127-letters2"></script>
 <script>if("serviceWorker" in navigator){window.addEventListener("load",()=>navigator.serviceWorker.register("./sw.js",{scope:"./"}).catch(e=>console.warn("VELLORA offline shell:",e)));}</script>
 <script>
 /* Live VELLORA stories are loaded from the published Supabase catalogue. */
