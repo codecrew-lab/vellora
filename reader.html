@@ -467,7 +467,8 @@ function pageEl(n){
   const p=pages[n];if(!p)return`<div class="pg"></div>`;
   const nxt=pages[n+1]?pages[n+1].w:Infinity;
   const on=bm!==null&&bm>=p.w&&bm<nxt;
-  const letterTheme=chapters[p.chapterIndex]?.s==="Letter";\n  return`<div class="pg${letterTheme?" letter-theme":""}" data-n="${n}"><div>${p.h}</div><span class="wm">VELLORA</span><span class="pn">${n+1}</span><button class="rb ${on?"on":"off"}" data-n="${n}" aria-label="${on?"Remove ribbon":"Place ribbon"}">${RIB}</button></div>`;
+  const letterTheme=chapters[p.chapterIndex]?.s==="Letter";
+  return`<div class="pg${letterTheme?" letter-theme":""}" data-n="${n}"><div>${p.h}</div><span class="wm">VELLORA</span><span class="pn">${n+1}</span><button class="rb ${on?"on":"off"}" data-n="${n}" aria-label="${on?"Remove ribbon":"Place ribbon"}">${RIB}</button></div>`;
 }
 function render(){
   book.className="book"+(two?" two":"");
