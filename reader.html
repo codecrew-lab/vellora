@@ -207,30 +207,8 @@ body::after{content:"";position:fixed;inset:0;pointer-events:none;background:rad
 /* VELLORA continuous background music player */
 .vellora-music-player{position:fixed;right:16px;bottom:16px;z-index:95;width:min(310px,calc(100vw - 24px));padding:13px 15px 12px;background:rgba(28,21,17,.96);color:#ead9b8;border:1px solid rgba(205,169,105,.5);border-radius:13px;box-shadow:0 12px 38px rgba(0,0,0,.3);font-family:var(--ui,Arial,sans-serif);backdrop-filter:blur(12px);display:none}.vellora-music-player.active{display:block}.vellora-music-close{width:27px;height:27px;flex:0 0 27px;border:1px solid rgba(205,169,105,.45);border-radius:50%;background:transparent;color:#ead9b8;font-size:18px;line-height:1;cursor:pointer}.vellora-music-fab{position:fixed;right:16px;bottom:18px;z-index:120;width:54px;height:54px;border:1px solid #b99a65;border-radius:50%;background:#241a12;color:#e3c486;box-shadow:0 8px 25px rgba(0,0,0,.35);font-size:25px;display:none;align-items:center;justify-content:center;cursor:pointer}.vellora-music-fab.show{display:flex}.vellora-music-player{max-height:min(46vh,360px);overflow:auto}.vellora-music-heading{display:flex;align-items:center;gap:10px}.vellora-music-note{font-size:25px;color:#d7b77c}.vellora-music-heading div{display:flex;flex:1;min-width:0;flex-direction:column;gap:3px}.vellora-music-heading strong{font-size:10px;letter-spacing:.19em}.vellora-music-heading small{font-size:11px;color:#c6b69d;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.vellora-music-play{width:35px;height:35px;border:1px solid #b99a65;border-radius:50%;background:#d5b77d;color:#241a12;font-size:14px;cursor:pointer}.vellora-music-track-label,.vellora-music-volume label{display:block;margin:12px 0 5px;font-size:9px;letter-spacing:.16em;color:#c6b69d}.vellora-music-track{width:100%;padding:8px 9px;border:1px solid rgba(205,169,105,.35);border-radius:7px;background:#211812;color:#f0e4cd;font-size:12px}.vellora-music-volume{display:flex;align-items:center;gap:9px}.vellora-music-volume label{margin:0;white-space:nowrap}.vellora-music-volume input{min-width:0;flex:1;accent-color:#d5b77d}.vellora-music-volume span{width:34px;text-align:right;font-size:10px;font-variant-numeric:tabular-nums}@media(max-width:520px){.vellora-music-player{right:10px;bottom:10px;width:min(285px,calc(100vw - 20px));padding:10px 12px}.vellora-music-track-label,.vellora-music-volume label{margin-top:8px}}
 
-/* Author's Secret Journal — applies only to the six closing letter pages. */
-.pg.letter-theme{
- background:
-  radial-gradient(ellipse at 8% 12%,rgba(123,145,105,.10),transparent 34%),
-  radial-gradient(ellipse at 92% 88%,rgba(177,145,83,.10),transparent 32%),
-  linear-gradient(135deg,#fbf8eb 0%,#f2efdc 52%,#faf6e8 100%);
- color:#354637;
- border:1px solid rgba(112,132,91,.38);
- box-shadow:inset 0 0 0 7px rgba(255,255,255,.28),inset 0 0 0 8px rgba(130,145,103,.18),0 8px 26px rgba(45,55,35,.10);
-}
-.pg.letter-theme h2{
- color:#435d48;
- font-family:Georgia,"Times New Roman",serif;
- font-style:italic;
- letter-spacing:.025em;
-}
-.pg.letter-theme .sub{color:#8b875f;letter-spacing:.16em;text-transform:uppercase}
-.pg.letter-theme .orn{color:#a58b50}
-.pg.letter-theme p{color:#394a3b;font-family:Georgia,"Times New Roman",serif;line-height:1.9}
-.pg.letter-theme .wm{color:rgba(79,105,77,.22)}
-.pg.letter-theme .pn{color:#7e896e}
-.pg.letter-theme .rb svg{filter:hue-rotate(65deg) saturate(.65)}
 </style>
-<link rel="stylesheet" href="reading-diary.css"><link rel="stylesheet" href="author-letters.css">
+<link rel="stylesheet" href="reading-diary.css">
 </head>
 <body>
 <div id="top" class="ui">
@@ -332,18 +310,6 @@ function parseManuscript(source){
 }
 function markRecent(){st.set("vellora.recent",[id,...st.get("vellora.recent",[]).filter(x=>String(x)!==String(id))].slice(0,12))}
 function applyStoryData(data){title=data.title||"Untitled story";genre=data.genre||"VELLORA EDITIONS";author=data.author||"VELLORA Editions";coverUrl=data.cover_url||"";chapters=parseManuscript(data.manuscript_content);
- const letterPages=[
-  ["A Thank-You Note","Dear reader,","Thank you for giving "+title+" your time, attention and imagination. A story becomes a journey when someone chooses to read it.","Thank you for being part of this journey."],
-  ["Where It Began","A note about the beginning,","Every story begins with a spark: a question, an image or a feeling. "+title+" grew from that first spark into a world of its own.","Thank you for following this story."],
-  ["The World Between the Pages","To the curious reader,","You travelled through the world of "+title+". The people and places may live on the page, but your imagination gave them another life.","The world can stay alive in you."],
-  ["A Thought I Kept Aside","One last thought,","There are always possibilities outside a finished manuscript: paths not taken, questions left open and details each reader understands differently. Perhaps you noticed something others missed in "+title+".","Your interpretation is part of this story now."],
-  ["Just for You","Dear reader,","You brought your own memories and feelings to "+title+". If a scene made you pause or a character felt familiar, keep that feeling. It belongs to you now.","May these pages stay with you."],
-  ["Until the Next Story","Before you go,","The final page is not the end of your reading journey. Another book is waiting with a new voice and a different world. Thank you for spending part of your day inside "+title+".","With appreciation, "+author]
- ];
- chapters.push(...letterPages.map(([heading,salutation,body,closing])=>({
-  h:heading,s:"Letter",p:[],
-  letterMarkup:'<article class="vellora-author-letter"><p class="letter-salutation">'+formatParagraph(salutation)+'</p><p>'+formatParagraph(body)+'</p><p>'+formatParagraph(closing)+'</p><p class="letter-signature">— '+safeText(author)+'</p></article>'
- })));
  $("#ttl").textContent=title+" · "+author;document.title=title+" – VELLORA";markRecent();pos=st.get("vellora.pos."+id,0);bm=st.get("vellora.bm."+id,null);return (document.fonts?document.fonts.ready:Promise.resolve()).then(()=>setup())}
 async function loadStory(){
  try{
@@ -419,7 +385,6 @@ function paginate(){
     const flush=()=>{if(cur)built.push({h:cur,w:curW,chapterIndex:curChapterIndex});cur="";};
     chapters.forEach((c,chapterIndex)=>{
       flush();curChapterIndex=chapterIndex;curW=w;
-      if(c.letterMarkup){built.push({h:'<h2>'+safeText(c.h)+'</h2><div class="sub">A Letter from VELLORA</div><div class="orn">&#10086;</div>'+c.letterMarkup,w:curW,chapterIndex});return;}
       const indexMarkup=includeIndexes&&c.s==="Part"&&c.indexMarkup?c.indexMarkup:"";
       cur=`<h2>${c.h}</h2><div class="sub">${c.s||""}</div><div class="orn">&#10086;</div>${indexMarkup}`;
       c.p.forEach((para,pi)=>{
@@ -467,8 +432,7 @@ function pageEl(n){
   const p=pages[n];if(!p)return`<div class="pg"></div>`;
   const nxt=pages[n+1]?pages[n+1].w:Infinity;
   const on=bm!==null&&bm>=p.w&&bm<nxt;
-  const letterTheme=chapters[p.chapterIndex]?.s==="Letter";
-  return`<div class="pg${letterTheme?" letter-theme":""}" data-n="${n}"><div>${p.h}</div><span class="wm">VELLORA</span><span class="pn">${n+1}</span><button class="rb ${on?"on":"off"}" data-n="${n}" aria-label="${on?"Remove ribbon":"Place ribbon"}">${RIB}</button></div>`;
+  return`<div class="pg" data-n="${n}"><div>${p.h}</div><span class="wm">VELLORA</span><span class="pn">${n+1}</span><button class="rb ${on?"on":"off"}" data-n="${n}" aria-label="${on?"Remove ribbon":"Place ribbon"}">${RIB}</button></div>`;
 }
 function render(){
   book.className="book"+(two?" two":"");
@@ -609,7 +573,7 @@ let rt;addEventListener("resize",()=>{clearTimeout(rt);rt=setTimeout(()=>{if((in
 /* PDF: prints a clean book layout (cover, chapters, page numbers, faint VELLORA mark) in the chosen theme. Choose "Save as PDF" in the print dialog. */
 $("#pdf").onclick=()=>{
   $("#print").innerHTML=`<div class="wmf">VELLORA</div><div class="cov"><h1>${safeText(title)}</h1><small>${safeText(genre.toUpperCase())}</small><small style="margin-top:8mm">${safeText(author)}</small><small style="margin-top:30mm">VELLORA</small></div>`+
-   chapters.map(c=>c.letterMarkup?'<h2>'+safeText(c.h)+'</h2><div class="sub">A Letter from VELLORA</div><div class="orn">&#10086;</div>'+c.letterMarkup:`<h2>${c.h}</h2><div class="sub">${c.s||""}</div><div class="orn">&#10086;</div>`+c.p.map((t,i)=>`<p class="${i===0?"first":""}">${t}</p>`).join("")).join("");
+   chapters.map(c=>`<h2>${c.h}</h2><div class="sub">${c.s||""}</div><div class="orn">&#10086;</div>`+c.p.map((t,i)=>`<p class="${i===0?"first":""}">${t}</p>`).join("")).join("");
   print();
 };
 
