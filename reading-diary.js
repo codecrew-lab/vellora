@@ -15,7 +15,7 @@
    return '<article class="vd-page"><div class="vd-book-cover">'+cover+'</div><div class="vd-page-copy"><div class="vd-page-kicker">READING MEMORY · '+dateLabel(e.completed_at)+'</div><h3>'+esc(e.title)+'</h3><p class="vd-author">By '+esc(e.author)+'</p><div class="vd-rating">'+stars(e.rating)+'</div>'+(e.reflection?'<p class="vd-reflection">“'+esc(e.reflection)+'”</p>':'<p class="vd-reflection vd-muted">A little reflection is waiting to be added.</p>')+(e.favourite_character?'<p class="vd-detail"><b>Favourite character</b> '+esc(e.favourite_character)+'</p>':'')+(e.memorable_moment?'<p class="vd-detail"><b>Memorable moment</b> '+esc(e.memorable_moment)+'</p>':'')+'<p class="vd-closing">'+esc(e.closing_line||"Another story has found a place in my memories.")+'</p><button type="button" class="vd-edit" data-diary-edit="'+esc(e.book_id)+'">'+(e.rating?"Edit this memory":"Complete this diary page")+'</button></div></article>';
   }).join("");
  }
- const write=rows=>{try{localStorage.setItem(KEY,JSON.stringify(rows));renderShelf();return true}catch(e){console.warn("VELLORA diary storage:",e);return false}};
+ const write=rows=>{try{localStorage.setItem(KEY,JSON.stringify(rows));renderShelf();window.dispatchEvent(new Event("vellora:diary-updated"));return true}catch(e){console.warn("VELLORA diary storage:",e);return false}};
  let dialog;
  function buildDialog(){
   if(dialog)return dialog;
