@@ -486,7 +486,18 @@ function render(){
 }
 function setup(){
   two=innerWidth>=900;paginate();
-  idx=pageIndexForWord(pos);if(two)idx-=idx%2;render();
+  const savedProgress=st.get("vellora.progress."+id,null);
+  const savedPosition=st.get("vellora.pos."+id,null);
+  const hasReadingProgress=!!(savedProgress&&(Number(savedProgress.page)>1||Number(savedProgress.wordPosition)>0)||Number(savedPosition)>0);
+  if(hasReadingProgress){
+    const savedPage=Number(savedProgress?.page)||0;
+    idx=savedPage>0?Math.max(0,Math.min(pages.length-1,savedPage-1)):pageIndexForWord(Number(savedPosition)||0);
+  }else{
+    const indexPage=pages.findIndex(page=>chapters[page.chapterIndex]?.s==="Part");
+    idx=indexPage>=0?indexPage:0;
+  }
+  if(two)idx-=idx%2;
+  render();
 }
 
 /* Dynamic contents index and page-number navigation use the exact current pagination. */
