@@ -44,5 +44,5 @@
  }
  document.addEventListener("click",e=>{const b=e.target.closest("[data-diary-edit]");if(b)open(all().find(x=>String(x.book_id)===String(b.dataset.diaryEdit)))});
  window.addEventListener("storage",e=>{if(e.key===KEY)renderShelf()});
- window.VelloraDiary={all,complete,open,renderShelf};renderShelf();
+ window.VelloraDiary={all,complete,open,renderShelf};renderShelf();window.dispatchEvent(new Event("vellora:diary-updated"));
 })();
