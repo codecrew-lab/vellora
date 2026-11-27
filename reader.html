@@ -341,7 +341,7 @@ function applyStoryData(data){title=data.title||"Untitled story";genre=data.genr
   ["Until the Next Story","Before you go,","The final page is not the end of your reading journey. Another book is waiting with a new voice and a different world. Thank you for spending part of your day inside "+title+".","With appreciation, "+author]
  ];
  chapters.push(...letterPages.map(([heading,salutation,body,closing])=>({
-  h:heading,s:"A Letter from VELLORA",p:[],
+  h:heading,s:"Letter",p:[],
   letterMarkup:'<article class="vellora-author-letter"><p class="letter-salutation">'+formatParagraph(salutation)+'</p><p>'+formatParagraph(body)+'</p><p>'+formatParagraph(closing)+'</p><p class="letter-signature">— '+safeText(author)+'</p></article>'
  })));
  $("#ttl").textContent=title+" · "+author;document.title=title+" – VELLORA";markRecent();pos=st.get("vellora.pos."+id,0);bm=st.get("vellora.bm."+id,null);return (document.fonts?document.fonts.ready:Promise.resolve()).then(()=>setup())}
