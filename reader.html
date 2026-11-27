@@ -478,15 +478,17 @@ function paginate(){
     }
   });
   pages=buildPages(true);
+  if(innerWidth>=900&&pages.length%2===1)pages.push({h:"",w:pages.length?pages[pages.length-1].w:0,chapterIndex:-1,blankPage:true});
   pages.push({h:"",w:pages.length?pages[pages.length-1].w:0,chapterIndex:-1,authorNote:true});
 }
-const pageIndexForWord=wd=>{let r=0;pages.forEach((p,i)=>{if(p.w<=wd)r=i});return r};
+const pageIndexForWord=wd=>{let r=0;pages.forEach((p,i)=>{if(!p.authorNote&&!p.blankPage&&p.w<=wd)r=i});return r};
 
 /* render */
 const book=$("#book");
 const RIB=`<svg width="28" height="68" viewBox="0 0 28 68" aria-hidden="true"><path d="M1 0h26v68L14 56 1 68z" fill="#641f24"/><path d="M3 0h20v58L14 49 5 58z" fill="#9e3d3d"/><path d="M5 0h5v57l-5 3z" fill="#c66b61" opacity=".72"/><path d="M22 0h3v59l-3-2z" fill="#43151a" opacity=".72"/><path d="M1 0h26v5H1z" fill="#4b171b"/><path d="M3 5h2v48H3z" fill="#e7b7a0" opacity=".3"/></svg>`;
 function pageEl(n){
   const p=pages[n];if(!p)return`<div class="pg"></div>`;
+  if(p.blankPage)return`<div class="pg va-blank-note-page" aria-hidden="true"></div>`;
   if(p.authorNote){
     const note=buildAuthorsLetter();
     const paras=(note.p||[]).map(x=>String(x).replace(/<[^>]*>/g," ").replace(/&amp;/g,"&").replace(/&quot;/g,'"').replace(/&#39;/g,"'").replace(/&lt;/g,"<").replace(/&gt;/g,">").trim());
