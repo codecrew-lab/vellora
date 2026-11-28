@@ -218,7 +218,7 @@ async function draw(n,dir){
  const bm=$("#bookmarkSelect");
  if(bm){bm.innerHTML='<option value="">Saved bookmarks ('+marks.length+')</option>'+marks.map(n=>'<option value="'+n+'">Page '+n+'</option>').join("");bm.value=""}
  $("#prevPage").disabled=page<=1;$("#nextPage").disabled=page>=currentPdf.numPages;
- const atEnd=page>=currentPdf.numPages;$("#openBookReview").hidden=!atEnd;if(!atEnd)$("#bookReviewPanel").hidden=true;if(atEnd&&endReviewBookId!==String(currentBook.id)){endReviewBookId=String(currentBook.id);loadBookReviews(currentBook.id)}
+ const atEnd=page>=currentPdf.numPages;$("#openBookReview").hidden=!atEnd;if(!atEnd)$("#bookReviewPanel").hidden=true;
  frame.classList.remove("turn-next","turn-prev");save();
  if(sound){try{const AC=window.AudioContext||window.webkitAudioContext;if(AC){const ac=new AC(),o=ac.createOscillator(),g=ac.createGain();o.connect(g);g.connect(ac.destination);g.gain.value=.02;o.frequency.value=500;o.start();o.stop(ac.currentTime+.07);o.onended=()=>ac.close()}}catch(_){}}
 }
