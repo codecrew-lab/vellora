@@ -143,7 +143,7 @@ $("#enableNotifications")?.addEventListener("click",enableVelloraNotifications);
 $("#skipNotifications")?.addEventListener("click",()=>{const key=isIOSDevice()&&!isStandaloneApp()?"vellora.pushPromptAt.ios-browser":"vellora.pushPromptAt";store.set(key,Date.now());$("#notificationInvite")?.close()});
 async function restoreVelloraPushSubscription(){
  if(!("Notification" in window)||Notification.permission!=="granted"||!("serviceWorker" in navigator))return;
- try{const registration=await navigator.serviceWorker.ready;const subscription=await registration.pushManager.getSubscription();if(subscription)await savePushSubscription(subscription)}catch(error){console.warn("VELLORA push subscription:",error)}
+ try{const registration=await navigator.serviceWorker.ready;let subscription=await registration.pushManager.getSubscription();if(!subscription)subscription=await registration.pushManager.subscribe({userVisibleOnly:true,applicationServerKey:urlBase64ToUint8Array(VELLORA_PUSH_PUBLIC_KEY)});await savePushSubscription(subscription);store.set("vellora.pushEnabled",true)}catch(error){console.warn("VELLORA push subscription:",error)}
 }
 
 function cover(b){const styles={nocturne:"cover-nocturne",botanical:"cover-botanical",gilded:"cover-gilded",midnight:"cover-midnight",terracotta:"cover-terracotta"};const key=String(b.cover_url||"").replace("vellora-cover://","");const cls=styles[key]||"cover-nocturne";const titleLength=String(b.title||"").trim().length;const titleScale=titleLength>42?0.66:titleLength>30?0.76:titleLength>22?0.86:titleLength>14?0.94:1;return '<div class="cover '+cls+'" style="--title-scale:'+titleScale+'"><em>'+esc(b.genre||"VELLORA EDITIONS")+'</em><b>'+esc(b.title||"Untitled") +'</b><small>'+esc(b.author||"VELLORA")+'</small></div>'}
