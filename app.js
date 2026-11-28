@@ -93,7 +93,7 @@ function showNotificationInvite(){
  if(last&&Date.now()-last<14*24*60*60*1000)return;
  const iosHelp=$("#notificationIOSNote");
  if(iosHelp)iosHelp.hidden=!(isIOSDevice()&&!isStandaloneApp());
- store.set("vellora.pushPromptAt",Date.now());
+ if(!(isIOSDevice()&&!isStandaloneApp()))store.set("vellora.pushPromptAt",Date.now());
  if(!dialog.open)dialog.showModal();
 }
 function finishOpeningExperience(){
