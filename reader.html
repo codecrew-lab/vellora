@@ -179,7 +179,11 @@ body::after{content:"";position:fixed;inset:0;pointer-events:none;background:rad
 #reviewOpen{position:fixed;z-index:70;right:clamp(14px,3vw,30px);bottom:calc(76px + env(safe-area-inset-bottom,0px));display:none;align-items:center;gap:9px;min-height:42px;padding:10px 17px;border:1px solid color-mix(in srgb,var(--accent) 65%,var(--border));border-radius:999px;background:var(--surface);color:var(--text);box-shadow:0 8px 24px rgba(30,20,12,.2);font:600 .72rem var(--ui);letter-spacing:.07em;text-transform:uppercase}
 #reviewOpen.visible{display:inline-flex}
 #reviewOpen span{font-size:1rem;color:var(--accent)}
-#reviewSheet{position:fixed;z-index:90;left:50%;bottom:calc(128px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);width:min(660px,calc(100vw - 28px));max-height:min(72dvh,680px);overflow:auto;overscroll-behavior:contain;padding:22px clamp(18px,4vw,30px);border:1px solid var(--border);border-radius:14px;background:var(--surface);color:var(--text);box-shadow:0 18px 60px rgba(25,17,10,.3);font-family:var(--ui)}
+#reviewSheet{position:fixed;z-index:90;left:50%;right:auto;bottom:calc(128px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);width:min(560px,calc(100% - 24px));max-width:calc(100vw - 24px);min-width:0;max-height:min(72dvh,680px);overflow-y:auto;overflow-x:hidden;overscroll-behavior:contain;box-sizing:border-box;padding:22px clamp(14px,4vw,26px);border:1px solid var(--border);border-radius:14px;background:var(--surface);color:var(--text);box-shadow:0 18px 60px rgba(25,17,10,.3);font-family:var(--ui)}
+#reviewSheet *{box-sizing:border-box;min-width:0;max-width:100%}
+#reviewSheet .review-head,#reviewForm,#reviewForm label{width:100%;min-width:0}
+#reviewForm input:not([type=radio]),#reviewForm textarea{display:block;width:100%;max-width:100%;min-width:0}
+#reviewForm textarea{resize:vertical;overflow-x:hidden;overflow-wrap:anywhere}
 #reviewSheet[hidden]{display:none!important}
 .review-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:14px}
 .review-head h2{font:600 1.55rem var(--display)}
@@ -201,7 +205,7 @@ body::after{content:"";position:fixed;inset:0;pointer-events:none;background:rad
 .approved-review{padding:10px 0;border-top:1px solid var(--border);font-size:.82rem;line-height:1.55}
 .approved-review-head{display:flex;justify-content:space-between;gap:10px;margin-bottom:4px}
 .approved-review-head span{color:var(--accent);white-space:nowrap}
-@media(max-width:767px){#reviewOpen{right:12px;bottom:calc(76px + env(safe-area-inset-bottom,0px));min-height:39px;padding:9px 14px;font-size:.67rem}#reviewSheet{bottom:calc(124px + env(safe-area-inset-bottom,0px));width:calc(100vw - 20px);max-height:70dvh;padding:17px 16px}}
+@media(max-width:767px){#reviewOpen{right:12px;bottom:calc(76px + env(safe-area-inset-bottom,0px));min-height:39px;padding:9px 14px;font-size:.67rem}#reviewSheet{left:10px;right:10px;bottom:calc(124px + env(safe-area-inset-bottom,0px));transform:none;width:auto;max-width:none;max-height:70dvh;padding:16px 14px}}
 
 
 /* VELLORA continuous background music player */
