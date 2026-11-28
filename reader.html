@@ -395,7 +395,7 @@ $("#reviewForm").addEventListener("submit",async event=>{
  try{
   const {error}=await client.from("book_reviews").insert({book_id:id,reviewer_key:reviewIdentity(),display_name:displayName,rating,review_text:reviewText,reflection,favourite_character:favourite,memorable_moment:moment,status:"pending"});
   if(error)throw error;
-  st.set("vellora.reviewed."+id,true);form.hidden=true;status.textContent="Thank you! Your review has been sent to the VELLORA team for approval.";
+  st.set("vellora.reviewed."+id,true);form.hidden=true;status.textContent="Thank you! Your review has been sent privately to the VELLORA admin team. It will not be published.";
  }catch(error){status.textContent=error.code==="23505"?"A review has already been submitted from this device.":"Your review could not be sent. Please try again.";console.warn("VELLORA review submission:",error)}
  finally{button.disabled=false;button.textContent="Send review"}
 });
