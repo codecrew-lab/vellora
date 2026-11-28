@@ -15,6 +15,8 @@ async function renderOfflineShelf(){const section=$("#offlineShelf"),row=$("#off
 async function renderOfflineLibrary(){try{books=(await offlineAll()).filter(x=>x&&x._offline);buildLibraryTools();drawDiscovery();const f=books.find(b=>b.is_featured)||books[0];if(f){$("#featured").hidden=false;$("#featured").innerHTML='<div class="featured"><span class="tag">Saved edition</span>'+cover(f)+'<div><div class="meta">'+esc(f.author||"")+' · '+esc(f.genre||"")+'</div><h2>'+esc(f.title)+'</h2><p>'+esc(f.description||"")+'</p><button class="btn" data-id="'+esc(f.id)+'">Discover story</button></div></div>'}else $("#featured").hidden=true;drawGrid();drawRecent();await renderOfflineShelf();revealVellora(document)}catch(e){empty($("#grid"),"Library unavailable offline","Connect once, then save books for offline reading.")}}
 
 const themes=[["manuscript","Manuscript","Faded manuscript","#EDE3D0"],["heritage","Dark Mode","Dark manuscript","#2D231C"]];
+const VELLORA_PUSH_PUBLIC_KEY="BMP43Apish_UsJ34CYy2hiTgFx8LwzuDTeOL1_RSH_LSEGPiOkyGF0-BXNzsNwxzYXolJk-LAGCv1_gC-RQ3Ptw";
+let notificationTargetBook=new URLSearchParams(location.search).get("book"),landingFinished=false;
 let books=[],reviewSummaries={},genre="All",sortMode="newest",showFavorites=false,active=null,pdf=null,page=1,sound=store.get("vellora.sound",true),outline=[],drawVersion=0,renderTask=null,genreVisibleCount=2,genreFiltersExpanded=false,libraryVisibleCount=6,endReviewBookId="";
 const shelfManage={recent:false,continue:false,offline:false};
 const esc=v=>String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
@@ -74,11 +76,75 @@ $("#open").onclick=()=>{
   musicFadeIn();
   landing.classList.add("opening");
   store.set("vellora.seen",1);
-  setTimeout(()=>{landing.hidden=true;document.body.classList.add("library-ready")},window.matchMedia("(prefers-reduced-motion: reduce)").matches?40:2250);
+  setTimeout(()=>{landing.hidden=true;document.body.classList.add("library-ready");landingFinished=true;finishOpeningExperience()},window.matchMedia("(prefers-reduced-motion: reduce)").matches?40:2250);
 };
 /* Always show the signature opening on a fresh page load, even if a
    previous preview already set the old one-time seen flag. */
 showLanding();
+
+
+function isIOSDevice(){return /iphone|ipad|ipod/i.test(navigator.userAgent)}
+function isStandaloneApp(){return window.matchMedia("(display-mode: standalone)").matches||navigator.standalone===true}
+function showNotificationInvite(){
+ const dialog=$("#notificationInvite");
+ if(!dialog||!("Notification" in window)||!("serviceWorker" in navigator)||!("PushManager" in window))return;
+ if(Notification.permission!=="default"||store.get("vellora.pushEnabled",false))return;
+ const promptKey=isIOSDevice()&&!isStandaloneApp()?"vellora.pushPromptAt.ios-browser":"vellora.pushPromptAt";
+ const last=Number(store.get(promptKey,0));
+ if(last&&Date.now()-last<14*24*60*60*1000)return;
+ const iosHelp=$("#notificationIOSNote");
+ if(iosHelp)iosHelp.hidden=!(isIOSDevice()&&!isStandaloneApp());
+ if(!dialog.open)dialog.showModal();
+}
+function finishOpeningExperience(){
+ if(!landingFinished)return;
+ if(notificationTargetBook&&books.length){
+  const id=notificationTargetBook;notificationTargetBook=null;
+  history.replaceState({}, "", location.pathname+location.hash);
+  openBook(id);return;
+ }
+ if(!notificationTargetBook)showNotificationInvite();
+}
+function urlBase64ToUint8Array(value){
+ const padding="=".repeat((4-value.length%4)%4),base=(value+padding).replace(/-/g,"+").replace(/_/g,"/");
+ const raw=atob(base);return Uint8Array.from(raw,c=>c.charCodeAt(0));
+}
+async function savePushSubscription(subscription){
+ if(!cfg.url||!cfg.publishableKey)throw new Error("VELLORA notification service is not configured.");
+ const response=await fetch(cfg.url.replace(/\/$/,"")+"/functions/v1/vellora-push",{
+  method:"POST",headers:{"Content-Type":"application/json","apikey":cfg.publishableKey},
+  body:JSON.stringify({action:"subscribe",subscription:subscription.toJSON()})
+ });
+ const result=await response.json().catch(()=>({}));
+ if(!response.ok)throw new Error(result.error||"Could not save this device's notification subscription.");
+}
+async function enableVelloraNotifications(){
+ const status=$("#notificationInviteStatus"),button=$("#enableNotifications");
+ if(isIOSDevice()&&!isStandaloneApp()){
+  if(status)status.textContent="On iPhone or iPad: use Share → Add to Home Screen, then open the installed VELLORA app and enable notifications there.";
+  return;
+ }
+ if(!("Notification" in window)||!("serviceWorker" in navigator)||!("PushManager" in window)){
+  if(status)status.textContent="Push notifications are not supported by this browser.";return;
+ }
+ if(button){button.disabled=true;button.textContent="Enabling…"}
+ try{
+  const permission=await Notification.requestPermission();
+  if(permission!=="granted")throw new Error(permission==="denied"?"Notifications are blocked in your browser settings.":"Notification permission was not granted.");
+  const registration=await navigator.serviceWorker.ready;
+  let subscription=await registration.pushManager.getSubscription();
+  if(!subscription)subscription=await registration.pushManager.subscribe({userVisibleOnly:true,applicationServerKey:urlBase64ToUint8Array(VELLORA_PUSH_PUBLIC_KEY)});
+  await savePushSubscription(subscription);store.set("vellora.pushEnabled",true);
+  const dialog=$("#notificationInvite");if(dialog?.open)dialog.close();
+ }catch(error){if(status)status.textContent=error.message||"Could not enable notifications. Please try again."}
+ finally{if(button){button.disabled=false;button.textContent="Enable notifications"}}
+}
+$("#enableNotifications")?.addEventListener("click",enableVelloraNotifications);
+$("#skipNotifications")?.addEventListener("click",()=>{const key=isIOSDevice()&&!isStandaloneApp()?"vellora.pushPromptAt.ios-browser":"vellora.pushPromptAt";store.set(key,Date.now());$("#notificationInvite")?.close()});
+async function restoreVelloraPushSubscription(){
+ if(!("Notification" in window)||Notification.permission!=="granted"||!("serviceWorker" in navigator))return;
+ try{const registration=await navigator.serviceWorker.ready;let subscription=await registration.pushManager.getSubscription();if(!subscription)subscription=await registration.pushManager.subscribe({userVisibleOnly:true,applicationServerKey:urlBase64ToUint8Array(VELLORA_PUSH_PUBLIC_KEY)});await savePushSubscription(subscription);store.set("vellora.pushEnabled",true)}catch(error){console.warn("VELLORA push subscription:",error)}
+}
 
 function cover(b){const styles={nocturne:"cover-nocturne",botanical:"cover-botanical",gilded:"cover-gilded",midnight:"cover-midnight",terracotta:"cover-terracotta"};const key=String(b.cover_url||"").replace("vellora-cover://","");const cls=styles[key]||"cover-nocturne";const titleLength=String(b.title||"").trim().length;const titleScale=titleLength>42?0.66:titleLength>30?0.76:titleLength>22?0.86:titleLength>14?0.94:1;return '<div class="cover '+cls+'" style="--title-scale:'+titleScale+'"><em>'+esc(b.genre||"VELLORA EDITIONS")+'</em><b>'+esc(b.title||"Untitled") +'</b><small>'+esc(b.author||"VELLORA")+'</small></div>'}
 function favoriteIds(){return store.get("vellora.favorites",[]).map(String)}
@@ -177,7 +243,7 @@ async function load(){
  await loadReviewSummaries();
  buildLibraryTools();drawDiscovery();const f=books.find(b=>b.is_featured)||books[0];
  if(f){$("#featured").hidden=false;$("#featured").innerHTML='<div class="featured"><span class="tag">Featured story</span>'+cover(f)+'<div><div class="meta">'+esc(f.author||"")+' · '+esc(f.genre||"")+'</div><h2>'+esc(f.title)+'</h2><p>'+esc(f.description||"")+'</p><button class="btn" data-id="'+esc(f.id)+'">Discover story</button></div></div>'}else $("#featured").hidden=true;
- drawGrid();drawRecent();await renderOfflineShelf();revealVellora(document);
+ drawGrid();drawRecent();await renderOfflineShelf();revealVellora(document);if(landingFinished)finishOpeningExperience();restoreVelloraPushSubscription();
  // Refresh any already-saved offline copies after the live Library is visible.
  Promise.all(books.filter(b=>String(b.manuscript_content||"").trim()).map(async b=>{const saved=await offlineGet(b.id);if(saved&&saved._offline)await offlinePut({...b,_offline:true,offlineSavedAt:saved.offlineSavedAt})})).catch(e=>console.warn("VELLORA offline refresh:",e));
 }
