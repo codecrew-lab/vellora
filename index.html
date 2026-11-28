@@ -49,26 +49,15 @@ animation:rise 2.4s cubic-bezier(.2,.7,.2,1) .3s both,shine 9s linear 2.7s infin
 .door-in .rule::after{display:none}
 /* Split the tagline between the two panels so the centre seam never crosses a word. */
 .door-in::before,.door-in::after{display:none!important}
-/* Both door panels carry the same complete tagline. Each panel reveals
-   its own half, so the sentence reads continuously across the centre seam. */
-.door-in p{position:relative;width:100vw;max-width:100vw;text-align:center;white-space:nowrap;font-family:var(--display);font-style:italic;font-size:clamp(.78rem,2.05vw,1.32rem);font-weight:500;color:#dfc99f;letter-spacing:.065em;padding:0 18px;text-shadow:0 2px 16px rgba(217,182,115,.22);animation:rise2 1.8s ease 1.9s both}
-.door.l .door-in p,.door.r .door-in p{left:0}
-/* Mobile: restore the original two-panel sentence split.
-   The left panel carries the first phrase; the right carries the ending. */
+/* One continuous sentence split exactly at the centre seam.
+   Each panel shows only its own half of the line. */
+.door-in p{position:relative;width:50vw;max-width:50vw;text-align:right;white-space:nowrap;font-family:var(--display);font-style:italic;font-size:0;font-weight:500;color:#dfc99f;letter-spacing:0;padding:0 10px;text-shadow:0 2px 16px rgba(217,182,115,.22);animation:rise2 1.8s ease 1.9s both}
+.door.l .door-in p{left:0;text-align:right}
+.door.r .door-in p{left:50vw;text-align:left}
+.door.l .door-in p::before{content:"A beautiful world where";font-size:clamp(.82rem,2.05vw,1.32rem);letter-spacing:.065em}
+.door.r .door-in p::before{content:"stories come to life";font-size:clamp(.82rem,2.05vw,1.32rem);letter-spacing:.065em}
 @media(max-width:520px){
- .door-in p{font-size:0;letter-spacing:0;padding:0 10px}
- .door.l .door-in p{text-align:right}
- .door.r .door-in p{text-align:left}
- .door.l .door-in p::before{content:"A beautiful world where";font-size:clamp(.72rem,3.15vw,.92rem);letter-spacing:.035em}
- .door.r .door-in p::before{content:"stories come to life";font-size:clamp(.72rem,3.15vw,.92rem);letter-spacing:.035em}
-}
-/* Desktop-only seam alignment. Mobile tagline styles remain untouched. */
-@media(min-width:521px){
- .door-in p{font-size:0;letter-spacing:0;padding:0 10px}
- .door.l .door-in p{text-align:right}
- .door.r .door-in p{text-align:left}
- .door.l .door-in p::before{content:"A beautiful world where";font-size:clamp(.82rem,2.05vw,1.32rem);letter-spacing:.065em}
- .door.r .door-in p::before{content:"stories come to life";font-size:clamp(.82rem,2.05vw,1.32rem);letter-spacing:.065em}
+ .door.l .door-in p::before,.door.r .door-in p::before{font-size:clamp(.72rem,3.15vw,.92rem);letter-spacing:.035em}
 }
 @keyframes rise{from{opacity:0;transform:translateY(14px);letter-spacing:.44em}to{opacity:1;transform:none;letter-spacing:.24em}}
 @keyframes rise2{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
