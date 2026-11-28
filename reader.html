@@ -383,6 +383,8 @@ function reviewIdentity(){
 
 
 
+$("#reviewOpen").addEventListener("click",()=>{$("#reviewSheet").hidden=false;$("#reviewClose").focus()});
+$("#reviewClose").addEventListener("click",()=>{$("#reviewSheet").hidden=true;$("#reviewOpen").focus()});
 $("#reviewForm").addEventListener("submit",async event=>{
  event.preventDefault();const client=getReviewDb(),form=event.currentTarget,button=$("#reviewSubmit"),status=$("#reviewStatus");
  if(!client||!id){status.textContent="Reviews are unavailable right now. Please try again when connected.";return}
