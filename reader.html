@@ -267,20 +267,8 @@ body::after{content:"";position:fixed;inset:0;pointer-events:none;background:rad
 <div id="nav" class="ui"><button id="pv">Previous</button><span id="pl" aria-live="polite"></span><div class="quick-page-search" role="search" aria-label="Find a page"><label for="pageSearch">Page</label><input id="pageSearch" type="number" min="1" step="1" inputmode="numeric" placeholder="No."><button type="button" id="pageSearchGo">Go</button></div><button id="nx">Next</button><small id="pageSearchStatus" aria-live="polite" style="position:absolute;bottom:100%;background:var(--surface);padding:3px 8px;border-radius:6px"></small></div>
 <div id="contentsPanel" aria-hidden="true"><section class="contents-card" role="dialog" aria-modal="true" aria-labelledby="contentsTitle"><div class="contents-head"><h2 id="contentsTitle">Contents</h2><button type="button" id="contentsClose">Close</button></div><p class="contents-subtitle">Page numbers update automatically when the reader layout or text size changes.</p><div id="contentsList" class="contents-list"></div></section></div>
 
-<button type="button" id="reviewOpen" aria-haspopup="dialog" aria-controls="reviewSheet">Write a review <span aria-hidden="true">✎</span></button>
-<section id="reviewSheet" role="dialog" aria-modal="false" aria-labelledby="reviewTitle" hidden>
- <div class="review-head"><h2 id="reviewTitle">Share your thoughts</h2><button type="button" id="reviewClose" aria-label="Close review form">×</button></div>
- <form id="reviewForm">
-  <label>Your name (optional)<input name="display_name" maxlength="80" placeholder="Reader"></label>
-  <div><span style="display:block;font-size:.78rem;color:var(--text2);margin-bottom:4px">Your rating</span><div class="review-stars" role="radiogroup" aria-label="Choose a star rating">
-   <label><input type="radio" name="rating" value="1"  required><span aria-hidden="true">★</span></label><label><input type="radio" name="rating" value="2"  required><span aria-hidden="true">★</span></label><label><input type="radio" name="rating" value="3"  required><span aria-hidden="true">★</span></label><label><input type="radio" name="rating" value="4"  required><span aria-hidden="true">★</span></label><label><input type="radio" name="rating" value="5" checked required><span aria-hidden="true">★</span></label>
-  </div></div>
-  <label>Your review<textarea name="review_text" minlength="10" maxlength="2000" required placeholder="What did you think of this story?"></textarea></label><label>A little reflection<textarea name="reflection" maxlength="1200" rows="3" placeholder="What did this story make you feel? What will you remember?"></textarea></label><label>Favourite character<input name="favourite_character" maxlength="100" placeholder="Who stayed with you?"></label><label>A memorable moment<input name="memorable_moment" maxlength="180" placeholder="A scene you will remember"></label>
-  <button id="reviewSubmit" type="submit">Send review</button>
- </form>
- <p id="reviewStatus" aria-live="polite"></p>
- <div id="approvedReviews"></div>
-</section>
+
+
 
 <div id="print"></div>
 <!-- CC0 page-turn sound: SFXMint, Single Slow Page Turning 33. -->
@@ -392,18 +380,9 @@ function reviewIdentity(){
  if(!key){key=crypto.randomUUID?crypto.randomUUID():"xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g,ch=>{const r=Math.random()*16|0;return(ch==="x"?r:(r&3|8)).toString(16)});st.set("vellora.reviewIdentity",key)}
  return key;
 }
-async function loadApprovedReviews(){
- const host=$("#approvedReviews"),client=getReviewDb();if(!host||!client||!id)return;
- host.innerHTML='<p class="review-muted">Loading reader reviews…</p>';
- try{
-  const {data,error}=await client.from("book_reviews").select("rating,display_name,review_text,reflection,favourite_character,memorable_moment,submitted_at").eq("book_id",id).eq("status","approved").order("submitted_at",{ascending:false}).limit(8);
-  if(error)throw error;
-  host.innerHTML=data?.length?'<h3>Reader reviews</h3>'+data.map(row=>'<article class="approved-review"><div class="approved-review-head"><strong>'+safeText(row.display_name||"Reader")+'</strong><span aria-label="'+Number(row.rating)+' out of 5 stars">'+("★".repeat(Number(row.rating)))+("☆".repeat(5-Number(row.rating)))+'</span></div><p>'+safeText(row.review_text)+'</p></article>').join(""):'<p class="review-muted">Be the first to leave an approved review.</p>';
-  if(st.get("vellora.reviewed."+id,false)){$("#reviewForm").hidden=true;$("#reviewStatus").textContent="You've already submitted a review for this book from this device. Thank you!"}
- }catch(error){host.innerHTML='<p class="review-muted">Reader reviews are temporarily unavailable.</p>';console.warn("VELLORA reviews:",error)}
-}
-$("#reviewOpen").addEventListener("click",()=>{$("#reviewSheet").hidden=false;$("#reviewClose").focus()});
-$("#reviewClose").addEventListener("click",()=>{$("#reviewSheet").hidden=true;$("#reviewOpen").focus()});
+
+
+
 $("#reviewForm").addEventListener("submit",async event=>{
  event.preventDefault();const client=getReviewDb(),form=event.currentTarget,button=$("#reviewSubmit"),status=$("#reviewStatus");
  if(!client||!id){status.textContent="Reviews are unavailable right now. Please try again when connected.";return}
@@ -507,7 +486,7 @@ function render(){
   $("#pl").textContent=(two&&pages[idx+1]?"Pages "+(idx+1)+"-"+(idx+2):"Page "+(idx+1))+" of "+pages.length+" · "+pct+"%";
   $("#pv").disabled=idx<=0;$("#nx").disabled=idx+(two?2:1)>last;
   $("#prog").style.width=pct+"%";
-  $("#reviewOpen").classList.toggle("visible",visibleEnd>=pages.length&&!previewMode);if(visibleEnd>=pages.length&&!previewMode){if(window.VelloraDiary)window.VelloraDiary.complete({id,title,author,cover_url:coverUrl});if(reviewLoadedFor!==id){reviewLoadedFor=id;loadApprovedReviews();}}
+  $("#reviewOpen").classList.toggle("visible",visibleEnd>=pages.length&&!previewMode);if(visibleEnd>=pages.length&&!previewMode){if(window.VelloraDiary)window.VelloraDiary.complete({id,title,author,cover_url:coverUrl});}
   if(visibleEnd>=pages.length&&!previewMode&&diaryPromptedFor!==id){
     if(diaryPromptTimer===null){
       diaryPromptTimer=setTimeout(()=>{
