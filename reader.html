@@ -402,7 +402,7 @@ async function loadApprovedReviews(){
   if(st.get("vellora.reviewed."+id,false)){$("#reviewForm").hidden=true;$("#reviewStatus").textContent="You've already submitted a review for this book from this device. Thank you!"}
  }catch(error){host.innerHTML='<p class="review-muted">Reader reviews are temporarily unavailable.</p>';console.warn("VELLORA reviews:",error)}
 }
-$("#reviewOpen").addEventListener("click",()=>openReadingDiary());
+$("#reviewOpen").addEventListener("click",()=>{$("#reviewSheet").hidden=false;$("#reviewClose").focus()});
 $("#reviewClose").addEventListener("click",()=>{$("#reviewSheet").hidden=true;$("#reviewOpen").focus()});
 $("#reviewForm").addEventListener("submit",async event=>{
  event.preventDefault();const client=getReviewDb(),form=event.currentTarget,button=$("#reviewSubmit"),status=$("#reviewStatus");
