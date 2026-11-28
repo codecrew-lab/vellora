@@ -51,7 +51,7 @@ animation:rise 2.4s cubic-bezier(.2,.7,.2,1) .3s both,shine 9s linear 2.7s infin
 .door-in::before,.door-in::after{display:none!important}
 /* One continuous sentence split exactly at the centre seam.
    Each panel shows only its own half of the line. */
-.door-in p{position:relative;width:50vw;max-width:50vw;text-align:right;white-space:nowrap;font-family:var(--display);font-style:italic;font-size:0;font-weight:500;color:#dfc99f;letter-spacing:0;padding:0 10px;text-shadow:0 2px 16px rgba(217,182,115,.22);animation:rise2 1.8s ease 1.9s both}
+.door-in p{position:relative;align-self:flex-start;width:50vw;max-width:50vw;text-align:right;white-space:nowrap;font-family:var(--display);font-style:italic;font-size:0;font-weight:500;color:#dfc99f;letter-spacing:0;padding:0 10px;text-shadow:0 2px 16px rgba(217,182,115,.22);animation:rise2 1.8s ease 1.9s both}
 .door.l .door-in p{left:0;text-align:right}
 .door.r .door-in p{left:50vw;text-align:left}
 .door.l .door-in p::before{content:"A beautiful world where";font-size:clamp(.82rem,2.05vw,1.32rem);letter-spacing:.065em}
