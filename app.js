@@ -174,6 +174,7 @@ async function load(){
  const {data,error}=await db.from("books").select("id,title,author,slug,description,genre,cover_url,pdf_path,language,reading_time_minutes,is_featured,is_recommended,is_published,created_at,updated_at,published_at").eq("is_published",true).order("published_at",{ascending:false,nullsFirst:false}).order("created_at",{ascending:false});
  if(error){console.error(error);await renderOfflineLibrary();return}
  books=data||[];
+ await loadReviewSummaries();
  buildLibraryTools();drawDiscovery();const f=books.find(b=>b.is_featured)||books[0];
  if(f){$("#featured").hidden=false;$("#featured").innerHTML='<div class="featured"><span class="tag">Featured story</span>'+cover(f)+'<div><div class="meta">'+esc(f.author||"")+' · '+esc(f.genre||"")+'</div><h2>'+esc(f.title)+'</h2><p>'+esc(f.description||"")+'</p><button class="btn" data-id="'+esc(f.id)+'">Discover story</button></div></div>'}else $("#featured").hidden=true;
  drawGrid();drawRecent();await renderOfflineShelf();revealVellora(document);
