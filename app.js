@@ -89,11 +89,11 @@ function showNotificationInvite(){
  const dialog=$("#notificationInvite");
  if(!dialog||!("Notification" in window)||!("serviceWorker" in navigator)||!("PushManager" in window))return;
  if(Notification.permission!=="default"||store.get("vellora.pushEnabled",false))return;
- const last=Number(store.get("vellora.pushPromptAt",0));
+ const promptKey=isIOSDevice()&&!isStandaloneApp()?"vellora.pushPromptAt.ios-browser":"vellora.pushPromptAt";
+ const last=Number(store.get(promptKey,0));
  if(last&&Date.now()-last<14*24*60*60*1000)return;
  const iosHelp=$("#notificationIOSNote");
  if(iosHelp)iosHelp.hidden=!(isIOSDevice()&&!isStandaloneApp());
- if(!(isIOSDevice()&&!isStandaloneApp()))store.set("vellora.pushPromptAt",Date.now());
  if(!dialog.open)dialog.showModal();
 }
 function finishOpeningExperience(){
@@ -140,7 +140,7 @@ async function enableVelloraNotifications(){
  finally{if(button){button.disabled=false;button.textContent="Enable notifications"}}
 }
 $("#enableNotifications")?.addEventListener("click",enableVelloraNotifications);
-$("#skipNotifications")?.addEventListener("click",()=>$("#notificationInvite")?.close());
+$("#skipNotifications")?.addEventListener("click",()=>{const key=isIOSDevice()&&!isStandaloneApp()?"vellora.pushPromptAt.ios-browser":"vellora.pushPromptAt";store.set(key,Date.now());$("#notificationInvite")?.close()});
 async function restoreVelloraPushSubscription(){
  if(!("Notification" in window)||Notification.permission!=="granted"||!("serviceWorker" in navigator))return;
  try{const registration=await navigator.serviceWorker.ready;const subscription=await registration.pushManager.getSubscription();if(subscription)await savePushSubscription(subscription)}catch(error){console.warn("VELLORA push subscription:",error)}
